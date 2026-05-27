@@ -1,17 +1,12 @@
 package com.mathgate.app
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import kotlin.random.Random
 import kotlin.random.nextInt
 
 class GenerateMath(val difficulty: String) {
-    var question by mutableStateOf("")
-        private set
+    var question = ""
 
-    var correctAnswer by mutableStateOf(0)
-        private set
+    var correctAnswer = 0
 
     init {
         getQuestion()

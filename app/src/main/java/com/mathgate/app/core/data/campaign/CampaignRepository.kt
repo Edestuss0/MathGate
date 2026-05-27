@@ -13,8 +13,6 @@ class CampaignRepository(private val campaignDao: CampaignDao) {
     }
 
     suspend fun checkAndPreloadDb(context: Context) {
-        if (campaignDao.getCount() > 0) return
-
         try {
             val jsonString = context.assets.open("campaign/campaign.json")
                 .bufferedReader().use { it.readText() }

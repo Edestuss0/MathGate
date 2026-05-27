@@ -103,7 +103,7 @@ private fun CampaignScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Свободный режим", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(text = "Кампания", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -152,7 +152,7 @@ private fun CampaignScreen(
             }
             Button(
                 onClick = {
-                    viewModel.onAnswer(if (!(answerInput == "")) answerInput.toInt() else 0)
+                    viewModel.onAnswer(if (!(answerInput == "")) answerInput.toInt() else return@Button)
                     answerInput = ""
                           },
                 modifier = Modifier

@@ -78,9 +78,8 @@ class CampaignViewModel(private val campaignRepository: CampaignRepository, priv
                     return@launch
                 }
 
-                viewModelScope.launch {
-                    userRepository.completeCampaign()
-                }
+                userRepository.completeCampaign()
+
                 _state.update { it.copy(message = "Правильно", isError = false) }
             } else {
                 _state.update { it.copy(message = "Неправильно", isError = true) }
