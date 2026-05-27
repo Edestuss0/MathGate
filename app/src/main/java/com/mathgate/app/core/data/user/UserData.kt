@@ -1,0 +1,121 @@
+package com.mathgate.app.core.data.user
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_profile")
+
+data class User(
+    val username: String,
+    val level: Int,
+    val experience: Int,
+    val money: Int,
+    val best_streak: Int,
+    val registered: Boolean,
+    val current_campaign: Int,
+) {
+    companion object {
+        fun init(): User {
+            return User(
+                username = "Загрузка",
+                level = 0,
+                experience = 0,
+                money = 0,
+                best_streak = 0,
+                registered = false,
+                current_campaign = 1,
+            )
+        }
+    }
+}
+
+private val USERNAME = stringPreferencesKey("username")
+private val LEVEL = intPreferencesKey("level")
+private val EXPERIENCE = intPreferencesKey("experience")
+private val MONEY = intPreferencesKey("money")
+private val BEST_STREAK = intPreferencesKey("best_streak")
+private val REGISTERED = booleanPreferencesKey("registered")
+private val CURRENT_CAMPAIGN = intPreferencesKey("current_campaign")
+
+class UserRepository(context: Context) {
+
+    private val dataStore = context.applicationContext.dataStore
+
+    fun getProfile(): Flow<User> = dataStore.data.map { preferences ->
+        User(
+            username = preferences[USERNAME] ?: "",
+            level = preferences[LEVEL] ?: 0,
+            experience = preferences[EXPERIENCE] ?: 0,
+            money = preferences[MONEY] ?: 0,
+            best_streak = preferences[BEST_STREAK] ?: 0,
+            registered = preferences[REGISTERED] ?: false,
+            current_campaign = preferences[CURRENT_CAMPAIGN] ?: 1,
+        )
+    }
+
+    suspend fun register(name: String) {
+        require(name.length > 0) {"Имя пользователя не может быть пустым"}
+
+        dataStore.edit { preferences ->
+            preferences[USERNAME] = name
+            preferences[REGISTERED] = true
+            preferences[LEVEL] = 0
+            preferences[EXPERIENCE] = 0
+            preferences[MONEY] = 0
+            preferences[BEST_STREAK] = 0
+            preferences[CURRENT_CAMPAIGN] = 1
+        }
+
+        println("Успешная регистрация")
+    }
+
+    suspend fun deleteAccount() {
+        dataStore.edit { preferences ->
+            preferences[USERNAME] = ""
+            preferences[LEVEL] = 0
+            preferences[EXPERIENCE] = 0
+            preferences[MONEY] = 0
+            preferences[BEST_STREAK] = 0
+            preferences[REGISTERED] = false
+            preferences[CURRENT_CAMPAIGN] = 1
+        }
+    }
+
+    suspend fun addExperience(value: Int) {
+            dataStore.edit { preferences ->
+                val currentExp: Int = preferences[EXPERIENCE] ?: 0
+                val currentLevel: Int = preferences[LEVEL] ?: 0
+                var finalValue: Int = 0
+
+                if ((currentExp + value) >= 1000) {
+                    finalValue = (currentExp + value) - 1000
+                    preferences[EXPERIENCE] = finalValue
+                    preferences[LEVEL] = currentLevel + 1
+                } else {
+                    finalValue = currentExp + value
+                    preferences[EXPERIENCE] = finalValue
+                }
+
+            }
+    }
+
+    suspend fun completeCampaign() {
+        dataStore.edit { preferences ->
+            val currentCampaign = preferences[CURRENT_CAMPAIGN] ?: 1
+            val currentExp = preferences[EXPERIENCE] ?: 0
+            preferences[CURRENT_CAMPAIGN] = currentCampaign + 1
+            preferences[EXPERIENCE] = currentExp + (currentCampaign * 10)
+        }
+    }
+
+}
+
+
