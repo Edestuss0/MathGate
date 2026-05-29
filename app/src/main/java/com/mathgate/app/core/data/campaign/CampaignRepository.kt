@@ -1,10 +1,15 @@
 package com.mathgate.app.core.data.campaign
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import org.json.JSONArray
+import javax.inject.Inject
 
-class CampaignRepository(private val campaignDao: CampaignDao) {
+class CampaignRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val campaignDao: CampaignDao
+) {
 
     val allCampaigns = campaignDao.getAllCampaigns()
 
@@ -12,7 +17,7 @@ class CampaignRepository(private val campaignDao: CampaignDao) {
         return campaignDao.getCount()
     }
 
-    suspend fun checkAndPreloadDb(context: Context) {
+    suspend fun checkAndPreloadDb() {
         try {
             val jsonString = context.assets.open("campaign/campaign.json")
                 .bufferedReader().use { it.readText() }

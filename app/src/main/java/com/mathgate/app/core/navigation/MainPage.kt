@@ -20,8 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mathgate.app.features.campaign.CampaignHomeScreenAppRoute
-import com.mathgate.app.features.campaign.CampaignScreenAppRoute
+import com.mathgate.app.features.campaign.CampaignHomeScreen
 import com.mathgate.app.features.freemode.FreemodeHomeScreen
 import com.mathgate.app.features.profile.ProfileScreen
 
@@ -35,11 +34,8 @@ enum class Screens(val route: String, val title: String, val icon: ImageVector) 
 fun MainPage(
     rootNavController: NavController
 ) {
-
     val tabNavController = rememberNavController()
-
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
-
     val currentRoute = backStackEntry?.destination?.route
 
     Scaffold(
@@ -80,7 +76,7 @@ fun MainPage(
         ) {
 
             composable(Screens.CampaignHome.route) {
-                CampaignHomeScreenAppRoute({ rootNavController.navigate("campaign_play") })
+                CampaignHomeScreen(onStartButtonClick = { rootNavController.navigate("campaign_play") })
             }
 
             composable(Screens.FreemodeHome.route) {

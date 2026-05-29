@@ -25,11 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun StartPage(
-    viewModel: StartPageViewModel = viewModel()
+    viewModel: StartPageViewModel = hiltViewModel()
 ) {
 
     var nameInput by remember { mutableStateOf<String>("") }

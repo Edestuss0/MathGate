@@ -1,6 +1,5 @@
 package com.mathgate.app.features.freemode
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -36,14 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FreemodeScreen(
     difficulty: String,
     onBackClick: () -> Unit,
-    viewModel: FreemodeViewModel = viewModel(),
+    viewModel: FreemodeViewModel = hiltViewModel(),
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }

@@ -8,8 +8,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_profile")
 
@@ -45,7 +47,9 @@ private val BEST_STREAK = intPreferencesKey("best_streak")
 private val REGISTERED = booleanPreferencesKey("registered")
 private val CURRENT_CAMPAIGN = intPreferencesKey("current_campaign")
 
-class UserRepository(context: Context) {
+class UserRepository @Inject constructor(
+   @ApplicationContext private val context: Context
+) {
 
     private val dataStore = context.applicationContext.dataStore
 

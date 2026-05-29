@@ -31,39 +31,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mathgate.app.core.data.campaign.CampaignRepository
-import com.mathgate.app.core.data.db.MainDb
-import com.mathgate.app.core.data.user.UserRepository
-
-@Composable
-fun CampaignScreenAppRoute(
-    onBackClick: () -> Unit
-) {
-    val context = LocalContext.current
-    val db = remember { MainDb.getDatabase(context) }
-    val campaignRepository = remember { CampaignRepository(db.campaignDao) }
-    val userRepository = remember { UserRepository(context) }
-    val viewModel: CampaignViewModel = viewModel(factory = CampaignViewModel.provideFactory(campaignRepository, userRepository))
-
-    LaunchedEffect(Unit) {
-        viewModel.initializeData(context)
-    }
-
-    CampaignScreen(viewModel, onBackClick)
-}
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CampaignScreen(
-    viewModel: CampaignViewModel,
+fun CampaignScreen(
+    viewModel: CampaignViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.initializeData()
+    }
 
     val state by viewModel.state.collectAsState()
     val currentCampaign by viewModel.currentCampaign.collectAsState()

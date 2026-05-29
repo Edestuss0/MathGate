@@ -8,6 +8,8 @@ import com.mathgate.app.core.data.campaign.CampaignEntity
 import com.mathgate.app.core.data.campaign.CampaignRepository
 import com.mathgate.app.core.data.user.User
 import com.mathgate.app.core.data.user.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -18,18 +20,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class CampaignViewModel(private val campaignRepository: CampaignRepository, private val userRepository: UserRepository) : ViewModel() {
-
-    companion object {
-        fun provideFactory(campaignRepository: CampaignRepository, userRepository: UserRepository): ViewModelProvider.Factory = object :
-            ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return CampaignViewModel(campaignRepository, userRepository) as T
-            }
-        }
-    }
-
+@HiltViewModel
+class CampaignViewModel @Inject constructor (
+    private val campaignRepository: CampaignRepository,
+    private val userRepository: UserRepository,
+) : ViewModel() {
     private val _state = MutableStateFlow(CampaignState())
     val state = _state.asStateFlow()
 
@@ -92,9 +89,9 @@ class CampaignViewModel(private val campaignRepository: CampaignRepository, priv
         _state.update { it.copy(message = null) }
     }
 
-    fun initializeData(context: Context) {
+    fun initializeData() {
         viewModelScope.launch {
-            campaignRepository.checkAndPreloadDb(context.applicationContext)
+            campaignRepository.checkAndPreloadDb()
         }
     }
 }
