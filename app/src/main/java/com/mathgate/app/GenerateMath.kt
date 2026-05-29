@@ -35,8 +35,7 @@ class GenerateMath(val difficulty: String) {
         correctAnswer = when (action) {
             "+" -> valueA + valueB
             "-" -> valueA - valueB
-            "*" -> valueA * valueB
-            else -> valueA + valueB
+            else -> valueA * valueB
         }
 
         println("QUESTION: ${this.question}")

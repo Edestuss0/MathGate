@@ -134,7 +134,7 @@ fun CampaignScreen(
             }
             Button(
                 onClick = {
-                    viewModel.onAnswer(if (!(answerInput == "")) answerInput.toInt() else return@Button)
+                    viewModel.onAnswer(if (answerInput.isNotEmpty()) answerInput.toInt() else return@Button)
                     answerInput = ""
                           },
                 modifier = Modifier

@@ -10,10 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class StartPageState(
-    val isError: Boolean = false,
-    val message: String? = null,
-)
+
 
 @HiltViewModel
 class StartPageViewModel @Inject constructor (

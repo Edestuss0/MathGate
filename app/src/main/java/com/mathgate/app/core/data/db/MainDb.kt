@@ -15,20 +15,4 @@ abstract class MainDb : RoomDatabase() {
 
     abstract val campaignDao: CampaignDao
 
-    companion object{
-        @Volatile
-        private var INSTANCE: MainDb? = null
-
-        fun getDatabase(context: Context): MainDb {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    MainDb::class.java,
-                    "main.db",
-                ).fallbackToDestructiveMigration().build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }

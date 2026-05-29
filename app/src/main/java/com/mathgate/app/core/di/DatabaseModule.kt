@@ -1,6 +1,7 @@
 package com.mathgate.app.core.di
 
 import android.content.Context
+import androidx.room.Room
 import com.mathgate.app.core.data.campaign.CampaignDao
 import com.mathgate.app.core.data.db.MainDb
 import dagger.Module
@@ -14,15 +15,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     fun provideDb(
         @ApplicationContext context: Context
-    ): MainDb {
-        return MainDb.getDatabase(context)
-    }
+    ): MainDb = Room.databaseBuilder(
+            context.applicationContext,
+            MainDb::class.java,
+            "main.db",
+        ).fallbackToDestructiveMigration().build()
 
-    @Provides
+    @Provides @Singleton
     fun provideCampaignDao(
         db: MainDb
     ): CampaignDao {

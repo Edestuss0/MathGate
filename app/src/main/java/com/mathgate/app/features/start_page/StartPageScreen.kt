@@ -35,7 +35,7 @@ fun StartPage(
 
     var nameInput by remember { mutableStateOf<String>("") }
     val state by viewModel.state.collectAsState()
-    val snackbarHostState = SnackbarHostState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = state.message) {
         state.message?.let { message ->

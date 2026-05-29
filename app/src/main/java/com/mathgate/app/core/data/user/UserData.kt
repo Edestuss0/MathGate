@@ -66,7 +66,7 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun register(name: String) {
-        require(name.length > 0) {"Имя пользователя не может быть пустым"}
+        require(name.isNotBlank()) {"Имя пользователя не может быть пустым"}
 
         dataStore.edit { preferences ->
             preferences[USERNAME] = name
