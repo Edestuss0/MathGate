@@ -1,8 +1,11 @@
 package com.mathgate.app.core.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mathgate.app.features.campaign.CampaignScreen
-import com.mathgate.app.features.education.LessonsScreen
+import com.mathgate.app.features.lessons.LessonsScreen
 import com.mathgate.app.features.freemode.FreemodeScreen
 import com.mathgate.app.features.start_page.StartPage
 
@@ -19,11 +22,23 @@ fun AppNavigation() {
 
     val rootNavController = rememberNavController()
     val viewModel: MainViewModel = hiltViewModel()
-    val isRegistered by viewModel.isRegistered.collectAsState()
+    val authState by viewModel.authState.collectAsState()
+
+    if (authState is AuthState.Loading) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        )
+        return
+    }
+
+    val startDestination = when (authState) {
+        is AuthState.Registered -> "main"
+        else -> "start_page"
+    }
 
     NavHost(
         navController = rootNavController,
-        startDestination = if (isRegistered) "main" else "start_page"
+        startDestination = startDestination
     ) {
 
         composable("start_page") {

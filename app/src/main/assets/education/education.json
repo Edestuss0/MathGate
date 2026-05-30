@@ -24,7 +24,7 @@
         { "question": "7²", "answer": ["49"] },
         { "question": "15⁰", "answer": ["1"] },
         { "question": "2⁰", "answer": ["1"] },
-        { "question": "100²", "answer": ["1000"] },
+        { "question": "100²", "answer": ["10000"] },
         { "question": "9⁰", "answer": ["1"] }
       ]
     },

@@ -11,21 +11,23 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+sealed class AuthState {
+    object Loading : AuthState()
+    object Registered : AuthState()
+    object NotRegistered : AuthState()
+}
+
 @HiltViewModel
 class MainViewModel @Inject constructor (
     private val userRepository: UserRepository
     ) : ViewModel() {
 
-    private val _user: StateFlow<User> = userRepository.getProfile().stateIn(
+    val authState: StateFlow<AuthState> = userRepository.getProfile().map { user ->
+        if (user.registered) AuthState.Registered else AuthState.NotRegistered
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = User.init()
-    )
-
-    val isRegistered: StateFlow<Boolean> = _user.map { it.registered }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = false
+        initialValue = AuthState.Loading
     )
 
 }

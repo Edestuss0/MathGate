@@ -1,4 +1,4 @@
-package com.mathgate.app.features.education
+package com.mathgate.app.features.lessons
 
 import com.mathgate.app.core.data.lessons.LessonEntity
 import androidx.compose.foundation.layout.Arrangement
@@ -29,13 +29,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 @Composable
 fun LessonsScreen(
     id: Int,
-    viewModel: EducationViewModel = hiltViewModel(),
+    viewModel: LessonsViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
-
-    LaunchedEffect(Unit) {
-        viewModel.getLessons(id)
-    }
 
     val lessons by viewModel.lessons.collectAsState()
 
