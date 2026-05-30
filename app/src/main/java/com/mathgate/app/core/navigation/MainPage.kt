@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -21,12 +22,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mathgate.app.features.campaign.CampaignHomeScreen
+import com.mathgate.app.features.education.EducationScreen
 import com.mathgate.app.features.freemode.FreemodeHomeScreen
 import com.mathgate.app.features.profile.ProfileScreen
 
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
     CampaignHome("campaign_home", "Кампания", Icons.Default.Flag),
     FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
+    EducationHome("education_home", "Обучение", Icons.Default.MenuBook),
     Profile("profile", "Профиль", Icons.Default.Person)
 }
 
@@ -74,6 +77,10 @@ fun MainPage(
             navController = tabNavController,
             startDestination = Screens.FreemodeHome.route
         ) {
+
+            composable(Screens.EducationHome.route) {
+                EducationScreen(onEducationClick = {id -> rootNavController.navigate("lessons/$id")})
+            }
 
             composable(Screens.CampaignHome.route) {
                 CampaignHomeScreen(onStartButtonClick = { rootNavController.navigate("campaign_play") })

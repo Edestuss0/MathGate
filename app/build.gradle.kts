@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.core.ktx)
     ksp("androidx.room:room-compiler:2.8.4")
+    implementation("com.google.code.gson:gson:2.13.1")
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

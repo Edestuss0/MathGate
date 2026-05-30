@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mathgate.app.features.campaign.CampaignScreen
+import com.mathgate.app.features.education.LessonsScreen
 import com.mathgate.app.features.freemode.FreemodeScreen
 import com.mathgate.app.features.start_page.StartPage
 
@@ -53,8 +54,24 @@ fun AppNavigation() {
             )
         }
 
+        composable(
+            route = "lessons/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 1
+
+            LessonsScreen(id = id, onBackClick = { rootNavController.popBackStack() })
+        }
+
         composable("campaign_play") {
-            CampaignScreen(onBackClick = {rootNavController.popBackStack()})
+            CampaignScreen(
+                onBackClick = {rootNavController.popBackStack()},
+                onThemeClick = {id -> rootNavController.navigate("lessons/$id")}
+            )
         }
     }
 }

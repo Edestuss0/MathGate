@@ -2,8 +2,10 @@ package com.mathgate.app.features.campaign
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,7 +43,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 @Composable
 fun CampaignScreen(
     viewModel: CampaignViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onThemeClick: (id: Int) -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.initializeData()
@@ -132,6 +135,19 @@ fun CampaignScreen(
                     )
                 }
             }
+
+            Button(
+                onClick = {onThemeClick(state.currentCampaign.theme)},
+                modifier = Modifier
+                    .fillMaxWidth().padding(horizontal = 16.dp),
+                shape = RoundedCornerShape(16.dp),
+                contentPadding = PaddingValues(vertical = 16.dp)
+            ) {
+                Text(text = "К теме", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(Modifier.height(8.dp))
+
             Button(
                 onClick = {
                     viewModel.onAnswer(if (answerInput.isNotEmpty()) answerInput.toInt() else return@Button)
