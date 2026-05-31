@@ -24,7 +24,6 @@ class UserRepository @Inject constructor(
             username = preferences[USERNAME] ?: "",
             level = preferences[LEVEL] ?: 0,
             experience = preferences[EXPERIENCE] ?: 0,
-            money = preferences[MONEY] ?: 0,
             best_streak = preferences[BEST_STREAK] ?: 0,
             registered = preferences[REGISTERED] ?: false,
             current_campaign = preferences[CURRENT_CAMPAIGN] ?: 1,
@@ -39,7 +38,6 @@ class UserRepository @Inject constructor(
             preferences[REGISTERED] = true
             preferences[LEVEL] = 0
             preferences[EXPERIENCE] = 0
-            preferences[MONEY] = 0
             preferences[BEST_STREAK] = 0
             preferences[CURRENT_CAMPAIGN] = 1
         }
@@ -52,7 +50,6 @@ class UserRepository @Inject constructor(
             preferences[USERNAME] = ""
             preferences[LEVEL] = 0
             preferences[EXPERIENCE] = 0
-            preferences[MONEY] = 0
             preferences[BEST_STREAK] = 0
             preferences[REGISTERED] = false
             preferences[CURRENT_CAMPAIGN] = 1

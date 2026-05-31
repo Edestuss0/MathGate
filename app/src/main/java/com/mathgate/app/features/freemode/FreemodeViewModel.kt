@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.mathgate.app.GenerateMath
 import com.mathgate.app.core.data.user.UserRepository
 import com.mathgate.app.core.entities.User
+import com.mathgate.app.ui.components.AppSnackbarVisuals
+import com.mathgate.app.ui.components.SnackbarMessageType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -51,7 +53,10 @@ class FreemodeViewModel @Inject constructor(
                     answerInput = "",
                     streak = it.streak + 1,
                     isError = false,
-                    message = "Правильно!"
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Правильно!",
+                        type = SnackbarMessageType.SUCCESS
+                    ),
                 )
             }
             val streak: Int = if (_state.value.streak > 0) { _state.value.streak } else { 1 }
@@ -67,13 +72,16 @@ class FreemodeViewModel @Inject constructor(
                 it.copy(
                     streak = 0,
                     isError = true,
-                    message = "Неправильно("
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Неправильно",
+                        type = SnackbarMessageType.ERROR
+                    ),
                 )
             }
         }
     }
 
     fun onMessageShown() {
-        _state.update { it.copy(message = null) }
+        _state.update { it.copy(snackbarMessage = null)}
     }
 }

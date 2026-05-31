@@ -4,7 +4,6 @@ data class User(
     val username: String = "Загрузка",
     val level: Int = 0,
     val experience: Int = 0,
-    val money: Int = 0,
     val best_streak: Int = 0,
     val registered: Boolean = false,
     val current_campaign: Int = 1,

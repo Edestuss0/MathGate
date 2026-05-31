@@ -6,6 +6,8 @@ import com.mathgate.app.core.data.campaign.CampaignEntity
 import com.mathgate.app.core.data.campaign.CampaignRepository
 import com.mathgate.app.core.data.user.UserRepository
 import com.mathgate.app.core.entities.User
+import com.mathgate.app.ui.components.AppSnackbarVisuals
+import com.mathgate.app.ui.components.SnackbarMessageType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -67,22 +69,34 @@ class CampaignViewModel @Inject constructor (
 
             if (answer == currentCampaign.value?.answer ?: 0) {
                 if (currentCampaign.value?.id ?: 1 >= count) {
-                    _state.update { it.copy(message = "Вы прошли всю кампанию!", isError = false) }
+                    _state.update { it.copy(isError = false) }
                     return@launch
                 }
 
                 userRepository.completeCampaign()
 
-                _state.update { it.copy(message = "Правильно", isError = false) }
+                _state.update { it.copy(
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Правильно!",
+                        type = SnackbarMessageType.SUCCESS
+                    ),
+                    isError = false
+                )}
             } else {
-                _state.update { it.copy(message = "Неправильно", isError = true) }
+                _state.update { it.copy(
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Неправильно",
+                        type = SnackbarMessageType.ERROR
+                    ),
+                    isError = true
+                )}
             }
         }
 
     }
 
     fun onMessageShown() {
-        _state.update { it.copy(message = null) }
+        _state.update { it.copy(snackbarMessage = null) }
     }
 
     fun initializeData() {

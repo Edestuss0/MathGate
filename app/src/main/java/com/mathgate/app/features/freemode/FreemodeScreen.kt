@@ -31,12 +31,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.mathgate.app.ui.components.AppSnackbarHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,34 +49,16 @@ fun FreemodeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(key1 = state.message) {
-        state.message?.let { message ->
-            snackbarHostState.showSnackbar(
-                message = message,
-                duration = SnackbarDuration.Short
-            )
-
+    LaunchedEffect(key1 = state.snackbarMessage) {
+        state.snackbarMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
             viewModel.onMessageShown()
         }
     }
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { data ->
-                val backgroundColor = if (state.isError) {
-                    Color(0xFFE53935)
-                } else {
-                    Color(0xFF43A047)
-                }
-
-                Snackbar(
-                    snackbarData = data,
-                    containerColor = backgroundColor,
-                    contentColor = Color.White,
-                    actionColor = Color.Yellow,
-                    shape = RoundedCornerShape(12.dp)
-                )
-            }
+            AppSnackbarHost(snackbarHostState)
         },
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -102,12 +84,6 @@ fun FreemodeScreen(
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Решайте простые математические примеры в свободном режиме",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 

@@ -132,11 +132,6 @@ fun ProfileContent(
             )
 
             ProfileContentRow(
-                icon = Icons.Default.AttachMoney,
-                content = "Монет: ${user.money}"
-            )
-
-            ProfileContentRow(
                 icon = Icons.Default.LineAxis,
                 content = "Лучшая серия: ${user.best_streak}"
             )

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mathgate.app.core.data.education.EducationRepository
 import com.mathgate.app.core.data.lesson_tasks.LessonTaskEntity
+import com.mathgate.app.ui.components.AppSnackbarVisuals
+import com.mathgate.app.ui.components.SnackbarMessageType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +37,7 @@ class LessonTasksViewModel @Inject constructor(
             val gettedTasks = educationRepository.getTasksByLessonId(lessonId)
             _tasks.update { gettedTasks }
             _currentTask.update { gettedTasks?.get(_currentIndex) }
-            _state.update { it.copy(message = null, isError = false, completed = false) }
+            _state.update { it.copy(snackbarMessage = null, isError = false, completed = false) }
         }
     }
 
@@ -45,7 +47,10 @@ class LessonTasksViewModel @Inject constructor(
             if (isLastTask()) {
                 _state.update { it.copy(
                     isError = false,
-                    message = "Вы завершили практику по этому уроку",
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Вы прошли практику по уроку",
+                        type = SnackbarMessageType.SUCCESS
+                    ),
                     completed = true
                 )}
             } else {
@@ -55,20 +60,26 @@ class LessonTasksViewModel @Inject constructor(
                 }
                 _state.update { it.copy(
                     isError = false,
-                    message = "Правильно",
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Правильно!",
+                        type = SnackbarMessageType.SUCCESS
+                    ),
                     completed = false
                 )}
             }
         } else {
             _state.update { it.copy(
                 isError = true,
-                message = "Неправильно",
+                snackbarMessage = AppSnackbarVisuals(
+                    message = "Неравильно",
+                    type = SnackbarMessageType.ERROR
+                ),
                 completed = false
             )}
         }
     }
 
     fun onMessageShown() {
-        _state.update { it.copy(message = null) }
+        _state.update { it.copy(snackbarMessage = null) }
     }
 }

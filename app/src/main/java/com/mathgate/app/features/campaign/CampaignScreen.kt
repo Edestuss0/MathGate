@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.mathgate.app.ui.components.AppSnackbarHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,36 +57,16 @@ fun CampaignScreen(
     var answerInput by remember { mutableStateOf<String>("") }
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1 = state.message) {
-        state.message?.let { message ->
-            snackbarHostState.showSnackbar(
-                message = message,
-                duration = SnackbarDuration.Short
-            )
-
+    LaunchedEffect(key1 = state.snackbarMessage) {
+        state.snackbarMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
             viewModel.onMessageShown()
         }
     }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { data ->
-                val backgroundColor = if (state.isError) {
-                    Color(0xFFE53935)
-                } else {
-                    Color(0xFF43A047)
-                }
-
-                Snackbar(
-                    snackbarData = data,
-                    containerColor = backgroundColor,
-                    contentColor = Color.White,
-                    actionColor = Color.Yellow,
-                    shape = RoundedCornerShape(12.dp)
-                )
-            }
-        },
+        snackbarHost = { AppSnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {

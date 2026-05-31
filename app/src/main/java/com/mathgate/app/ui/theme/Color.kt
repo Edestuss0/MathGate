@@ -22,8 +22,22 @@ val BorderDark          = Color(0xFF2A2A2A)
 
 val OnDark              = Color(0xFFF5F5F5)
 val OnDarkMuted         = Color(0xFFA3A3A3)
+val SurfaceContainerLowestDark = Color(0xFF080808)
+val SurfaceContainerLowDark    = Color(0xFF121212)  // ← именно Card
+val SurfaceContainerDark       = Color(0xFF1C1C1C)
+val SurfaceContainerHighDark   = Color(0xFF242424)
+val SurfaceContainerHighestDark= Color(0xFF2E2E2E)
+val SurfaceBrightDark          = Color(0xFF323232)
+val SurfaceDimDark             = Color(0xFF0A0A0A)
 
 // Light theme
+val SurfaceContainerLowestLight  = Color(0xFFFFFFFF)
+val SurfaceContainerLowLight     = Color(0xFFF1F1F1)  // ← именно Card
+val SurfaceContainerLight        = Color(0xFFEAEAEA)
+val SurfaceContainerHighLight    = Color(0xFFE0E0E0)
+val SurfaceContainerHighestLight = Color(0xFFD6D6D6)
+val SurfaceBrightLight           = Color(0xFFF8F8F8)
+val SurfaceDimLight              = Color(0xFFE8E8E8)
 val BackgroundLight     = Color(0xFFF8F8F8)
 val SurfaceLight        = Color(0xFFFFFFFF)
 val SurfaceVariantLight = Color(0xFFF1F1F1)
@@ -31,3 +45,9 @@ val BorderLight         = Color(0xFFE0E0E0)
 
 val OnLight             = Color(0xFF111111)
 val OnLightMuted        = Color(0xFF6B7280)
+
+
+//CORE COLORS
+val ErrorRed  = Color(0xFFE53935)
+val SuccessGreen = Color(0xFF43A047)
+val InfoBlue = Color(0xFF2563EB)
