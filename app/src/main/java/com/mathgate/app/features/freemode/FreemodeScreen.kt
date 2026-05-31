@@ -1,5 +1,6 @@
 package com.mathgate.app.features.freemode
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -98,7 +99,8 @@ fun FreemodeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Решайте простые математические примеры в свободном режиме",

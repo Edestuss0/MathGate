@@ -1,12 +1,10 @@
-package com.mathgate.app.features.campaign
+package com.mathgate.app.features.lesson_tasks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -42,18 +40,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampaignScreen(
-    viewModel: CampaignViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onThemeClick: (id: Int) -> Unit
+fun LessonTasksScreen(
+    id: Int,
+    viewModel: LessonTasksViewModel = hiltViewModel(),
+    onBackClick: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.initializeData()
-    }
-
+    val task by viewModel.currentTask.collectAsState()
     val state by viewModel.state.collectAsState()
-    val currentCampaign by viewModel.currentCampaign.collectAsState()
-    var answerInput by remember { mutableStateOf<String>("") }
+    var answerInput by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = state.message) {
@@ -68,7 +62,6 @@ fun CampaignScreen(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) { data ->
                 val backgroundColor = if (state.isError) {
@@ -86,10 +79,11 @@ fun CampaignScreen(
                 )
             }
         },
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Кампания", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(text = "Практические вопросы", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -103,64 +97,79 @@ fun CampaignScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Card(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
-                    Text(currentCampaign?.question ?: "Не удалось найти вопрос", fontSize = 16.sp, fontWeight = FontWeight.Bold,)
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        label = { Text("Введите свой ответ") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
-                        ),
-                        isError = state.isError,
-                        value = answerInput,
-                        onValueChange = { newValue: String ->
-                            val isValidInteger = newValue.isEmpty() ||
-                                    newValue == "-" ||
-                                    newValue.toIntOrNull() != null
-
-                            if (isValidInteger) {
+                    if (!(state.completed)) {
+                        Text(
+                            "Вопрос: ${task?.question ?: "Нет данных"}",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            label = { Text("Введите свой ответ") },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number
+                            ),
+                            isError = state.isError,
+                            value = answerInput,
+                            onValueChange = { newValue: String ->
                                 answerInput = newValue
                             }
-                        },
-                    )
+                        )
+                    } else {
+                        Text(
+                            "Практика по уроку окончена",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
                 }
             }
 
-            Button(
-                onClick = {onThemeClick(state.currentCampaign.theme)},
-                modifier = Modifier
-                    .fillMaxWidth().padding(horizontal = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
-                Text(text = "К теме", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    viewModel.onAnswer(if (answerInput.isNotEmpty()) answerInput.toInt() else return@Button)
-                    answerInput = ""
-                          },
-                modifier = Modifier
-                    .fillMaxWidth().padding(horizontal = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
-                Text(text = "Ответить", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            if (!(state.completed)) {
+                Button(
+                    onClick = {
+                        viewModel.onAnswer(answerInput)
+                        answerInput = ""
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(vertical = 16.dp)
+                ) {
+                    Text(text = "Ответить", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                }
+            } else {
+                Button(
+                    onClick = onBackClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(vertical = 16.dp)
+                ) {
+                    Text(text = "Завершить", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }

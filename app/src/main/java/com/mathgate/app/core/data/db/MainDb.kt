@@ -14,7 +14,7 @@ import com.mathgate.app.core.data.lessons.LessonEntity
 
 @Database(
     entities = [CampaignEntity::class, EducationEntity::class, LessonEntity::class, LessonTaskEntity::class],
-    version = 6,
+    version = 8,
 )
 @TypeConverters(Converters::class)
 abstract class MainDb : RoomDatabase() {

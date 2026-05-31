@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.mathgate.app.features.campaign.CampaignScreen
 import com.mathgate.app.features.lessons.LessonsScreen
 import com.mathgate.app.features.freemode.FreemodeScreen
+import com.mathgate.app.features.lesson_tasks.LessonTasksScreen
 import com.mathgate.app.features.lessons.LessonScreen
 import com.mathgate.app.features.start_page.StartPage
 
@@ -59,9 +60,7 @@ fun AppNavigation() {
             )
         ) { backStackEntry ->
 
-            val difficulty =
-                backStackEntry.arguments?.getString("difficulty") ?: "easy"
-
+            val difficulty = backStackEntry.arguments?.getString("difficulty") ?: "easy"
             FreemodeScreen(
                 difficulty = difficulty,
                 onBackClick = {
@@ -79,8 +78,11 @@ fun AppNavigation() {
             )
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: 1
-
-            LessonsScreen(id = id,  onBackClick = { rootNavController.popBackStack() }, onLessonClick = {lessonId -> rootNavController.navigate("lesson/$lessonId")})
+            LessonsScreen(
+                id = id,
+                onBackClick = { rootNavController.popBackStack() },
+                onLessonClick = {lessonId -> rootNavController.navigate("lesson/$lessonId")},
+            )
         }
 
         composable(
@@ -92,8 +94,26 @@ fun AppNavigation() {
             )
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: 1
+            LessonScreen(
+                lessonId = id,
+                onBackClick = {rootNavController.popBackStack()},
+                onStartPractice = {lessonId -> rootNavController.navigate("lesson/practice/$lessonId")}
+            )
+        }
 
-            LessonScreen(lessonId = id, onBackClick = {rootNavController.popBackStack()})
+        composable(
+            route = "lesson/practice/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 1
+            LessonTasksScreen(
+                id = id,
+                onBackClick = {rootNavController.popBackStack()}
+            )
         }
 
         composable("campaign_play") {

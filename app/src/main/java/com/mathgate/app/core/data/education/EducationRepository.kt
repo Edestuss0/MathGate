@@ -33,6 +33,10 @@ class EducationRepository @Inject constructor(
         return lessonDao.getLessonById(id)
     }
 
+    suspend fun getTasksByLessonId(id: Int): List<LessonTaskEntity>? {
+        return lessonTaskDao.getTasksByLessonId(id)
+    }
+
     suspend fun checkAndPreloadDb() {
         try {
             val jsonString = context.assets.open("education/education.json")
@@ -41,6 +45,7 @@ class EducationRepository @Inject constructor(
             val educations = mutableListOf<EducationEntity>()
             val lessons = mutableListOf<LessonEntity>()
             val tasks  = mutableListOf<LessonTaskEntity>()
+            var currentLessonId: Int = 1
 
             for (i in 0 until jsonArray.length()) {
                 val themeJson = jsonArray.getJSONObject(i)
@@ -52,7 +57,7 @@ class EducationRepository @Inject constructor(
 
                     lessons.add(
                         LessonEntity(
-                            id = lessonJson.getInt("id"),
+                            id = currentLessonId,
                             name = lessonJson.getString("lessonname"),
                             material = lessonJson.getString("material"),
                             educationId = themeJson.getInt("id")
@@ -71,10 +76,12 @@ class EducationRepository @Inject constructor(
                                             answers.getString(index)
                                         }
                                     },
-                                lessonId = lessonJson.getInt("id")
+                                lessonId = currentLessonId
                             )
                         )
                     }
+
+                    currentLessonId++
                 }
 
                 educations.add(

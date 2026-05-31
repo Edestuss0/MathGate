@@ -33,7 +33,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 fun LessonScreen(
     lessonId: Int,
     viewModel: LessonsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onStartPractice: (id: Int) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.getLessonById(lessonId)
@@ -83,12 +84,12 @@ fun LessonScreen(
             Spacer(Modifier.weight(1f))
 
             Button(
-                onClick = {},
+                onClick = {onStartPractice(lesson?.id ?: 1)},
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 contentPadding = PaddingValues(16.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text("Начать практику", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text("Закрепить знания", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
         }
     }
