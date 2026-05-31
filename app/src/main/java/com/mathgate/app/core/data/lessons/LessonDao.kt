@@ -15,6 +15,9 @@ interface LessonDao {
     @Query("SELECT * FROM lessons WHERE educationId = :id")
     suspend fun getLessonsByEducationId(id: Int): List<LessonEntity>
 
+    @Query("SELECT * FROM lessons WHERE id = :id LIMIT 1")
+    suspend fun getLessonById(id: Int): LessonEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLessons(lessons: List<LessonEntity>)
 }

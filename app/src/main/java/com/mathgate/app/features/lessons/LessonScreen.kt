@@ -1,15 +1,16 @@
 package com.mathgate.app.features.lessons
 
-import com.mathgate.app.core.data.lessons.LessonEntity
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,21 +30,22 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LessonsScreen(
-    id: Int,
+fun LessonScreen(
+    lessonId: Int,
     viewModel: LessonsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onLessonClick: (id: Int) -> Unit
+    onBackClick: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.getLessonById(lessonId)
+    }
 
-    val lessons by viewModel.lessons.collectAsState()
+    val lesson by viewModel.lessonById.collectAsState()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Обучение", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(text = lesson?.name ?: "Нет данных", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -54,38 +56,40 @@ fun LessonsScreen(
                     }
                 }
             )
-        }
+        },
+        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            items(lessons?.size ?: 0) { index ->
-                LessonCard(lessons?.get(index) ?: LessonEntity(0, 0, "Нет данных", "Нет данных"), onClick = onLessonClick)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(text = lesson?.material ?: "Нет данных", fontSize = 16.sp)
+                }
             }
-        }
-    }
-}
 
-@Composable
-private fun LessonCard(
-    item: LessonEntity,
-    onClick: (id: Int) -> Unit
-) {
-    Card(
-        onClick = { onClick(item.id) },
-        modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = item.name, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.weight(1f))
+
+            Button(
+                onClick = {},
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                contentPadding = PaddingValues(16.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text("Начать практику", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            }
         }
     }
 }

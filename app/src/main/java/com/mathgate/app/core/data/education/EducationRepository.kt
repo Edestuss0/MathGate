@@ -26,7 +26,11 @@ class EducationRepository @Inject constructor(
     }
 
     suspend fun getLessonByEducationId(id: Int): List<LessonEntity>? {
-        return lessonDao.getLessonsByEducationId(id) ?: null
+        return lessonDao.getLessonsByEducationId(id)
+    }
+
+    suspend fun getLessonById(id: Int): LessonEntity? {
+        return lessonDao.getLessonById(id)
     }
 
     suspend fun checkAndPreloadDb() {

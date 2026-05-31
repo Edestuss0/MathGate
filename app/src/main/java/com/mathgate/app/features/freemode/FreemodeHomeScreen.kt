@@ -44,9 +44,7 @@ fun FreemodeHomeScreen(onStartButtonClick: (difficulty: String) -> Unit) {
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            Text(
-                text = "Главная страница"
-            )
+            Text(text = "Свободный режим", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
 
             Spacer(modifier = Modifier.height(16.dp))
 
