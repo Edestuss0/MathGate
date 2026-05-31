@@ -12,18 +12,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary                = Indigo80,
-    onPrimary              = Color(0xFF0D0F2E),
-    primaryContainer       = Color(0xFF1E2050),
-    onPrimaryContainer     = Color(0xFFD0D3FF),
-    secondary              = Slate80,
-    onSecondary            = Color(0xFF0F1520),
-    secondaryContainer     = Color(0xFF1E2531),
-    onSecondaryContainer   = Color(0xFFDDE4EE),
-    tertiary               = Emerald80,
-    onTertiary             = Color(0xFF022016),
-    tertiaryContainer      = Color(0xFF0A2E22),
-    onTertiaryContainer    = Color(0xFFB0F0D8),
+    primary                = Gray80,
+    onPrimary              = Color(0xFF111111),
+    primaryContainer       = Color(0xFF242424),
+    onPrimaryContainer     = Color(0xFFF5F5F5),
+    secondary              = Neutral80,
+    onSecondary            = Color(0xFF111111),
+    secondaryContainer     = Color(0xFF1C1C1C),
+    onSecondaryContainer   = Color(0xFFE5E7EB),
+    tertiary               = Dark80,
+    onTertiary             = Color(0xFF111111),
+    tertiaryContainer      = Color(0xFF262626),
+    onTertiaryContainer    = Color(0xFFF5F5F5),
     background             = BackgroundDark,
     onBackground           = OnDark,
     surface                = SurfaceDark,
@@ -31,22 +31,22 @@ private val DarkColorScheme = darkColorScheme(
     surfaceVariant         = SurfaceVariantDark,
     onSurfaceVariant       = OnDarkMuted,
     outline                = BorderDark,
-    outlineVariant         = Color(0xFF1E2531)
+    outlineVariant         = Color(0xFF202020)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary                = Indigo40,
+    primary                = Gray40,
     onPrimary              = Color.White,
-    primaryContainer       = Color(0xFFE6E8FF),
-    onPrimaryContainer     = Color(0xFF1A1D72),
-    secondary              = Slate40,
+    primaryContainer       = Color(0xFFEAEAEA),
+    onPrimaryContainer     = Color(0xFF111111),
+    secondary              = Neutral40,
     onSecondary            = Color.White,
-    secondaryContainer     = Color(0xFFEEF0F6),
-    onSecondaryContainer   = Color(0xFF2D3A50),
-    tertiary               = Emerald40,
+    secondaryContainer     = Color(0xFFF1F1F1),
+    onSecondaryContainer   = Color(0xFF222222),
+    tertiary               = Dark40,
     onTertiary             = Color.White,
-    tertiaryContainer      = Color(0xFFD6F5EA),
-    onTertiaryContainer    = Color(0xFF053D28),
+    tertiaryContainer      = Color(0xFFE5E5E5),
+    onTertiaryContainer    = Color(0xFF111111),
     background             = BackgroundLight,
     onBackground           = OnLight,
     surface                = SurfaceLight,
@@ -54,7 +54,7 @@ private val LightColorScheme = lightColorScheme(
     surfaceVariant         = SurfaceVariantLight,
     onSurfaceVariant       = OnLightMuted,
     outline                = BorderLight,
-    outlineVariant         = Color(0xFFE8EDF5)
+    outlineVariant         = Color(0xFFEAEAEA)
 )
 
 @Composable

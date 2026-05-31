@@ -42,21 +42,25 @@ fun EducationScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Обучение", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                },
-            )
-        }
     ) { innerPadding ->
-        LazyColumn(
+
+
+
+        Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding).padding(16.dp)
         ) {
-            items(allEducations.size) { index ->
-                EducationCard(item = allEducations.get(index), onClick = onEducationClick)
+            Text(
+                text = "Обучение",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
 
+            LazyColumn(modifier = Modifier.fillMaxSize().padding(vertical = 16.dp)) {
+                items(allEducations.size) { index ->
+                    EducationCard(item = allEducations.get(index), onClick = onEducationClick)
+                }
             }
         }
     }

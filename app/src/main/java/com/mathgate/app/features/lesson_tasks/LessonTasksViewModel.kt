@@ -41,7 +41,7 @@ class LessonTasksViewModel @Inject constructor(
 
     fun onAnswer(answer: String) {
         println("TASKS SIZE: ${_tasks.value?.size}")
-        if (currentTask.value?.answer?.contains(answer) == true) {
+        if (currentTask.value?.answer?.contains(answer.trim()) == true) {
             if (isLastTask()) {
                 _state.update { it.copy(
                     isError = false,

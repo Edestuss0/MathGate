@@ -131,7 +131,7 @@ fun CampaignScreen(
                                     newValue.toIntOrNull() != null
 
                             if (isValidInteger) {
-                                answerInput = newValue
+                                answerInput = newValue.trim()
                             }
                         },
                     )

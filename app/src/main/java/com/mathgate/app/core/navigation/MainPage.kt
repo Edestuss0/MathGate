@@ -75,7 +75,7 @@ fun MainPage(
                 .fillMaxSize()
                 .padding(contentPadding),
             navController = tabNavController,
-            startDestination = Screens.FreemodeHome.route
+            startDestination = Screens.CampaignHome.route
         ) {
 
             composable(Screens.EducationHome.route) {

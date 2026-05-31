@@ -128,6 +128,7 @@ fun LessonTasksScreen(
                             label = { Text("Введите свой ответ") },
                             isError = state.isError,
                             value = answerInput,
+                            maxLines = 1,
                             onValueChange = { newValue: String ->
                                 answerInput = newValue
                             }

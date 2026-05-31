@@ -42,7 +42,7 @@ class FreemodeViewModel @Inject constructor(
     }
 
     fun onAnswer() {
-        val isCorrect: Boolean = generator.answer(_state.value.answerInput)
+        val isCorrect: Boolean = generator.answer(_state.value.answerInput.trim())
 
         if (isCorrect) {
             _state.update {
