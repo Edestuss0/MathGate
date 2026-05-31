@@ -126,9 +126,6 @@ fun LessonTasksScreen(
                                 .padding(vertical = 16.dp),
                             shape = RoundedCornerShape(16.dp),
                             label = { Text("Введите свой ответ") },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number
-                            ),
                             isError = state.isError,
                             value = answerInput,
                             onValueChange = { newValue: String ->

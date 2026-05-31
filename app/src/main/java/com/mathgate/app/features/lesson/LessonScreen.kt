@@ -1,4 +1,4 @@
-package com.mathgate.app.features.lessons
+package com.mathgate.app.features.lesson
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -27,18 +28,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.mathgate.app.features.lessons.LessonsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LessonScreen(
-    lessonId: Int,
-    viewModel: LessonsViewModel = hiltViewModel(),
+    id: Int,
+    viewModel: LessonViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onStartPractice: (id: Int) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.getLessonById(lessonId)
-    }
 
     val lesson by viewModel.lessonById.collectAsState()
 
@@ -60,37 +59,39 @@ fun LessonScreen(
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Column(
+            items(1) {
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(text = lesson?.material ?: "Нет данных", fontSize = 16.sp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(text = lesson?.material ?: "Нет данных", fontSize = 16.sp)
+                    }
                 }
+
+                Button(
+                    onClick = {onStartPractice(lesson?.id ?: 1)},
+                    modifier = Modifier.fillMaxWidth().padding(horizontal =  16.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text("Закрепить знания", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
+
             }
 
-            Spacer(Modifier.weight(1f))
-
-            Button(
-                onClick = {onStartPractice(lesson?.id ?: 1)},
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                contentPadding = PaddingValues(16.dp),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text("Закрепить знания", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
         }
     }
 }

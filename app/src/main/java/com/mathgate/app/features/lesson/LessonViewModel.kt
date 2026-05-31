@@ -1,4 +1,4 @@
-package com.mathgate.app.features.lessons
+package com.mathgate.app.features.lesson
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,22 +13,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LessonsViewModel @Inject constructor(
+class LessonViewModel @Inject constructor(
     private val educationRepository: EducationRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _lessons = MutableStateFlow<List<LessonEntity>?>(null)
-    val lessons = _lessons.asStateFlow()
+    private val _lessonId = savedStateHandle["id"] ?: 1
     private val _lessonById  = MutableStateFlow<LessonEntity?>(null)
     val lessonById = _lessonById.asStateFlow()
-    private val _educationId: Int = savedStateHandle["id"] ?: 1
 
     init {
         viewModelScope.launch {
-            _lessons.update { null }
-            val gettedLessons = educationRepository.getLessonByEducationId(_educationId)
-            _lessons.update { gettedLessons }
+            _lessonById.update { null }
+            val gettedLesson = educationRepository.getLessonById(_lessonId)
+            _lessonById.update { gettedLesson }
         }
     }
 }

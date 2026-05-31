@@ -16,7 +16,7 @@ import com.mathgate.app.features.campaign.CampaignScreen
 import com.mathgate.app.features.lessons.LessonsScreen
 import com.mathgate.app.features.freemode.FreemodeScreen
 import com.mathgate.app.features.lesson_tasks.LessonTasksScreen
-import com.mathgate.app.features.lessons.LessonScreen
+import com.mathgate.app.features.lesson.LessonScreen
 import com.mathgate.app.features.start_page.StartPage
 
 @Composable
@@ -95,7 +95,7 @@ fun AppNavigation() {
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: 1
             LessonScreen(
-                lessonId = id,
+                id = id,
                 onBackClick = {rootNavController.popBackStack()},
                 onStartPractice = {lessonId -> rootNavController.navigate("lesson/practice/$lessonId")}
             )

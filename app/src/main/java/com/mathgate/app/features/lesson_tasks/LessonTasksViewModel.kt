@@ -27,7 +27,7 @@ class LessonTasksViewModel @Inject constructor(
     private fun isLastTask(): Boolean {
         return _currentIndex >= (_tasks.value?.lastIndex ?: -1)
     }
-    val lessonId = savedStateHandle["id"] ?: 1
+    private val lessonId = savedStateHandle["id"] ?: 1
 
     init {
         viewModelScope.launch {
