@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.mathgate.app.core.data.user.User
+import com.mathgate.app.core.entities.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -206,7 +206,7 @@ fun ProfileContentRow(
 @Composable
 fun ProfileContentPreview() {
     ProfileContent(
-        user = User.init(),
+        user = User(),
         onDeleteAccount = {}
     )
 }

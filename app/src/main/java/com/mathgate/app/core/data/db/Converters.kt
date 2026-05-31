@@ -9,8 +9,8 @@ class Converters {
     private val gson = Gson()
 
     @TypeConverter
-    fun fromStringList(list: List<String>,): String {
-        return gson.toJson(list ?: emptyList<String>())
+    fun fromStringList(list: List<String>): String {
+        return gson.toJson(list)
     }
 
     @TypeConverter

@@ -22,7 +22,7 @@ class EducationRepository @Inject constructor(
     }
 
     suspend fun getEducationById(id: Int): EducationEntity? {
-        return educationDao.getEducationById(id) ?: null
+        return educationDao.getEducationById(id)
     }
 
     suspend fun getLessonByEducationId(id: Int): List<LessonEntity>? {

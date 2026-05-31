@@ -1,16 +1,12 @@
 package com.mathgate.app.features.campaign
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mathgate.app.core.data.campaign.CampaignEntity
 import com.mathgate.app.core.data.campaign.CampaignRepository
-import com.mathgate.app.core.data.user.User
 import com.mathgate.app.core.data.user.UserRepository
+import com.mathgate.app.core.entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,7 +29,7 @@ class CampaignViewModel @Inject constructor (
     private val user = userRepository.getProfile().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = User.init()
+        initialValue = User()
     )
 
     private val allCampaigns = campaignRepository.allCampaigns.stateIn(

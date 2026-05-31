@@ -2,7 +2,6 @@ package com.mathgate.app.core.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mathgate.app.core.data.user.User
 import com.mathgate.app.core.data.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

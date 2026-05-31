@@ -3,49 +3,15 @@ package com.mathgate.app.core.data.user
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.mathgate.app.core.entities.User
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_profile")
-
-data class User(
-    val username: String,
-    val level: Int,
-    val experience: Int,
-    val money: Int,
-    val best_streak: Int,
-    val registered: Boolean,
-    val current_campaign: Int,
-) {
-    companion object {
-        fun init(): User {
-            return User(
-                username = "Загрузка",
-                level = 0,
-                experience = 0,
-                money = 0,
-                best_streak = 0,
-                registered = false,
-                current_campaign = 1,
-            )
-        }
-    }
-}
-
-private val USERNAME = stringPreferencesKey("username")
-private val LEVEL = intPreferencesKey("level")
-private val EXPERIENCE = intPreferencesKey("experience")
-private val MONEY = intPreferencesKey("money")
-private val BEST_STREAK = intPreferencesKey("best_streak")
-private val REGISTERED = booleanPreferencesKey("registered")
-private val CURRENT_CAMPAIGN = intPreferencesKey("current_campaign")
 
 class UserRepository @Inject constructor(
    @ApplicationContext private val context: Context
@@ -109,6 +75,14 @@ class UserRepository @Inject constructor(
                 }
 
             }
+    }
+
+    suspend fun updateStreak(streak: Int) {
+        dataStore.edit { preferences ->
+            val currentBestStreak = preferences[BEST_STREAK] ?: 0
+            if (streak < currentBestStreak) return@edit
+            preferences[BEST_STREAK] = streak
+        }
     }
 
     suspend fun completeCampaign() {
