@@ -79,6 +79,7 @@ class FreemodeViewModel @Inject constructor(
                 )
             }
         }
+
     }
 
     fun onMessageShown() {

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mathgate.app.ui.components.AppSnackbarHost
 
 @Composable
 fun StartPage(
@@ -37,34 +38,16 @@ fun StartPage(
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1 = state.message) {
-        state.message?.let { message ->
-            snackbarHostState.showSnackbar(
-                message = message
-            )
+    LaunchedEffect(key1 = state.snackbarMessage) {
+        state.snackbarMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
             viewModel.onMessageShown()
         }
     }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { data ->
-                val backgroundColor = if (state.isError) {
-                    Color(0xFFE53935)
-                } else {
-                    Color(0xFF43A047)
-                }
-
-                Snackbar(
-                    snackbarData = data,
-                    containerColor = backgroundColor,
-                    contentColor = Color.White,
-                    actionColor = Color.Yellow,
-                    shape = RoundedCornerShape(12.dp)
-                )
-            }
-        },
+        snackbarHost = { AppSnackbarHost(snackbarHostState) },
     ) { innerPadding ->
         Column(modifier = Modifier
             .fillMaxSize()

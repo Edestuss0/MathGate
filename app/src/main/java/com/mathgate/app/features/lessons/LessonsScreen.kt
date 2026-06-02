@@ -62,8 +62,8 @@ fun LessonsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            items(lessons?.size ?: 0) { index ->
-                LessonCard(lessons?.get(index) ?: LessonEntity(0, 0, "Нет данных", "Нет данных"), onClick = onLessonClick)
+            items(lessons.orEmpty()) { lesson ->
+                LessonCard(lesson, onClick = onLessonClick)
             }
         }
     }

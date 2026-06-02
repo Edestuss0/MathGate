@@ -3,6 +3,8 @@ package com.mathgate.app.features.start_page
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mathgate.app.core.data.user.UserRepository
+import com.mathgate.app.ui.components.AppSnackbarVisuals
+import com.mathgate.app.ui.components.SnackbarMessageType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,15 +27,27 @@ class StartPageViewModel @Inject constructor (
         viewModelScope.launch {
             try {
                 userRepository.register(name)
-                _state.update { it.copy(message = "Регистрация успешна", isError = false) }
+                _state.update { it.copy(
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Регистрация успешна",
+                        type = SnackbarMessageType.SUCCESS
+                    ),
+                    isError = false
+                ) }
             } catch (e: Exception) {
-                _state.update { it.copy(message = "Проверьте введённое имя", isError = true) }
+                _state.update { it.copy(
+                    snackbarMessage = AppSnackbarVisuals(
+                        message = "Ошибка регистрации",
+                        type = SnackbarMessageType.ERROR
+                    ),
+                    isError = true
+                ) }
             }
         }
     }
     
     fun onMessageShown() {
-        _state.update { it.copy(message = null) }
+        _state.update { it.copy(snackbarMessage = null) }
     }
 
 }

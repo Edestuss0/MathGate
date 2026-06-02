@@ -1,5 +1,5 @@
 package com.mathgate.app.core.entities
 
-enum class Difficulties(var label: String) {
+enum class Difficulties(val label: String) {
     easy("Лёгкая"), medium("Средняя"), hard("Сложная");
 }

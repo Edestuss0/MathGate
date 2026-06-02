@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -59,39 +61,36 @@ fun LessonScreen(
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        LazyColumn(
+       Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            items(1) {
-                Card(
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    shape = RoundedCornerShape(16.dp)
+                        .padding(16.dp)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Text(text = lesson?.material ?: "Нет данных", fontSize = 16.sp)
-                    }
+                    Text(text = lesson?.material ?: "Нет данных", fontSize = 16.sp)
                 }
-
-                Button(
-                    onClick = {onStartPractice(lesson?.id ?: 1)},
-                    modifier = Modifier.fillMaxWidth().padding(horizontal =  16.dp),
-                    contentPadding = PaddingValues(16.dp),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Text("Закрепить знания", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                }
-
             }
 
+            Button(
+                onClick = {onStartPractice(lesson?.id ?: 1)},
+                modifier = Modifier.fillMaxWidth().padding(horizontal =  16.dp),
+                contentPadding = PaddingValues(16.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text("Закрепить знания", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            }
         }
     }
 }

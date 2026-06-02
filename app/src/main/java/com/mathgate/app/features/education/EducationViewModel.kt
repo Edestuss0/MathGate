@@ -7,6 +7,7 @@ import com.mathgate.app.core.data.lessons.LessonEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,13 +24,14 @@ class EducationViewModel @Inject constructor(
         initialValue = emptyList()
     )
 
-    val lessons = MutableStateFlow<List<LessonEntity>?>(null)
+   private val _lessons = MutableStateFlow<List<LessonEntity>?>(null)
+    val lessons = _lessons.asStateFlow()
 
     fun getLessons(id: Int) {
         viewModelScope.launch {
-            lessons.update { null }
+            _lessons.update { null }
             val gettedLessons = educationRepository.getLessonByEducationId(id)
-            lessons.update { gettedLessons }
+            _lessons.update { gettedLessons }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.mathgate.app.core.navigation
 
+import LoadingScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import com.mathgate.app.features.lessons.LessonsScreen
 import com.mathgate.app.features.freemode.FreemodeScreen
 import com.mathgate.app.features.lesson_tasks.LessonTasksScreen
 import com.mathgate.app.features.lesson.LessonScreen
+import com.mathgate.app.features.oge.OgeScreen
 import com.mathgate.app.features.start_page.StartPage
 
 @Composable
@@ -27,10 +29,7 @@ fun AppNavigation() {
     val authState by viewModel.authState.collectAsState()
 
     if (authState is AuthState.Loading) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        )
-        return
+        LoadingScreen()
     }
 
     val startDestination = when (authState) {
@@ -83,6 +82,10 @@ fun AppNavigation() {
                 onBackClick = { rootNavController.popBackStack() },
                 onLessonClick = {lessonId -> rootNavController.navigate("lesson/$lessonId")},
             )
+        }
+
+        composable(route = "oge") {
+            OgeScreen(onBackClick = {rootNavController.popBackStack()})
         }
 
         composable(

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -58,8 +59,8 @@ fun EducationScreen(
             )
 
             LazyColumn(modifier = Modifier.fillMaxSize().padding(vertical = 16.dp)) {
-                items(allEducations.size) { index ->
-                    EducationCard(item = allEducations.get(index), onClick = onEducationClick)
+                items(allEducations.orEmpty()) { education ->
+                    EducationCard(item = education, onClick = onEducationClick)
                 }
             }
         }
