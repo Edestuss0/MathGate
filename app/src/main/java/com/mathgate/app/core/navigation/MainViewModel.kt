@@ -29,4 +29,12 @@ class MainViewModel @Inject constructor (
         initialValue = AuthState.Loading
     )
 
+    val currentGrade: StateFlow<Int?> = userRepository.getProfile().map { user ->
+        user.current_grade
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = null
+    )
+
 }

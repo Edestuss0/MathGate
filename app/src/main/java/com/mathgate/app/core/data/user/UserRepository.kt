@@ -27,6 +27,7 @@ class UserRepository @Inject constructor(
             best_streak = preferences[BEST_STREAK] ?: 0,
             registered = preferences[REGISTERED] ?: false,
             current_campaign = preferences[CURRENT_CAMPAIGN] ?: 1,
+            current_grade = preferences[CURRENT_GRADE]
         )
     }
 
@@ -40,6 +41,7 @@ class UserRepository @Inject constructor(
             preferences[EXPERIENCE] = 0
             preferences[BEST_STREAK] = 0
             preferences[CURRENT_CAMPAIGN] = 1
+            preferences.remove(CURRENT_GRADE)
         }
 
         println("Успешная регистрация")
@@ -53,6 +55,7 @@ class UserRepository @Inject constructor(
             preferences[BEST_STREAK] = 0
             preferences[REGISTERED] = false
             preferences[CURRENT_CAMPAIGN] = 1
+            preferences.remove(CURRENT_GRADE)
         }
     }
 
@@ -88,6 +91,18 @@ class UserRepository @Inject constructor(
             val currentExp = preferences[EXPERIENCE] ?: 0
             preferences[CURRENT_CAMPAIGN] = currentCampaign + 1
             preferences[EXPERIENCE] = currentExp + (currentCampaign * 10)
+        }
+    }
+
+    suspend fun changeCurrentGrade(grade: Int) {
+        dataStore.edit { preferences ->
+            preferences[CURRENT_GRADE] = grade
+        }
+    }
+
+    suspend fun removeCurrentGrade() {
+        dataStore.edit { preferences ->
+            preferences.remove(CURRENT_GRADE)
         }
     }
 

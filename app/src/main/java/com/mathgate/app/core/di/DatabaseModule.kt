@@ -2,10 +2,10 @@ package com.mathgate.app.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mathgate.app.core.data.campaign.CampaignDao
 import com.mathgate.app.core.data.db.MainDb
-import com.mathgate.app.core.data.education.EducationDao
-import com.mathgate.app.core.data.lesson_tasks.LessonTaskDao
+import com.mathgate.app.core.data.lesson_blocks.LessonBlocksDao
+import com.mathgate.app.core.data.lesson_pages.LessonPageDao
+import com.mathgate.app.core.data.theme.ThemeDao
 import com.mathgate.app.core.data.lessons.LessonDao
 import dagger.Module
 import dagger.Provides
@@ -28,14 +28,9 @@ object DatabaseModule {
         ).fallbackToDestructiveMigration().build()
 
     @Provides @Singleton
-    fun provideCampaignDao(
-        db: MainDb
-    ): CampaignDao = db.campaignDao
-
-    @Provides @Singleton
     fun provideEducationDao(
         db: MainDb
-    ): EducationDao = db.educationDao
+    ): ThemeDao = db.themeDao
 
     @Provides @Singleton
     fun provideLessonDao(
@@ -43,9 +38,14 @@ object DatabaseModule {
     ): LessonDao = db.lessonDao
 
     @Provides @Singleton
-    fun provideLessonTasksDao(
+    fun provideLessonPagesDao(
         db: MainDb
-    ): LessonTaskDao = db.lessonTaskDao
+    ): LessonPageDao = db.lessonPageDao
+
+    @Provides @Singleton
+    fun provideLessonBlocksDao(
+        db: MainDb
+    ): LessonBlocksDao = db.lessonBlockDao
 }
 
 

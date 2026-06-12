@@ -7,4 +7,5 @@ data class User(
     val best_streak: Int = 0,
     val registered: Boolean = false,
     val current_campaign: Int = 1,
+    val current_grade: Int? = null
 )

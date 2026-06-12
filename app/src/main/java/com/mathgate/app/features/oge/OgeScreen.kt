@@ -1,17 +1,12 @@
 package com.mathgate.app.features.oge
 
-import LoadingScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -44,6 +39,7 @@ import com.mathgate.app.core.entities.FormulaBlock
 import com.mathgate.app.core.entities.ImageBlock
 import com.mathgate.app.core.entities.TextBlock
 import com.mathgate.app.ui.components.AppSnackbarHost
+import com.mathgate.app.ui.components.LoadingScreen
 import com.mathgate.app.ui.components.SvgImageView
 
 @OptIn(ExperimentalMaterial3Api::class)

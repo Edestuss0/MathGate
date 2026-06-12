@@ -1,102 +1,141 @@
 package com.mathgate.app.core.data.education
 
-import android.content.Context
-import com.mathgate.app.core.data.lesson_tasks.LessonTaskDao
-import com.mathgate.app.core.data.lesson_tasks.LessonTaskEntity
+import android.util.Log
+import com.mathgate.app.core.api.ApiClient
+import com.mathgate.app.core.data.lesson_blocks.LessonBlockEntity
+import com.mathgate.app.core.data.lesson_blocks.LessonBlocksDao
+import com.mathgate.app.core.data.lesson_pages.LessonPageDao
+import com.mathgate.app.core.data.lesson_pages.LessonPageEntity
 import com.mathgate.app.core.data.lessons.LessonDao
 import com.mathgate.app.core.data.lessons.LessonEntity
-import dagger.hilt.android.qualifiers.ApplicationContext
-import org.json.JSONArray
+import com.mathgate.app.core.data.theme.ThemeDao
+import com.mathgate.app.core.data.theme.ThemeEntity
+import com.mathgate.app.core.entities.DownloadedTheme
+import com.mathgate.app.core.entities.EducationTheme
+import com.mathgate.app.core.entities.Lesson
+import com.mathgate.app.core.entities.LessonByTheme
+import com.mathgate.app.core.entities.LessonDto
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import javax.inject.Inject
 
 class EducationRepository @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val educationDao: EducationDao,
+    private val themeDao: ThemeDao,
     private val lessonDao: LessonDao,
-    private val lessonTaskDao: LessonTaskDao
+    private val lessonPageDao: LessonPageDao,
+    private val lessonBlockDao: LessonBlocksDao
 ) {
-    val allEducations = educationDao.getEducation()
+    private val client = ApiClient.client
 
-    suspend fun getCount(): Int {
-        return educationDao.getCount()
-    }
-
-    suspend fun getEducationById(id: Int): EducationEntity? {
-        return educationDao.getEducationById(id)
-    }
-
-    suspend fun getLessonByEducationId(id: Int): List<LessonEntity>? {
-        return lessonDao.getLessonsByEducationId(id)
-    }
-
-    suspend fun getLessonById(id: Int): LessonEntity? {
-        return lessonDao.getLessonById(id)
-    }
-
-    suspend fun getTasksByLessonId(id: Int): List<LessonTaskEntity>? {
-        return lessonTaskDao.getTasksByLessonId(id)
-    }
-
-    suspend fun checkAndPreloadDb() {
+    private suspend fun downloadThemesByGrade(grade: Int) {
         try {
-            val jsonString = context.assets.open("education/education.json")
-                .bufferedReader().use { it.readText() }
-            val jsonArray = JSONArray(jsonString)
-            val educations = mutableListOf<EducationEntity>()
-            val lessons = mutableListOf<LessonEntity>()
-            val tasks  = mutableListOf<LessonTaskEntity>()
-            var currentLessonId: Int = 1
+        val res = client.get("http://151.242.88.125:9090/api/education/themes/grade/${grade}/download")
+        if (res.status.value == 200) {
+            val downloadedThemes = res.body<List<DownloadedTheme>>()
+            val themesToAdd = mutableListOf<ThemeEntity>()
+            val lessonsToAdd = mutableListOf<LessonEntity>()
+            val pagesToAdd = mutableListOf<LessonPageEntity>()
+            val blocksToAdd = mutableListOf<LessonBlockEntity>()
 
-            for (i in 0 until jsonArray.length()) {
-                val themeJson = jsonArray.getJSONObject(i)
-                val lessonsJson = themeJson.getJSONArray("lessons")
-
-                for (k in 0 until lessonsJson.length()) {
-                    val lessonJson = lessonsJson.getJSONObject(k)
-                    val tasksJson = lessonJson.getJSONArray("tasks")
-
-                    lessons.add(
-                        LessonEntity(
-                            id = currentLessonId,
-                            name = lessonJson.getString("lessonname"),
-                            material = lessonJson.getString("material"),
-                            educationId = themeJson.getInt("id")
-                        )
-                    )
-
-                    for (j in 0 until tasksJson.length()) {
-                        val taskJson = tasksJson.getJSONObject(j)
-
-                        tasks.add(
-                            LessonTaskEntity(
-                                question = taskJson.getString("question"),
-                                answer = taskJson.getJSONArray("answer")
-                                    .let { answers ->
-                                        List(answers.length()) { index ->
-                                            answers.getString(index)
-                                        }
-                                    },
-                                lessonId = currentLessonId
+            downloadedThemes.map { theme ->
+                theme.lessons.mapIndexed { index, lesson ->
+                    lesson.pages.map {page ->
+                        page.blocks.map { block ->
+                            blocksToAdd.add(
+                                LessonBlockEntity(
+                                    id = block.id,
+                                    orderIndex = block.orderIndex,
+                                    blockType = block.blockType.toString(),
+                                    pageId = page.id,
+                                    payload = block.payload.toString()
+                                )
+                            )
+                        }
+                        pagesToAdd.add(
+                            LessonPageEntity(
+                                id = page.id,
+                                orderIndex = page.orderIndex,
+                                lessonId = lesson.id
                             )
                         )
                     }
-
-                    currentLessonId++
+                    lessonsToAdd.add(
+                        LessonEntity(
+                            id = lesson.id,
+                            title = lesson.title,
+                            description = lesson.description,
+                            themeId = lesson.themeId,
+                            orderIndex = index
+                        )
+                    )
                 }
 
-                educations.add(
-                    EducationEntity(
-                        id = themeJson.optInt("id", i + 1),
-                        name = themeJson.getString("themename"),
+                themesToAdd.add(
+                    ThemeEntity(
+                        id = theme.id,
+                        name = theme.name,
+                        grade = theme.grade,
                     )
                 )
             }
-
-            educationDao.insertEducations(educations)
-            lessonDao.insertLessons(lessons)
-            lessonTaskDao.insertLessonTasks(tasks)
-        } catch (e: Exception) {
-            e.printStackTrace()
+            themeDao.insertThemes(themesToAdd)
+            lessonDao.insertLessons(lessonsToAdd)
+            lessonPageDao.insertLessonPages(pagesToAdd)
+            lessonBlockDao.insertLessonBlocks(blocksToAdd)
         }
+        } catch (e: Exception) { }
+    }
+
+    suspend fun getThemesByGrade(grade: Int): List<EducationTheme> {
+        try {
+            val res = client.get("http://151.242.88.125:9090/api/education/themes/grade/${grade}")
+            downloadThemesByGrade(grade)
+            if (res.status.value == 200) {
+                return res.body<List<EducationTheme>>()
+            }
+        } catch (e: Exception) {
+            val themes = themeDao.getThemesByGrade(grade).map {
+                EducationTheme(
+                    id = it.id,
+                    name = it.name,
+                    grade = it.grade
+                )
+            }
+            return themes
+        }
+        return emptyList()
+    }
+
+    suspend fun getLessonsByTheme(id: Int): List<LessonByTheme> {
+        try {
+        val res = client.get("http://151.242.88.125:9090/api/education/theme/${id}/lessons")
+            if (res.status.value == 200) {
+                return res.body<List<LessonByTheme>>()
+            }
+        } catch (e: Exception) {
+            return lessonDao.getLessonsByThemeId(id).map {
+                LessonByTheme(
+                    id = it.id,
+                    title = it.title,
+                    orderIndex = it.orderIndex,
+                    description = it.description
+                )
+            }
+        }
+        return emptyList()
+    }
+
+    suspend fun getLessonById(id: Int): Lesson? {
+        try {
+            val res = client.get("http://151.242.88.125:9090/api/education/lesson/$id")
+            if (res.status.value == 200) {
+                return res.body<LessonDto>().toLesson()
+            }
+        } catch(e: Exception) {
+            val lessonWithPages = lessonDao.getLessonWithPages(id) ?: return null
+            val blocks = lessonBlockDao.getBlocksByLessonId(id)
+            return lessonWithPages.toLesson(blocks)
+        }
+        return null
     }
 }

@@ -10,3 +10,5 @@ val EXPERIENCE = intPreferencesKey("experience")
 val BEST_STREAK = intPreferencesKey("best_streak")
 val REGISTERED = booleanPreferencesKey("registered")
 val CURRENT_CAMPAIGN = intPreferencesKey("current_campaign")
+
+val CURRENT_GRADE = intPreferencesKey("current_grade")

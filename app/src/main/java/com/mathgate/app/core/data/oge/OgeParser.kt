@@ -2,13 +2,14 @@ package com.mathgate.app.core.data.oge
 
 import android.content.Context
 import android.util.Log
+import com.mathgate.app.core.api.ApiClient
 import com.mathgate.app.core.entities.FormulaBlock
 import com.mathgate.app.core.entities.ImageBlock
 import com.mathgate.app.core.entities.OgeQuestion
 import com.mathgate.app.core.entities.TaskBlock
 import com.mathgate.app.core.entities.TextBlock
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.ktor.client.HttpClient
+
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import org.json.JSONArray
@@ -25,8 +26,7 @@ class OgeParser @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    private val client = HttpClient()
-
+    val client = ApiClient.client
     suspend fun parseOge(): OgeQuestion {
         return try {
 

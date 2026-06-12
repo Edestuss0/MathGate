@@ -1,15 +1,28 @@
 package com.mathgate.app.core.data.lessons
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.mathgate.app.core.data.theme.ThemeEntity
 
 @Entity(
     tableName = "lessons",
-    primaryKeys = ["id", "educationId"]
+    foreignKeys = [
+        ForeignKey(
+            entity = ThemeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["themeId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("themeId")]
 )
 data class LessonEntity(
+    @PrimaryKey
     val id: Int,
-    val educationId: Int,
-    val name: String,
-    val material: String
+    val themeId: Int,
+    val title: String,
+    val description: String,
+    val orderIndex: Int
 )

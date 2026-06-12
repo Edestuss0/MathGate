@@ -14,35 +14,38 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mathgate.app.features.campaign.CampaignHomeScreen
-import com.mathgate.app.features.education.EducationScreen
+import com.mathgate.app.features.education.GradesScreen
+import com.mathgate.app.features.education.ThemeScreen
 import com.mathgate.app.features.freemode.FreemodeHomeScreen
 import com.mathgate.app.features.oge.OgeHomeScreen
 import com.mathgate.app.features.profile.ProfileScreen
 
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
-    CampaignHome("campaign_home", "Кампания", Icons.Default.Flag),
     FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
-    EducationHome("education_home", "Обучение", Icons.Default.MenuBook),
+    GradesScreen("education_home", "Обучение", Icons.Default.MenuBook),
     OgeHome("oge_home", "ОГЭ", Icons.Default.School),
     Profile("profile", "Профиль", Icons.Default.Person)
 }
 
 @Composable
 fun MainPage(
-    rootNavController: NavController
+    rootNavController: NavController,
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val tabNavController = rememberNavController()
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+    val currentGrade by viewModel.currentGrade.collectAsState()
 
     Scaffold(
         bottomBar = {
@@ -78,15 +81,18 @@ fun MainPage(
                 .fillMaxSize()
                 .padding(contentPadding),
             navController = tabNavController,
-            startDestination = Screens.CampaignHome.route
+            startDestination = Screens.GradesScreen.route
         ) {
 
-            composable(Screens.EducationHome.route) {
-                EducationScreen(onEducationClick = {id -> rootNavController.navigate("lessons/$id")})
-            }
-
-            composable(Screens.CampaignHome.route) {
-                CampaignHomeScreen(onStartButtonClick = { rootNavController.navigate("campaign_play") })
+            composable(Screens.GradesScreen.route) {
+                if (currentGrade == null) {
+                    GradesScreen()
+                } else {
+                    ThemeScreen(
+                        grade = currentGrade!!,
+                        onLessonClick = {id -> rootNavController.navigate("lesson/${id}")}
+                    )
+                }
             }
 
             composable(Screens.FreemodeHome.route) {
