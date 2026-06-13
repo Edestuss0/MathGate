@@ -135,7 +135,7 @@ fun LessonScreen(
 
                     LessonBlockType.SVG -> {
                         val payload = block.payload as SvgLessonPayload
-                        SvgImageView(url = payload.svg, isFile = true)
+                        SvgImageView(url = payload.svg)
                     }
                     else -> TextPayloadItem(payload = TextLessonPayload(""))
                 }

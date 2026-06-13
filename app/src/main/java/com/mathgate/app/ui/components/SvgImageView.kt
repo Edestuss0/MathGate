@@ -11,7 +11,7 @@ import coil3.compose.AsyncImage
 import coil3.svg.SvgDecoder
 
 @Composable
-fun SvgImageView(url: String, modifier: Modifier = Modifier, isFile: Boolean = false) {
+fun SvgImageView(url: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val imageLoader = remember {
@@ -23,7 +23,7 @@ fun SvgImageView(url: String, modifier: Modifier = Modifier, isFile: Boolean = f
     }
 
     AsyncImage(
-        model = if (isFile) url.toByteArray() else url,
+        model = if (url.contains("<svg>")) url.toByteArray() else url,
         imageLoader = imageLoader,
         contentDescription = null,
         modifier = modifier,

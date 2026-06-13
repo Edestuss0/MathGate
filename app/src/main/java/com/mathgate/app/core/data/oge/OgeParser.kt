@@ -5,13 +5,20 @@ import android.util.Log
 import com.mathgate.app.core.api.ApiClient
 import com.mathgate.app.core.entities.FormulaBlock
 import com.mathgate.app.core.entities.ImageBlock
+import com.mathgate.app.core.entities.OgeAddDto
+import com.mathgate.app.core.entities.OgeBlockAddDto
 import com.mathgate.app.core.entities.OgeQuestion
 import com.mathgate.app.core.entities.TaskBlock
 import com.mathgate.app.core.entities.TextBlock
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.ktor.client.request.accept
 
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import org.json.JSONArray
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -44,16 +51,51 @@ class OgeParser @Inject constructor(
             val body = document.selectFirst("div.pbody, div.problem_body")
                 ?: return OgeQuestion(emptyList(), "")
 
-            val rawAnswer = document.selectFirst("div.answer span")
-                ?.text()
-                ?.trim()
-                ?: ""
+            val rawAnswer = document.selectFirst("div.answer span")?.text()?.trim() ?: ""
 
-            val answer = rawAnswer
-                .replace(Regex("(?i)Ответ:\\s*:?"), "")
-                .trim()
+            val answer = rawAnswer.replace(Regex("(?i)Ответ:\\s*:?"), "").trim()
 
             val blocks = parseBlocks(body)
+
+            val addRequestBody = OgeAddDto(
+                id = jsonArray.getInt(random),
+                answer = answer,
+                blocks = blocks.map {
+                    OgeBlockAddDto(
+                        content = when(it) {
+                            is TextBlock -> it.text
+                            is ImageBlock -> fetchSvgCode(it.url)
+                            is FormulaBlock -> {
+                                val svg = fetchSvgCode(it.url)
+
+                                Log.d(
+                                    "OGE",
+                                    "SVG size = ${svg.toByteArray().size} bytes"
+                                )
+
+                                svg
+                            }
+                            else -> ""
+                        },
+                        type = when(it) {
+                            is TextBlock -> "TEXT"
+                            is ImageBlock -> "IMAGE"
+                            is FormulaBlock -> "FORMULA"
+                            else -> "TEXT"
+                        }
+                    )
+                }
+            )
+
+            try {
+                val response = client.post("http://151.242.88.125:9090/api/oge/add") {
+                    contentType(ContentType.Application.Json)
+                    setBody(addRequestBody)
+                }
+                Log.d("OGE", "POST OK ${response.status}")
+            } catch (e: Exception) {
+                Log.e("OGE", "POST_ERROR", e)
+            }
 
             OgeQuestion(
                 blocks = blocks,
@@ -126,5 +168,8 @@ class OgeParser @Inject constructor(
             .replace("\u00A0", " ")
             .replace(Regex("\\s+"), " ")
             .trim()
+    }
+    private suspend fun fetchSvgCode(url: String): String {
+        return client.get(url).bodyAsText()
     }
 }
