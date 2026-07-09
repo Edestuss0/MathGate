@@ -1,8 +1,9 @@
-package com.mathgate.app.core.data.db
+package com.mathgate.app.data.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.mathgate.app.domain.exam.entity.ExamTypes
 
 class Converters {
 
@@ -20,4 +21,12 @@ class Converters {
         return gson.fromJson(json, type)
     }
 
+    @TypeConverter
+    fun fromType(type: ExamTypes): String {
+        return type.name
+    }
+    @TypeConverter
+    fun toType(type: String): ExamTypes {
+        return ExamTypes.valueOf(type)
+    }
 }

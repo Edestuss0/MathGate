@@ -3,7 +3,6 @@ package com.mathgate.app.core.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Person
@@ -11,7 +10,6 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,14 +24,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mathgate.app.features.education.GradesScreen
 import com.mathgate.app.features.education.ThemeScreen
-import com.mathgate.app.features.freemode.FreemodeHomeScreen
-import com.mathgate.app.features.oge.OgeHomeScreen
+import com.mathgate.app.features.exam.view.ExamHost
+import com.mathgate.app.features.freemode.view.FreemodeHomeScreen
 import com.mathgate.app.features.profile.ProfileScreen
+import com.mathgate.app.ui.theme.AppScaffold
 
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
     FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
     GradesScreen("education_home", "Обучение", Icons.Default.MenuBook),
-    OgeHome("oge_home", "ОГЭ", Icons.Default.School),
+    OgeHome("oge_home", "Экзамены", Icons.Default.School),
     Profile("profile", "Профиль", Icons.Default.Person)
 }
 
@@ -47,7 +46,7 @@ fun MainPage(
     val currentRoute = backStackEntry?.destination?.route
     val currentGrade by viewModel.currentGrade.collectAsState()
 
-    Scaffold(
+    AppScaffold(
         bottomBar = {
             NavigationBar() {
                 Screens.entries.forEach {screen ->
@@ -77,9 +76,7 @@ fun MainPage(
     ) { contentPadding ->
 
         NavHost(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding),
+            modifier = Modifier.fillMaxSize().padding(bottom =  contentPadding.calculateBottomPadding()),
             navController = tabNavController,
             startDestination = Screens.GradesScreen.route
         ) {
@@ -107,7 +104,7 @@ fun MainPage(
             }
 
             composable(Screens.OgeHome.route) {
-                OgeHomeScreen(onStartClick = {rootNavController.navigate("oge")})
+                ExamHost()
             }
 
 

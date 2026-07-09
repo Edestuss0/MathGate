@@ -9,9 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mathgate.app.features.freemode.FreemodeScreen
+import com.mathgate.app.features.freemode.view.FreemodeScreen
 import com.mathgate.app.features.lesson.LessonScreen
-import com.mathgate.app.features.oge.OgeScreen
 import com.mathgate.app.features.start_page.StartPage
 import com.mathgate.app.ui.components.LoadingScreen
 
@@ -51,19 +50,12 @@ fun AppNavigation() {
                     type = NavType.StringType
                 }
             )
-        ) { backStackEntry ->
-
-            val difficulty = backStackEntry.arguments?.getString("difficulty") ?: "easy"
+        ) {
             FreemodeScreen(
-                difficulty = difficulty,
                 onBackClick = {
                     rootNavController.popBackStack()
                 }
             )
-        }
-
-        composable(route = "oge") {
-            OgeScreen(onBackClick = {rootNavController.popBackStack()})
         }
 
         composable(

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -9,6 +11,22 @@ plugins {
 configurations.all {
     resolutionStrategy.force("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0")
 }
+
+val configProps = Properties()
+val configFile = rootProject.file("config.properties")
+
+if (configFile.exists()) {
+    configFile.inputStream().use {
+        configProps.load(it)
+    }
+} else {
+    throw GradleException(
+        "config.properties not found: ${configFile.absolutePath}"
+    )
+}
+
+val apiUrl = configProps.getProperty("API_URL")
+    ?: throw GradleException("API_URL not found in config.properties")
 
 android {
     namespace = "com.mathgate.app"
@@ -22,6 +40,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "API_URL",
+            "\"$apiUrl\""
+        )
     }
 
     buildTypes {
@@ -38,6 +62,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }

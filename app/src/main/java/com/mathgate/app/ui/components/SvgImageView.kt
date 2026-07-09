@@ -5,13 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.svg.SvgDecoder
 
 @Composable
-fun SvgImageView(url: String, modifier: Modifier = Modifier) {
+fun SvgImageView(
+    url: String,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
 
     val imageLoader = remember {
@@ -23,10 +27,11 @@ fun SvgImageView(url: String, modifier: Modifier = Modifier) {
     }
 
     AsyncImage(
-        model = if (url.contains("<svg>")) url.toByteArray() else url,
+        model = if (url.contains("<svg")) url.toByteArray() else url,
         imageLoader = imageLoader,
         contentDescription = null,
         modifier = modifier,
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+        contentScale = ContentScale.Fit
     )
 }

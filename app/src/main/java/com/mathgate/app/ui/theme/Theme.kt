@@ -2,7 +2,9 @@ package com.mathgate.app.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -10,6 +12,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
     primary                = Gray80,
@@ -81,6 +84,14 @@ private val LightColorScheme = lightColorScheme(
     scrim                   = Color(0xFF000000),
 )
 
+val shapes = Shapes(
+    extraSmall = RoundedCornerShape(6.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(14.dp),
+    large = RoundedCornerShape(20.dp),
+    extraLarge = RoundedCornerShape(24.dp)
+)
+
 @Composable
 fun MathGateTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -99,6 +110,7 @@ fun MathGateTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography  = Typography,
-        content     = content
+        content = content,
+        shapes = shapes
     )
 }
