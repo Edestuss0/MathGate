@@ -1,6 +1,6 @@
 package com.mathgate.app.core.di
 
-import com.mathgate.app.data.features.exam.repository.ExamRepositoryImpl
+import com.mathgate.app.domain.exam.repository.ExamRepositoryImpl
 import com.mathgate.app.domain.exam.repository.ExamRepository
 import dagger.Binds
 import dagger.Module

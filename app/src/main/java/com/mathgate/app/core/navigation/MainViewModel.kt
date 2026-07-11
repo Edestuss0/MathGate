@@ -2,7 +2,7 @@ package com.mathgate.app.core.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mathgate.app.core.data.user.UserRepository
+import com.mathgate.app.domain.user.repository.IUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,23 +18,12 @@ sealed class AuthState {
 
 @HiltViewModel
 class MainViewModel @Inject constructor (
-    private val userRepository: UserRepository
+    private val userRepository: IUserRepository
     ) : ViewModel() {
 
-    val authState: StateFlow<AuthState> = userRepository.getProfile().map { user ->
-        if (user.registered) AuthState.Registered else AuthState.NotRegistered
+    val authState: StateFlow<AuthState> = userRepository.getUser().map {
+        if (it.registered) AuthState.Registered else AuthState.NotRegistered
     }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = AuthState.Loading
+        scope = viewModelScope, started = SharingStarted.WhileSubscribed(5000), initialValue = AuthState.Loading
     )
-
-    val currentGrade: StateFlow<Int?> = userRepository.getProfile().map { user ->
-        user.current_grade
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
-
 }

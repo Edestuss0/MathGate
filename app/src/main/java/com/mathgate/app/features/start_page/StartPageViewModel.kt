@@ -2,7 +2,7 @@ package com.mathgate.app.features.start_page
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mathgate.app.core.data.user.UserRepository
+import com.mathgate.app.domain.user.repository.IUserRepository
 import com.mathgate.app.ui.components.AppSnackbarVisuals
 import com.mathgate.app.ui.components.SnackbarMessageType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StartPageViewModel @Inject constructor (
-    private val userRepository: UserRepository
+    private val userRepository: IUserRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(StartPageState())

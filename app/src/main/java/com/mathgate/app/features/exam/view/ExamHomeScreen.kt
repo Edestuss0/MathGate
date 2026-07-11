@@ -3,18 +3,23 @@ package com.mathgate.app.features.exam.view
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
@@ -27,37 +32,116 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mathgate.app.domain.exam.entity.ExamTypes
+import com.mathgate.app.domain.user.entity.User
 import com.mathgate.app.ui.theme.AppCard
+import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExamHomeScreen(
-    onStartClick: (type: ExamTypes) -> Unit
+    onStartClick: (type: ExamTypes) -> Unit,
+    user: User
 ) {
 
+
+
+
+    AppScaffold(Modifier.fillMaxSize()) {
+        ExamHomeContent(
+            onStartClick = onStartClick,
+            user = user
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ExamHomeContent(
+    onStartClick: (type: ExamTypes) -> Unit,
+    user: User
+) {
     var isDropdownOpen by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf<ExamTypes>(ExamTypes.EGE) }
 
-    Scaffold(Modifier.fillMaxSize()) { innerPadding ->
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth()
         ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Задачи из экзаменов",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                AppCard(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.LocalFireDepartment,
+                                contentDescription = null
+                            )
+                            Text(
+                                text = "Серия: ${user.currentStreak}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    }
+                }
+                AppCard(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null
+                            )
+                            Text(
+                                text = "Верных: ${(user.examData.filter { it == true }.size.toDouble() / user.examData.size.toDouble() * 100).toInt()}%",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
             AppCard() {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(16.dp)
                 ) {
+                    Text(
+                        text = "Решайте задачи из экзаменов в формате свободного режима",
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center
+                    )
 
-                    Text(text = "Решайте задания из экзаменов", style = MaterialTheme.typography.titleLarge)
-
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     ExposedDropdownMenuBox(
                         expanded = isDropdownOpen,
@@ -65,11 +149,11 @@ fun ExamHomeScreen(
                     ) {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable, true),
-                            shape = RoundedCornerShape(16.dp),
+                            shape = MaterialTheme.shapes.medium,
                             value = selectedType.label,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Сложность") },
+                            label = { Text("Тип экзамена") },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownOpen) },
                             colors = ExposedDropdownMenuDefaults.textFieldColors()
                         )
@@ -93,12 +177,22 @@ fun ExamHomeScreen(
 
                     Spacer(Modifier.height(16.dp))
 
-                    PrimaryButton(
-                        onClick = {onStartClick(selectedType)},
-                        text = "Начать"
-                    )
                 }
             }
+            Spacer(Modifier.height(16.dp))
+            PrimaryButton(
+                onClick = {onStartClick(selectedType)},
+                text = "Начать"
+            )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun preview() {
+    ExamHomeContent(
+        onStartClick = {},
+        user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), listOf(true, true, false, true), true)
+    )
 }

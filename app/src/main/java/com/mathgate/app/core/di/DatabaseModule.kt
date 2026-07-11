@@ -2,12 +2,14 @@ package com.mathgate.app.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mathgate.app.data.db.MainDb
+import com.mathgate.app.core.db.MainDb
 import com.mathgate.app.core.data.lesson_blocks.LessonBlocksDao
 import com.mathgate.app.core.data.lesson_pages.LessonPageDao
 import com.mathgate.app.core.data.theme.ThemeDao
 import com.mathgate.app.core.data.lessons.LessonDao
-import com.mathgate.app.data.features.exam.local.dao.ExamCacheDao
+import com.mathgate.app.domain.exam.data.local.dao.ExamCacheDao
+import com.mathgate.app.domain.user.data.exam_data.dao.ExamDataDao
+import com.mathgate.app.domain.user.data.freemode_data.dao.FreemodeDataDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,6 +54,16 @@ object DatabaseModule {
     fun provideExamCacheDao(
         db: MainDb
     ): ExamCacheDao = db.examCacheDao
+
+    @Provides @Singleton
+    fun provideExamDataDao(
+        db: MainDb
+    ): ExamDataDao = db.examDataDao
+
+    @Provides @Singleton
+    fun provideFreemodeDataDao(
+        db: MainDb
+    ): FreemodeDataDao = db.freemodeDataDao
 }
 
 

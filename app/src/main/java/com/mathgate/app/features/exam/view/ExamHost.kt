@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mathgate.app.features.exam.viewmodel.ExamViewModel
+import com.mathgate.app.ui.components.LoadingScreen
+import com.mathgate.app.ui.theme.EmptyState
 
 @Composable
 fun ExamHost(
@@ -15,25 +17,48 @@ fun ExamHost(
 ) {
     val navController = rememberNavController()
     val state by viewModel.state.collectAsState()
+    val user by viewModel.user.collectAsState()
 
     NavHost(
         navController = navController,
         startDestination = "main"
     ) {
         composable("main") {
-            ExamHomeScreen(
-                onStartClick = {type ->
-                    viewModel.load(type)
-                    navController.navigate("play")
+            when {
+                state.isLoading -> {
+                    LoadingScreen()
                 }
-            )
+                user == null -> {
+                    EmptyState("Не удалось получить необходимую информацию")
+                }
+                else -> {
+                    ExamHomeScreen(
+                        onStartClick = {type ->
+                            viewModel.load(type)
+                            navController.navigate("play")
+                        },
+                        user = user!!
+                    )
+                }
+            }
         }
         composable("play") {
-            ExamScreen(
-                viewModel = viewModel,
-                state = state,
-                onBackClick = {navController.popBackStack()}
-            )
+            when {
+                state.isLoading -> {
+                    LoadingScreen()
+                }
+                user == null -> {
+                    EmptyState("Не удалось получить необходимую информацию")
+                }
+                else -> {
+                    ExamScreen(
+                        viewModel = viewModel,
+                        state = state,
+                        onBackClick = {navController.popBackStack()},
+                        user = user!!
+                    )
+                }
+            }
         }
     }
 }

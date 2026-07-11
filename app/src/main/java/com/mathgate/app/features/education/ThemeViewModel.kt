@@ -3,9 +3,9 @@ package com.mathgate.app.features.education
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mathgate.app.core.data.education.EducationRepository
-import com.mathgate.app.core.data.user.UserRepository
 import com.mathgate.app.core.entities.EducationTheme
 import com.mathgate.app.core.entities.LessonByTheme
+import com.mathgate.app.domain.user.repository.IUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ThemeViewModel @Inject constructor(
     private val educationRepository: EducationRepository,
-    private val userRepository: UserRepository
+    private val userRepository: IUserRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ThemeState>(ThemeState())
@@ -25,7 +25,7 @@ class ThemeViewModel @Inject constructor(
     fun getInitialData(grade: Int) {
         viewModelScope.launch {
             if (grade < 1) {
-                userRepository.removeCurrentGrade()
+//                userRepository.removeCurrentGrade()
                 return@launch
             }
             try {
@@ -44,11 +44,11 @@ class ThemeViewModel @Inject constructor(
                         )
                     }
                 } else {
-                    userRepository.removeCurrentGrade()
+//                    userRepository.removeCurrentGrade()
                     _state.update { it.copy(isLoading = false) }
                 }
             } catch (_: Exception) {
-                userRepository.removeCurrentGrade()
+//                userRepository.removeCurrentGrade()
                 _state.update { it.copy(isLoading = false, currentTheme = null, lessons = emptyList()) }
             }
         }
@@ -91,7 +91,7 @@ class ThemeViewModel @Inject constructor(
 
     fun onGradeClick() {
         viewModelScope.launch {
-            userRepository.removeCurrentGrade()
+//            userRepository.removeCurrentGrade()
         }
     }
 }

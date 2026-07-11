@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.LineAxis
 import androidx.compose.material.icons.filled.Person
@@ -34,7 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.mathgate.app.core.entities.User
+import com.mathgate.app.domain.user.entity.User
+import com.mathgate.app.ui.components.LoadingScreen
+import com.mathgate.app.ui.theme.AppScaffold
+import com.mathgate.app.ui.theme.EmptyState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +46,18 @@ fun ProfileScreen(
     val state by viewModel.state.collectAsState()
     var isDeleteAccountModalOpen by remember { mutableStateOf<Boolean>(false) }
 
-    ProfileContent(user = state, onDeleteAccount = { isDeleteAccountModalOpen = true })
+    when {
+        state.isLoading -> {
+            LoadingScreen()
+        }
+        state.user == null -> {
+            EmptyState("Не удалось получить информацию о пользователе")
+        }
+        else -> {
+            ProfileContent(user = state.user!!, onDeleteAccount = { isDeleteAccountModalOpen = true })
+        }
+    }
+
 
     if (isDeleteAccountModalOpen) {
         AlertDialog(
@@ -79,7 +92,7 @@ fun ProfileContent(
     user: User,
     onDeleteAccount: () -> Unit
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize())  { innerPadding ->
+    AppScaffold(modifier = Modifier.fillMaxSize())  { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -133,12 +146,7 @@ fun ProfileContent(
 
             ProfileContentRow(
                 icon = Icons.Default.LineAxis,
-                content = "Лучшая серия: ${user.best_streak}"
-            )
-
-            ProfileContentRow(
-                icon = Icons.Default.Check,
-                content = "Уровень кампании: ${user.current_campaign}"
+                content = "Лучшая серия: ${user.bestStreak}"
             )
 
             Button(

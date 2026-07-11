@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,15 +40,11 @@ fun AppCard(
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.extraLarge,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.75f),
-            contentColor = MaterialTheme.colorScheme.onSurface
-        ),
-        border = BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
-        ),
-        elevation = CardDefaults.cardElevation(
+//        colors = CardDefaults.cardColors(
+//            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+//            contentColor = MaterialTheme.colorScheme.onSurface
+//        ),
+         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         )
     ) {
@@ -121,7 +118,8 @@ fun PrimaryButton(
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         shape = MaterialTheme.shapes.medium,
-        contentPadding = PaddingValues(vertical = 16.dp)
+        contentPadding = PaddingValues(vertical = 16.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
     ) {
         ButtonLabel(text)
     }

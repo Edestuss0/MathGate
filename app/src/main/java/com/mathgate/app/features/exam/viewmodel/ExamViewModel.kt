@@ -7,27 +7,35 @@ import com.mathgate.app.core.data.oge.OgeParser
 import com.mathgate.app.core.entity.AppResult
 import com.mathgate.app.domain.exam.entity.ExamTypes
 import com.mathgate.app.domain.exam.usecases.GetExamQuestionUseCase
+import com.mathgate.app.domain.user.entity.User
+import com.mathgate.app.domain.user.repository.IUserRepository
 import com.mathgate.app.ui.components.AppSnackbarVisuals
 import com.mathgate.app.ui.components.SnackbarMessageType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExamViewModel @Inject constructor(
-    private val getQuestion: GetExamQuestionUseCase
+    private val getQuestion: GetExamQuestionUseCase,
+    private val userRepository: IUserRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ExamState())
     val state = _state.asStateFlow()
     private val _events = Channel<AppSnackbarVisuals>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
-    private var type: ExamTypes? = null
+    val user: StateFlow<User?> = userRepository.getUser().stateIn(
+        scope = viewModelScope, started = SharingStarted.WhileSubscribed(5000), initialValue = null
+    )
 
     init {
         getNewQuestion()
@@ -36,7 +44,7 @@ class ExamViewModel @Inject constructor(
     fun getNewQuestion() {
 
         viewModelScope.launch {
-            if (type == null) {
+            if (state.value.type == null) {
                 _events.send( AppSnackbarVisuals(
                     message = "Некорректный тип экзамена",
                     type = SnackbarMessageType.ERROR
@@ -45,7 +53,7 @@ class ExamViewModel @Inject constructor(
             }
             _state.update { it.copy(isAnswered = false, isLoading = true, question = null) }
             try {
-                getQuestion(type!!).collect { result ->
+                getQuestion(state.value.type!!).collect { result ->
                     when {
                         result is AppResult.Success -> {
                             _state.update { it.copy(
@@ -110,8 +118,8 @@ class ExamViewModel @Inject constructor(
         }
     }
 
-    fun load(Newtype: ExamTypes) {
-        type = Newtype
+    fun load(newtype: ExamTypes) {
+        _state.update { it.copy(type = newtype) }
         getNewQuestion()
     }
 

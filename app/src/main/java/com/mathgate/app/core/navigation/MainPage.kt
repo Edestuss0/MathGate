@@ -26,6 +26,7 @@ import com.mathgate.app.features.education.GradesScreen
 import com.mathgate.app.features.education.ThemeScreen
 import com.mathgate.app.features.exam.view.ExamHost
 import com.mathgate.app.features.freemode.view.FreemodeHomeScreen
+import com.mathgate.app.features.freemode.view.FreemodeHost
 import com.mathgate.app.features.profile.ProfileScreen
 import com.mathgate.app.ui.theme.AppScaffold
 
@@ -44,7 +45,7 @@ fun MainPage(
     val tabNavController = rememberNavController()
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val currentGrade by viewModel.currentGrade.collectAsState()
+    val currentGrade = 0
 
     AppScaffold(
         bottomBar = {
@@ -76,7 +77,7 @@ fun MainPage(
     ) { contentPadding ->
 
         NavHost(
-            modifier = Modifier.fillMaxSize().padding(bottom =  contentPadding.calculateBottomPadding()),
+            modifier = Modifier.fillMaxSize().padding(bottom = contentPadding.calculateBottomPadding(), top = contentPadding.calculateTopPadding()),
             navController = tabNavController,
             startDestination = Screens.GradesScreen.route
         ) {
@@ -93,14 +94,7 @@ fun MainPage(
             }
 
             composable(Screens.FreemodeHome.route) {
-                FreemodeHomeScreen(
-                    onStartButtonClick = { difficulty ->
-
-                        rootNavController.navigate(
-                            "play/$difficulty"
-                        )
-                    }
-                )
+                FreemodeHost()
             }
 
             composable(Screens.OgeHome.route) {

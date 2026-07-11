@@ -44,21 +44,6 @@ fun AppNavigation() {
         }
 
         composable(
-            route = "play/{difficulty}",
-            arguments = listOf(
-                navArgument("difficulty") {
-                    type = NavType.StringType
-                }
-            )
-        ) {
-            FreemodeScreen(
-                onBackClick = {
-                    rootNavController.popBackStack()
-                }
-            )
-        }
-
-        composable(
             route = "lesson/{id}",
             arguments = listOf(
                 navArgument("id") {
