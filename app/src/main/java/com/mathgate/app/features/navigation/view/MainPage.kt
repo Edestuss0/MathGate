@@ -1,4 +1,4 @@
-package com.mathgate.app.core.navigation
+package com.mathgate.app.features.navigation.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,27 +24,24 @@ import androidx.navigation.compose.rememberNavController
 import com.mathgate.app.features.education.GradesScreen
 import com.mathgate.app.features.education.ThemeScreen
 import com.mathgate.app.features.exam.view.ExamHost
-import com.mathgate.app.features.freemode.view.FreemodeHomeScreen
 import com.mathgate.app.features.freemode.view.FreemodeHost
-import com.mathgate.app.features.profile.ProfileScreen
+import com.mathgate.app.features.navigation.viewmodel.MainViewModel
+import com.mathgate.app.features.profile.view.ProfileScreen
 import com.mathgate.app.ui.theme.AppScaffold
 
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
-    FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
-    GradesScreen("education_home", "Обучение", Icons.Default.MenuBook),
     OgeHome("oge_home", "Экзамены", Icons.Default.School),
+    FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
     Profile("profile", "Профиль", Icons.Default.Person)
 }
 
 @Composable
 fun MainPage(
     rootNavController: NavController,
-    viewModel: MainViewModel = hiltViewModel()
 ) {
     val tabNavController = rememberNavController()
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val currentGrade = 0
 
     AppScaffold(
         bottomBar = {
@@ -77,22 +73,10 @@ fun MainPage(
     ) { contentPadding ->
 
         NavHost(
-            modifier = Modifier.fillMaxSize().padding(bottom = contentPadding.calculateBottomPadding(), top = contentPadding.calculateTopPadding()),
+            modifier = Modifier.fillMaxSize().padding(bottom = contentPadding.calculateBottomPadding()),
             navController = tabNavController,
-            startDestination = Screens.GradesScreen.route
+            startDestination = Screens.FreemodeHome.route
         ) {
-
-            composable(Screens.GradesScreen.route) {
-                if (currentGrade == null) {
-                    GradesScreen()
-                } else {
-                    ThemeScreen(
-                        grade = currentGrade!!,
-                        onLessonClick = {id -> rootNavController.navigate("lesson/${id}")}
-                    )
-                }
-            }
-
             composable(Screens.FreemodeHome.route) {
                 FreemodeHost()
             }

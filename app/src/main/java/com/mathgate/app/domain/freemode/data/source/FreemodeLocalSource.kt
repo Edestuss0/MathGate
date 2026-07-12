@@ -5,13 +5,16 @@ import com.mathgate.app.domain.freemode.entity.FreemodeBlockType
 import com.mathgate.app.domain.freemode.entity.FreemodeQuestionBlock
 import java.math.BigDecimal
 import java.math.RoundingMode
+import javax.inject.Inject
 import kotlin.math.PI
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class FreemodeLocalSource {
+class FreemodeLocalSource @Inject constructor(
+
+) {
 
     private data class TrigAngle(
         val degrees: Int,

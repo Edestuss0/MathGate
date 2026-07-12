@@ -1,4 +1,4 @@
-package com.mathgate.app.core.navigation
+package com.mathgate.app.features.navigation.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -9,8 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mathgate.app.features.freemode.view.FreemodeScreen
 import com.mathgate.app.features.lesson.LessonScreen
+import com.mathgate.app.features.navigation.viewmodel.AuthState
+import com.mathgate.app.features.navigation.viewmodel.MainViewModel
 import com.mathgate.app.features.start_page.StartPage
 import com.mathgate.app.ui.components.LoadingScreen
 

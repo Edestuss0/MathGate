@@ -1,4 +1,4 @@
-package com.mathgate.app.core.navigation
+package com.mathgate.app.features.navigation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

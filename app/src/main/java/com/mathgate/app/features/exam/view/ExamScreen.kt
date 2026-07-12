@@ -3,6 +3,7 @@ package com.mathgate.app.features.exam.view
 import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -74,7 +75,7 @@ fun ExamScreen(
         hasBackButton = true,
         onBackClick = onBackClick,
         topBarText = "Экзамены"
-    ) {
+    ) { paddingValues ->
         when {
             state.isLoading && state.question == null -> {
                 LoadingScreen()
@@ -91,7 +92,8 @@ fun ExamScreen(
                     skipQuestion = {viewModel.skipQuestion()},
                     getNewQuestion = {viewModel.getNewQuestion()},
                     type = state.type ?: ExamTypes.EGE,
-                    user = user
+                    user = user,
+                    modifier = Modifier.padding(paddingValues)
                 )
             }
         }
@@ -107,21 +109,15 @@ private fun ExamContent(
     skipQuestion: () -> Unit,
     getNewQuestion: () -> Unit,
     user: User,
-    type: ExamTypes
+    type: ExamTypes,
+    modifier: Modifier
 ) {
     var answerInput by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding()
-            .navigationBarsPadding()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxSize().imePadding().navigationBarsPadding()
+            .verticalScroll(rememberScrollState()).padding(16.dp),
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -132,7 +128,8 @@ private fun ExamContent(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 imageVector = Icons.Default.LocalFireDepartment,
@@ -151,7 +148,8 @@ private fun ExamContent(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 imageVector = Icons.Default.MenuBook,
@@ -289,7 +287,6 @@ private fun ExamContent(
                 )
             }
         }
-    }
 }
 
 @Preview(showBackground = true)
@@ -314,6 +311,7 @@ private fun preview() {
         onAnswer = {},
         isError = false,
         user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), emptyList(), true),
-        type = ExamTypes.OGE
+        type = ExamTypes.OGE,
+        modifier = Modifier
     )
 }

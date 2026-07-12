@@ -48,6 +48,14 @@ android {
         )
     }
 
+    testOptions {
+        unitTests {
+            all {
+                it.maxHeapSize = "2048m"
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -97,12 +105,15 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.5.0")
     implementation("io.ktor:ktor-client-auth:3.5.0")
     implementation("io.ktor:ktor-client-logging:3.5.0")
+    testImplementation("io.ktor:ktor-client-mock:3.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation(libs.latex.base)
     implementation(libs.latex.renderer)
     implementation(libs.latex.parser)
     implementation("org.jsoup:jsoup:1.22.2")
     testImplementation(libs.junit)
+    testImplementation("io.mockk:mockk:1.14.11")
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

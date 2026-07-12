@@ -7,6 +7,7 @@ import com.mathgate.app.domain.exam.data.remote.source.ExamRemoteSource
 import com.mathgate.app.domain.exam.entity.ExamQuestion
 import com.mathgate.app.domain.exam.entity.ExamTypes
 import io.ktor.utils.io.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,10 +21,11 @@ import javax.inject.Singleton
 @Singleton
 class ExamRepositoryImpl @Inject constructor(
     private val remote: ExamRemoteSource,
-    private val local: ExamLocalSource
+    private val local: ExamLocalSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ExamRepository {
 
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
 
     override suspend fun getExamQuestion(type: ExamTypes): Flow<AppResult<ExamQuestion>> = flow {
         emit(AppResult.Loading)

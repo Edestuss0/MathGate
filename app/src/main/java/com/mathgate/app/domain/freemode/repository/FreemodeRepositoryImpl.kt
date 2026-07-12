@@ -10,9 +10,8 @@ import kotlin.random.nextInt
 
 @Singleton
 class FreemodeRepositoryImpl @Inject constructor(
-
+    private val source: FreemodeLocalSource
 ) : IFreemodeRepository {
-    private val source = FreemodeLocalSource()
     override fun getQuestion(difficulty: FreemodeDifficulty): FreemodeQuestion {
         return when (difficulty) {
             FreemodeDifficulty.EASY -> {
