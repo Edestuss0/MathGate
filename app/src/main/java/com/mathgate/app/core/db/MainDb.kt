@@ -11,16 +11,18 @@ import com.mathgate.app.core.data.theme.ThemeDao
 import com.mathgate.app.core.data.theme.ThemeEntity
 import com.mathgate.app.core.data.lessons.LessonDao
 import com.mathgate.app.core.data.lessons.LessonEntity
-import com.mathgate.app.domain.exam.data.local.dao.ExamCacheDao
-import com.mathgate.app.domain.exam.data.local.entities.ExamCacheEntity
+import com.mathgate.app.domain.exam.data.local.questions.dao.ExamQuestionCacheDao
+import com.mathgate.app.domain.exam.data.local.questions.entity.ExamQuestionCacheEntity
+import com.mathgate.app.domain.exam.data.local.themes.dao.ExamThemeCacheDao
+import com.mathgate.app.domain.exam.data.local.themes.entity.ExamThemeCacheEntity
 import com.mathgate.app.domain.user.data.exam_data.dao.ExamDataDao
 import com.mathgate.app.domain.user.data.exam_data.entity.ExamDataEntity
 import com.mathgate.app.domain.user.data.freemode_data.dao.FreemodeDataDao
 import com.mathgate.app.domain.user.data.freemode_data.entity.FreemodeDataEntity
 
 @Database(
-    entities = [ThemeEntity::class, LessonEntity::class, LessonPageEntity::class, LessonBlockEntity::class, ExamCacheEntity::class, FreemodeDataEntity::class, ExamDataEntity::class],
-    version = 10,
+    entities = [ThemeEntity::class, LessonEntity::class, LessonPageEntity::class, LessonBlockEntity::class, ExamQuestionCacheEntity::class, FreemodeDataEntity::class, ExamDataEntity::class, ExamThemeCacheEntity::class],
+    version = 11,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -30,8 +32,9 @@ abstract class MainDb : RoomDatabase() {
     abstract val lessonDao: LessonDao
     abstract val lessonPageDao: LessonPageDao
     abstract val lessonBlockDao: LessonBlocksDao
-    abstract val examCacheDao: ExamCacheDao
+    abstract val examQuestionCacheDao: ExamQuestionCacheDao
     abstract val examDataDao: ExamDataDao
     abstract val freemodeDataDao: FreemodeDataDao
+    abstract val examThemeCacheDao: ExamThemeCacheDao
 
 }

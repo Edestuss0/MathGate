@@ -7,7 +7,8 @@ import com.mathgate.app.core.data.lesson_blocks.LessonBlocksDao
 import com.mathgate.app.core.data.lesson_pages.LessonPageDao
 import com.mathgate.app.core.data.theme.ThemeDao
 import com.mathgate.app.core.data.lessons.LessonDao
-import com.mathgate.app.domain.exam.data.local.dao.ExamCacheDao
+import com.mathgate.app.domain.exam.data.local.questions.dao.ExamQuestionCacheDao
+import com.mathgate.app.domain.exam.data.local.themes.dao.ExamThemeCacheDao
 import com.mathgate.app.domain.user.data.exam_data.dao.ExamDataDao
 import com.mathgate.app.domain.user.data.freemode_data.dao.FreemodeDataDao
 import dagger.Module
@@ -53,7 +54,12 @@ object DatabaseModule {
     @Provides @Singleton
     fun provideExamCacheDao(
         db: MainDb
-    ): ExamCacheDao = db.examCacheDao
+    ): ExamQuestionCacheDao = db.examQuestionCacheDao
+
+    @Provides @Singleton
+    fun provideExamThemeCacheDao(
+        db: MainDb
+    ): ExamThemeCacheDao = db.examThemeCacheDao
 
     @Provides @Singleton
     fun provideExamDataDao(

@@ -85,7 +85,6 @@ fun MainPage(
                 ExamHost()
             }
 
-
             composable(Screens.Profile.route) {
                 ProfileScreen()
             }

@@ -10,7 +10,9 @@ data class ExamQuestionDto (
     val id: Int,
     val answer: String,
     val blocks: List<ExamBlockDto>,
-    val solutionBlocks: List<ExamBlockDto>
+    val solutionBlocks: List<ExamBlockDto>,
+    val themeLabel: String,
+    val themeNumber: Int
 )
 
 @Serializable
@@ -37,6 +39,8 @@ fun ExamQuestionDto.toDomain(): ExamQuestion {
         id = id,
         answer = answer,
         blocks = blocks.map { it.toDomain() },
-        solutionBlocks = solutionBlocks.map { it.toDomain() }
+        solutionBlocks = solutionBlocks.map { it.toDomain() },
+        themeLabel = themeLabel,
+        themeNumber = themeNumber
     )
 }

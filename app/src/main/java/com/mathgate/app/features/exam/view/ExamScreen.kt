@@ -61,7 +61,8 @@ fun ExamScreen(
     onBackClick: () -> Unit,
     viewModel: ExamViewModel,
     state: ExamState,
-    user: User
+    user: User,
+    number: Int?
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -90,7 +91,7 @@ fun ExamScreen(
                     isAnswered = state.isAnswered,
                     onAnswer = {input -> viewModel.onAnswer(input)},
                     skipQuestion = {viewModel.skipQuestion()},
-                    getNewQuestion = {viewModel.getNewQuestion()},
+                    getNewQuestion = {viewModel.getNewQuestion(number)},
                     type = state.type ?: ExamTypes.EGE,
                     user = user,
                     modifier = Modifier.padding(paddingValues)
@@ -303,7 +304,9 @@ private fun preview() {
                 ExamBlock(type = ExamBlockType.TEXT, "Найдите значение выражения"),
                 ExamBlock(type = ExamBlockType.FORMULA, "sin \\frac{\\pi}{6}")
             ),
-            id = 1314
+            id = 1314,
+            themeNumber = 52,
+            themeLabel = "dssfd"
         ),
         skipQuestion = {},
         getNewQuestion = {},

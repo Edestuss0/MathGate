@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.mathgate.app.features.exam.viewmodel.ExamViewModel
 import com.mathgate.app.ui.components.LoadingScreen
 import com.mathgate.app.ui.theme.EmptyState
@@ -34,15 +36,49 @@ fun ExamHost(
                 else -> {
                     ExamHomeScreen(
                         onStartClick = {type ->
-                            viewModel.load(type)
-                            navController.navigate("play")
+                            viewModel.loadType(type)
+                            navController.navigate("play/$type")
+                        },
+                        onThemesClick = {type ->
+                            viewModel.loadType(type)
+                            viewModel.loadThemes()
+                            navController.navigate("themes")
                         },
                         user = user!!
                     )
                 }
             }
         }
-        composable("play") {
+        composable("themes") {
+            when {
+                state.isLoading -> {
+                    LoadingScreen()
+                }
+                state.themes == null -> {
+                    EmptyState("Не удалось получить темы")
+                }
+                else -> {
+                    ExamThemesScreen(
+                        themes = state.themes!!,
+                        onStartClick = { number ->
+                            viewModel.getNewQuestion(number)
+                            navController.navigate("play/$number")
+                        },
+                        onBackClick = {navController.popBackStack()}
+                    )
+                }
+            }
+        }
+        composable(
+            route = "play/{number}",
+            arguments = listOf(
+                navArgument("number") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val number = backStackEntry.arguments?.getInt("number")
+
             when {
                 state.isLoading -> {
                     LoadingScreen()
@@ -55,7 +91,8 @@ fun ExamHost(
                         viewModel = viewModel,
                         state = state,
                         onBackClick = {navController.popBackStack()},
-                        user = user!!
+                        user = user!!,
+                        number = number
                     )
                 }
             }

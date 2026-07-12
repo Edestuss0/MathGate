@@ -2,7 +2,7 @@
 package com.mathgate.app.domain.exam.repository
 
 import com.mathgate.app.core.entity.AppResult
-import com.mathgate.app.domain.exam.data.local.source.ExamLocalSource
+import com.mathgate.app.domain.exam.data.local.questions.source.ExamQuestionsLocalSource
 import com.mathgate.app.domain.exam.data.remote.source.ExamRemoteSource
 import com.mathgate.app.domain.exam.entity.ExamQuestion
 import com.mathgate.app.domain.exam.entity.ExamTypes
@@ -20,7 +20,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 
 class ExamRepositoryImplTest {
-    private lateinit var local: ExamLocalSource
+    private lateinit var local: ExamQuestionsLocalSource
     private lateinit var remote: ExamRemoteSource
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var repository: ExamRepositoryImpl

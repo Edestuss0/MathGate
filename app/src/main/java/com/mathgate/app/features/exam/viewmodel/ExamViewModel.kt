@@ -1,12 +1,12 @@
 package com.mathgate.app.features.exam.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mathgate.app.core.data.oge.OgeParser
 import com.mathgate.app.core.entity.AppResult
 import com.mathgate.app.domain.exam.entity.ExamTypes
+import com.mathgate.app.domain.exam.usecases.GetExamQuestionByNumberUseCase
 import com.mathgate.app.domain.exam.usecases.GetExamQuestionUseCase
+import com.mathgate.app.domain.exam.usecases.GetExamThemesUseCase
 import com.mathgate.app.domain.user.entity.User
 import com.mathgate.app.domain.user.repository.IUserRepository
 import com.mathgate.app.ui.components.AppSnackbarVisuals
@@ -26,6 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ExamViewModel @Inject constructor(
     private val getQuestion: GetExamQuestionUseCase,
+    private val getQuestionByNumber: GetExamQuestionByNumberUseCase,
+    private val getThemes: GetExamThemesUseCase,
     private val userRepository: IUserRepository
 ) : ViewModel() {
 
@@ -41,8 +43,7 @@ class ExamViewModel @Inject constructor(
         getNewQuestion()
     }
 
-    fun getNewQuestion() {
-
+    fun loadThemes() {
         viewModelScope.launch {
             if (state.value.type == null) {
                 _events.send( AppSnackbarVisuals(
@@ -53,7 +54,54 @@ class ExamViewModel @Inject constructor(
             }
             _state.update { it.copy(isAnswered = false, isLoading = true, question = null) }
             try {
-                getQuestion(state.value.type!!).collect { result ->
+                getThemes(state.value.type!!).collect { result ->
+                    when {
+                        result is AppResult.Success -> {
+                            _state.update { it.copy(themes = result.data, isError = false) }
+                        }
+                        result is AppResult.Error -> {
+                            _state.update { it.copy(themes = result.data, isError = true) }
+                            _events.send(AppSnackbarVisuals(
+                                type = SnackbarMessageType.ERROR,
+                                message = result.message
+                            ))
+                        }
+                        result is AppResult.Loading -> {
+                            _state.update { it.copy(isLoading = true) }
+                        }
+                    }
+                }
+            } catch (_: Exception) {
+                _state.update { it.copy(
+                    question = null,
+                    isError = true,
+                )}
+                _events.send( AppSnackbarVisuals(
+                    message = "Ошибка при получении темы",
+                    type = SnackbarMessageType.ERROR
+                ))
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+
+    fun getNewQuestion(number: Int? = null) {
+        viewModelScope.launch {
+            if (state.value.type == null) {
+                _events.send( AppSnackbarVisuals(
+                    message = "Некорректный тип экзамена",
+                    type = SnackbarMessageType.ERROR
+                ))
+                return@launch
+            }
+            _state.update { it.copy(isAnswered = false, isLoading = true, question = null) }
+            try {
+                if (number == null) {
+                    getQuestion(state.value.type!!)
+                } else {
+                    getQuestionByNumber(state.value.type!!, number)
+                }.collect { result ->
                     when {
                         result is AppResult.Success -> {
                             _state.update { it.copy(
@@ -95,8 +143,6 @@ class ExamViewModel @Inject constructor(
 
     fun onAnswer(answer: String) {
         viewModelScope.launch {
-            Log.d("OGE_INPUT", answer.trim())
-            Log.d("OGE_ANSWER", state.value.question?.answer ?: "")
             if (answer.trim() == state.value.question?.answer) {
                 _state.update { it.copy(
                     isError = false,
@@ -118,7 +164,7 @@ class ExamViewModel @Inject constructor(
         }
     }
 
-    fun load(newtype: ExamTypes) {
+    fun loadType(newtype: ExamTypes) {
         _state.update { it.copy(type = newtype) }
         getNewQuestion()
     }

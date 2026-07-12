@@ -40,22 +40,21 @@ import com.mathgate.app.domain.exam.entity.ExamTypes
 import com.mathgate.app.domain.user.entity.User
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
+import com.mathgate.app.ui.theme.AppTextButton
 import com.mathgate.app.ui.theme.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExamHomeScreen(
     onStartClick: (type: ExamTypes) -> Unit,
+    onThemesClick: (type: ExamTypes) -> Unit,
     user: User
 ) {
-
-
-
-
     AppScaffold(Modifier.fillMaxSize()) {
         ExamHomeContent(
             onStartClick = onStartClick,
-            user = user
+            user = user,
+            onThemesClick = onThemesClick
         )
     }
 }
@@ -64,6 +63,7 @@ fun ExamHomeScreen(
 @Composable
 private fun ExamHomeContent(
     onStartClick: (type: ExamTypes) -> Unit,
+    onThemesClick: (type: ExamTypes) -> Unit,
     user: User
 ) {
     var isDropdownOpen by remember { mutableStateOf(false) }
@@ -184,6 +184,12 @@ private fun ExamHomeContent(
                 onClick = {onStartClick(selectedType)},
                 text = "Начать"
             )
+            Spacer(Modifier.height(16.dp))
+            AppTextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {onThemesClick(selectedType)},
+                text = "К списку заданий"
+            )
         }
     }
 }
@@ -193,6 +199,7 @@ private fun ExamHomeContent(
 private fun preview() {
     ExamHomeContent(
         onStartClick = {},
-        user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), listOf(true, true, false, true), true)
+        user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), listOf(true, true, false, true), true),
+        onThemesClick = {}
     )
 }
