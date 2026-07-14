@@ -1,7 +1,6 @@
 package com.mathgate.app.features.exam.data.remote.source
 
 import com.mathgate.app.core.api.core.ApiClient
-import com.mathgate.app.core.exception.ServerException
 import com.mathgate.app.features.exam.data.remote.dto.ExamBlockDto
 import com.mathgate.app.features.exam.data.remote.dto.ExamQuestionDto
 import com.mathgate.app.features.exam.domain.entity.ExamBlock
@@ -53,6 +52,8 @@ class ExamRemoteSourceTest {
             solutionBlocks = listOf(
                 ExamBlockDto(type = "TEXT", content = "sfdsdf")
             ),
+            themeLabel = "Plan",
+            themeNumber = 1
         )
         val jsonResponse = Json.encodeToString(bodyMock)
         val mockEngine = MockEngine { _ ->
@@ -90,6 +91,8 @@ class ExamRemoteSourceTest {
             solutionBlocks = listOf(
                 ExamBlockDto(type = "TEXT", content = "sfdsdf")
             ),
+            themeLabel = "Plan",
+            themeNumber = 1
         )
         val jsonResponse = Json.encodeToString(bodyMock)
         val mockEngine = MockEngine { _ ->

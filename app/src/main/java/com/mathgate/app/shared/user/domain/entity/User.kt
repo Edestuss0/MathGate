@@ -9,4 +9,11 @@ data class User(
     val freemodeData: List<Boolean> = emptyList(),
     val examData: List<Boolean> = emptyList(),
     val registered: Boolean = false,
-)
+
+) {
+    val freemodeSuccessRate: Int
+        get() = if (freemodeData.isEmpty()) 0 else (freemodeData.count { it } * 100 / freemodeData.size)
+
+    val examSuccessRate: Int
+        get() = if (examData.isEmpty()) 0 else (examData.count { it } * 100 / examData.size)
+}

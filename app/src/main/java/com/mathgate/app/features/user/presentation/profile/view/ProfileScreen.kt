@@ -146,7 +146,7 @@ fun ProfileContent(
                    ProfileContentRow(
                         title = "Верных ответов:",
                         icon = Icons.Default.Check,
-                        content = "${(user.freemodeData.filter { it == true }.size.toDouble() / user.freemodeData.size.toDouble() * 100).toInt()}%"
+                        content = "${user.freemodeSuccessRate}%"
                    )
                    Spacer(Modifier.height(16.dp))
                     AppTextButton(
@@ -166,7 +166,7 @@ fun ProfileContent(
                     ProfileContentRow(
                         title = "Верных ответов:",
                         icon = Icons.Default.Check,
-                        content = "${(user.examData.filter { it == true }.size.toDouble() / user.examData.size.toDouble() * 100).toInt()}%"
+                        content = "${user.examSuccessRate}%"
                     )
                     Spacer(Modifier.height(16.dp))
                     AppTextButton(

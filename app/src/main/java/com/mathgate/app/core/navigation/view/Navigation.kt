@@ -17,6 +17,22 @@ import com.mathgate.app.features.freemode.presentation.play.view.FreemodeScreen
 import com.mathgate.app.features.user.presentation.start_page.view.StartPage
 import com.mathgate.app.ui.components.LoadingScreen
 
+sealed class Screen(val route: String) {
+    data object StartPage : Screen("start_page")
+    data object MainPage : Screen("main")
+    data object ExamPlay : Screen("exam/play/{type}") {
+        fun navigate(type: String) = "exam/play/$type"
+    }
+    data object ExamPlayTheme : Screen("exam/play/{type}/{number}") {
+        fun navigate(type: String, number: Int) = "exam/play/$type/$number"
+    }
+    data object ExamThemes : Screen("exam/themes/{type}") {
+        fun navigate(type: String) = "exam/themes/$type"
+    }
+    data object FreemodePlay : Screen("freemode/play/{difficulty}") {
+        fun navigate(difficulty: String) = "freemode/play/$difficulty"
+    }
+}
 @Composable
 fun AppNavigation() {
 
@@ -38,16 +54,16 @@ fun AppNavigation() {
         startDestination = startDestination
     ) {
 
-        composable("start_page") {
+        composable(Screen.StartPage.route) {
             StartPage()
         }
 
-        composable("main") {
+        composable(Screen.MainPage.route) {
             MainPage(rootNavController)
         }
 
         composable(
-            route = "exam/play/{type}",
+            route = Screen.ExamPlay.route,
             arguments = listOf(
                 navArgument("type") {
                     type = NavType.StringType
@@ -60,7 +76,7 @@ fun AppNavigation() {
         }
 
         composable(
-            route = "exam/play/{type}/{number}",
+            route = Screen.ExamPlayTheme.route,
             arguments = listOf(
                 navArgument("type") {
                     type = NavType.StringType
@@ -76,7 +92,7 @@ fun AppNavigation() {
         }
 
         composable(
-            route = "exam/themes/{type}",
+            route = Screen.ExamThemes.route,
             arguments = listOf(
                 navArgument("type") {
                     type = NavType.StringType
@@ -85,12 +101,12 @@ fun AppNavigation() {
         ) {
             ExamThemesScreen(
                 onBackNavigate = {rootNavController.popBackStack()},
-                onPlayNavigate = {type, number -> rootNavController.navigate("exam/play/$type/$number")}
+                onPlayNavigate = {type, number -> rootNavController.navigate(Screen.ExamPlayTheme.navigate(type, number))}
             )
         }
 
         composable(
-            route = "freemode/play/{difficulty}",
+            route = Screen.FreemodePlay.route,
             arguments = listOf(
                 navArgument("difficulty") {
                     type = NavType.StringType

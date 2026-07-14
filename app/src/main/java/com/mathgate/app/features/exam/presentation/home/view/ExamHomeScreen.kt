@@ -140,7 +140,7 @@ private fun ExamHomeContent(
                                 contentDescription = null
                             )
                             Text(
-                                text = "Верных: ${(user.examData.filter { it == true }.size.toDouble() / user.examData.size.toDouble() * 100).toInt()}%",
+                                text = "Верных: ${user.examSuccessRate}%",
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }

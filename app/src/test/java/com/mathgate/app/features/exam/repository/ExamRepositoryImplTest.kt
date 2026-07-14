@@ -3,6 +3,7 @@ package com.mathgate.app.features.exam.repository
 
 import com.mathgate.app.core.entity.AppResult
 import com.mathgate.app.features.exam.data.local.questions.source.ExamQuestionsLocalSource
+import com.mathgate.app.features.exam.data.local.themes.source.ExamThemeLocalSource
 import com.mathgate.app.features.exam.data.remote.source.ExamRemoteSource
 import com.mathgate.app.features.exam.data.repository.ExamRepositoryImpl
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
@@ -21,17 +22,19 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 
 class ExamRepositoryImplTest {
-    private lateinit var local: ExamQuestionsLocalSource
+    private lateinit var localQuestions: ExamQuestionsLocalSource
+    private lateinit var localThemes: ExamThemeLocalSource
     private lateinit var remote: ExamRemoteSource
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var repository: ExamRepositoryImpl
 
     @Before
     fun setUp() {
-        local = mockk(relaxed = true)
+        localQuestions = mockk(relaxed = true)
+        localThemes = mockk(relaxed = true)
         remote = mockk()
         repository =
-            ExamRepositoryImpl(local = local, remote = remote, ioDispatcher = testDispatcher)
+            ExamRepositoryImpl(localThemes = localThemes, localQuestions = localQuestions,  remote = remote, ioDispatcher = testDispatcher)
     }
 
     @After
@@ -60,7 +63,7 @@ class ExamRepositoryImplTest {
         val type = ExamTypes.EGE
         val exceptedQuestion = mockk<ExamQuestion>(relaxed = true)
 
-        coEvery { local.get(type) } returns exceptedQuestion
+        coEvery { localQuestions.get(type) } returns exceptedQuestion
 
         val results = mutableListOf<AppResult<ExamQuestion>>()
         repository.getExamQuestion(type).toList(results)
@@ -76,7 +79,7 @@ class ExamRepositoryImplTest {
     fun `getExamQuestion without result`() = runTest(testDispatcher) {
         val type = ExamTypes.EGE
 
-        coEvery { local.get(type) } returns null
+        coEvery { localQuestions.get(type) } returns null
 
         val results = mutableListOf<AppResult<ExamQuestion>>()
         repository.getExamQuestion(type).toList(results)

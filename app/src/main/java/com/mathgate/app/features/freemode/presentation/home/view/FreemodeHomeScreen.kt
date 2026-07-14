@@ -146,7 +146,7 @@ private fun FreemodeHomeScreenContent(
                                 contentDescription = null
                             )
                             Text(
-                                text = "Верных: ${(user.freemodeData.filter { it == true }.size.toDouble() / user.freemodeData.size.toDouble() * 100).toInt()}%",
+                                text = "Верных: ${user.freemodeSuccessRate}%",
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }

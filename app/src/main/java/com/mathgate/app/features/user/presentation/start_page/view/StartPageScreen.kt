@@ -21,7 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.mathgate.app.features.user.presentation.start_page.viewmodel.StartPageEffects
+import com.mathgate.app.features.user.presentation.start_page.viewmodel.StartPageEvent
 import com.mathgate.app.features.user.presentation.start_page.viewmodel.StartPageViewModel
+import com.mathgate.app.ui.components.AppSnackbarHost
+import com.mathgate.app.ui.components.AppSnackbarVisuals
+import com.mathgate.app.ui.components.SnackbarMessageType
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.AppTextField
@@ -31,19 +36,31 @@ import com.mathgate.app.ui.theme.PrimaryButton
 fun StartPage(
     viewModel: StartPageViewModel = hiltViewModel()
 ) {
-
-    var nameInput by remember { mutableStateOf<String>("") }
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        viewModel.events.collect { event ->
-            snackbarHostState.showSnackbar(event)
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                is StartPageEffects.SuccessSnackbar -> {
+                    snackbarHostState.showSnackbar(AppSnackbarVisuals(
+                        message = effect.message,
+                        type = SnackbarMessageType.SUCCESS
+                    ))
+                }
+                is StartPageEffects.ErrorSnackbar -> {
+                    snackbarHostState.showSnackbar(AppSnackbarVisuals(
+                        message = effect.message,
+                        type = SnackbarMessageType.ERROR
+                    ))
+                }
+            }
         }
     }
 
     AppScaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { AppSnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
@@ -64,14 +81,15 @@ fun StartPage(
                     )
                     Spacer(Modifier.height(16.dp))
                     AppTextField(
-                        value = nameInput,
-                        onValueChange = {new -> nameInput = new},
-                        label = "Введите своё имя"
+                        value = state.nameInput,
+                        onValueChange = {new -> viewModel.onEvent(StartPageEvent.OnInputName(new))},
+                        label = "Введите своё имя",
+                        isError = state.isError
                     )
                     Spacer(Modifier.height(16.dp))
                     PrimaryButton(
                         text = "Зарегистрироваться",
-                        onClick = {viewModel.register(nameInput)}
+                        onClick = {viewModel.onEvent(StartPageEvent.Register)}
                     )
                 }
             }

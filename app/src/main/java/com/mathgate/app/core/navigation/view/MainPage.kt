@@ -74,14 +74,14 @@ fun MainPage(
         ) {
             composable(Screens.FreemodeHome.route) {
                 FreemodeHomeScreen(
-                    onStartNavigate = {difficulty -> rootNavController.navigate("freemode/play/$difficulty")}
+                    onStartNavigate = {difficulty -> rootNavController.navigate(Screen.FreemodePlay.navigate(difficulty))}
                 )
             }
 
             composable(Screens.OgeHome.route) {
                 ExamHomeScreen(
-                    onStartNavigate = {type -> rootNavController.navigate("exam/play/$type")},
-                    onThemesNavigate = {type -> rootNavController.navigate("exam/themes/$type")}
+                    onStartNavigate = {type -> rootNavController.navigate(Screen.ExamPlay.navigate(type))},
+                    onThemesNavigate = {type -> rootNavController.navigate(Screen.ExamThemes.navigate(type))}
                 )
             }
 

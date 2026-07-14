@@ -1,7 +1,7 @@
 package com.mathgate.app.features.exam.data.repository
 
 import com.mathgate.app.core.entity.AppResult
-import com.mathgate.app.core.exception.ServerException
+import com.mathgate.app.core.exception.toAppException
 import com.mathgate.app.features.exam.data.local.questions.source.ExamQuestionsLocalSource
 import com.mathgate.app.features.exam.data.local.themes.source.ExamThemeLocalSource
 import com.mathgate.app.features.exam.data.remote.source.ExamRemoteSource
@@ -26,7 +26,7 @@ class ExamRepositoryImpl @Inject constructor(
     private val remote: ExamRemoteSource,
     private val localQuestions: ExamQuestionsLocalSource,
     private val localThemes: ExamThemeLocalSource,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ExamRepository {
 
     val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
@@ -49,35 +49,12 @@ class ExamRepositoryImpl @Inject constructor(
                 localQuestions.invalidate(cached.id)
                 emit(AppResult.Success(cached))
             } else {
-                when {
-                    e is CancellationException -> throw e
-                    e is ServerException -> {
-                        emit(
-                            AppResult.Error(
-                                message = "Ошибка при попытке получения вопроса",
-                                data = null
-                            )
-                        )
-                    }
-
-                    e is IOException -> {
-                        emit(
-                            AppResult.Error(
-                                message = "Нет соединения с интернетом",
-                                data = null
-                            )
-                        )
-                    }
-
-                    else -> {
-                        emit(
-                            AppResult.Error(
-                                message = "Произошла непредвиденная ошибка",
-                                data = null
-                            )
-                        )
-                    }
-                }
+                emit(
+                    AppResult.Error(
+                        message = e.toAppException().message,
+                        data = null
+                    )
+                )
             }
 
         }
@@ -98,35 +75,12 @@ class ExamRepositoryImpl @Inject constructor(
             emit(AppResult.Success(response))
             localThemes.insertMore(response, type)
         } catch (e: Exception) {
-            when {
-                e is CancellationException -> throw e
-                e is ServerException -> {
-                    emit(
-                        AppResult.Error(
-                            message = "Ошибка при попытке получения тем",
-                            data = null
-                        )
-                    )
-                }
-
-                e is IOException -> {
-                    emit(
-                        AppResult.Error(
-                            message = "Нет соединения с интернетом",
-                            data = null
-                        )
-                    )
-                }
-
-                else -> {
-                    emit(
-                        AppResult.Error(
-                            message = "Произошла непредвиденная ошибка",
-                            data = null
-                        )
-                    )
-                }
-            }
+            emit(
+                AppResult.Error(
+                    message = e.toAppException().message,
+                    data = null
+                )
+            )
         }
 
     }
@@ -149,35 +103,12 @@ class ExamRepositoryImpl @Inject constructor(
                 localQuestions.invalidate(cached.id)
                 emit(AppResult.Success(cached))
             } else {
-                when {
-                    e is CancellationException -> throw e
-                    e is ServerException -> {
-                        emit(
-                            AppResult.Error(
-                                message = "Ошибка при попытке получения вопроса",
-                                data = null
-                            )
-                        )
-                    }
-
-                    e is IOException -> {
-                        emit(
-                            AppResult.Error(
-                                message = "Нет соединения с интернетом",
-                                data = null
-                            )
-                        )
-                    }
-
-                    else -> {
-                        emit(
-                            AppResult.Error(
-                                message = "Произошла непредвиденная ошибка",
-                                data = null
-                            )
-                        )
-                    }
-                }
+                emit(
+                    AppResult.Error(
+                        message = e.toAppException().message,
+                        data = null
+                    )
+                )
             }
 
         }

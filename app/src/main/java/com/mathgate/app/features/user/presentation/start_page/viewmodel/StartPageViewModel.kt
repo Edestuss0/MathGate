@@ -23,38 +23,35 @@ class StartPageViewModel @Inject constructor (
 
     private val _state = MutableStateFlow(StartPageState())
     val state = _state.asStateFlow()
-    private val _events = Channel<AppSnackbarVisuals>(Channel.BUFFERED)
-    val events = _events.receiveAsFlow()
+    private val _effects = Channel<StartPageEffects>(Channel.BUFFERED)
+    val effects = _effects.receiveAsFlow()
 
+    fun onEvent(event: StartPageEvent) {
+        when (event) {
+            is StartPageEvent.Register -> {register()}
+            is StartPageEvent.OnInputName -> {_state.update { it.copy(nameInput = event.input) }}
+        }
+    }
 
-    fun register(name: String) {
+    private fun register() {
         viewModelScope.launch {
             _state.update { it.copy(isError = false) }
-            if (name.length > 20) {
+            if (state.value.nameInput.length > 20) {
                 _state.update { it.copy(isError = true) }
-                _events.send(AppSnackbarVisuals(
-                    message = "Введите более короткое имя",
-                    type = SnackbarMessageType.ERROR
-                ))
+                _effects.send(StartPageEffects.ErrorSnackbar("Введите более короткое имя"))
                 return@launch
             }
             try {
-                registerUseCase(name)
+                registerUseCase(state.value.nameInput)
                 _state.update { it.copy(
                     isError = false
                 ) }
-                _events.send(AppSnackbarVisuals(
-                    message = "Регистрация успешна",
-                    type = SnackbarMessageType.SUCCESS
-                ),)
-            } catch (e: Exception) {
+                _effects.send(StartPageEffects.SuccessSnackbar("Регистрация успешна"))
+            } catch (_: Exception) {
                 _state.update { it.copy(
                     isError = true
                 ) }
-                _events.send(AppSnackbarVisuals(
-                    message = "Ошибка регистрации",
-                    type = SnackbarMessageType.ERROR
-                ),)
+                _effects.send(StartPageEffects.ErrorSnackbar("Ошибка регистрации"))
             }
         }
     }
