@@ -9,4 +9,7 @@ data class ExamDataEntity(
     val id: Int = 0,
     val answer: String,
     val isCorrect: Boolean,
+    val themeLabel: String,
+    val themeNubmer: Int,
+    val type: String
 )

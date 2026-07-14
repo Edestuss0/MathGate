@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
-import com.mathgate.app.presentation.navigation.view.AppNavigation
+import com.mathgate.app.core.navigation.view.AppNavigation
 import com.mathgate.app.ui.theme.MathGateTheme
 import dagger.hilt.android.AndroidEntryPoint
 

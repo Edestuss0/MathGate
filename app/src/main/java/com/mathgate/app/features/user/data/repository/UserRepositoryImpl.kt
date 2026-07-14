@@ -1,15 +1,14 @@
 package com.mathgate.app.features.user.data.repository
 
-import com.mathgate.app.features.exam.domain.entity.ExamQuestion
-import com.mathgate.app.features.freemode.domain.entity.FreemodeQuestion
 import com.mathgate.app.features.user.data.exam_data.source.ExamDataSource
 import com.mathgate.app.features.user.data.freemode_data.source.FreemodeDataSource
 import com.mathgate.app.features.user.data.user_data.source.UserSource
-import com.mathgate.app.features.user.domain.entity.User
-import com.mathgate.app.features.user.domain.repository.IUserRepository
+import com.mathgate.app.features.user.domain.entity.ExamQuestionInput
+import com.mathgate.app.features.user.domain.entity.FreemodeQuestionInput
+import com.mathgate.app.shared.user.domain.entity.User
+import com.mathgate.app.shared.user.domain.repository.IUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,26 +38,22 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAuthorizedStatus(): Flow<Boolean> {
-        return userData.getProfile().map { it.registered }
-    }
-
-    override suspend fun completeFreemode(isCorrect: Boolean, question: FreemodeQuestion) {
-        if (isCorrect) {
+    override suspend fun completeFreemode(question: FreemodeQuestionInput) {
+        if (question.isCorrect) {
             userData.updateStreak()
         } else {
             userData.failStreak()
         }
-        freemodeData.insert(isCorrect, question)
+        freemodeData.insert(question)
     }
 
-    override suspend fun completeExam(isCorrect: Boolean, question: ExamQuestion) {
-        if (isCorrect) {
+    override suspend fun completeExam(question: ExamQuestionInput) {
+        if (question.isCorrect) {
             userData.updateStreak()
         } else {
             userData.failStreak()
         }
-        examData.insert(isCorrect, question)
+        examData.insert(question)
     }
 
     override suspend fun deleteAccount() {

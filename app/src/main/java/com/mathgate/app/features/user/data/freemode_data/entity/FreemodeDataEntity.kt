@@ -9,4 +9,5 @@ data class FreemodeDataEntity(
     val id: Int = 0,
     val answer: String,
     val isCorrect: Boolean,
+    val difficulty: String
 )

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "686291195538",
+    "project_id": "mathgate",
+    "storage_bucket": "mathgate.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686291195538:android:883c158d9d513d3630784b",
+        "android_client_info": {
+          "package_name": "com.mathgate.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7QIR_CRbH_eJLmpSPgOl2hKoNGP-s5gE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,7 @@
 package com.mathgate.app.features.user.di
 
 import com.mathgate.app.features.user.data.repository.UserRepositoryImpl
-import com.mathgate.app.features.user.domain.repository.IUserRepository
+import com.mathgate.app.shared.user.domain.repository.IUserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
