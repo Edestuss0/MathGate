@@ -1,6 +1,6 @@
 package com.mathgate.app.features.exam.data.remote.source
 
-import com.mathgate.app.core.api.core.ApiClient
+import com.mathgate.app.core.exception.AppException
 import com.mathgate.app.features.exam.data.remote.dto.ExamBlockDto
 import com.mathgate.app.features.exam.data.remote.dto.ExamQuestionDto
 import com.mathgate.app.features.exam.domain.entity.ExamBlock
@@ -15,27 +15,18 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 class ExamRemoteSourceTest {
-
-    private lateinit var client: ApiClient
     private lateinit var source: ExamRemoteSource
     private val testDispatcher = StandardTestDispatcher()
 
-    @Before
-    fun setUp() {
-        client = mockk<ApiClient>(relaxed = true)
-    }
 
     @After
     fun tearDown() {
@@ -70,9 +61,8 @@ class ExamRemoteSourceTest {
             }
         }
 
-        every { client.client } returns httpClient
 
-        source = ExamRemoteSource(client)
+        source = ExamRemoteSource(httpClient)
 
         val result = source.getExamQuestion(type)
 
@@ -109,11 +99,10 @@ class ExamRemoteSourceTest {
             }
         }
 
-        every { client.client } returns httpClient
 
-        source = ExamRemoteSource(client)
+        source = ExamRemoteSource(httpClient)
 
-        val exception = org.junit.Assert.assertThrows(ServerException::class.java) {
+        val exception = org.junit.Assert.assertThrows(AppException.Network.ServerError::class.java) {
             runBlocking { source.getExamQuestion(type) }
         }
 

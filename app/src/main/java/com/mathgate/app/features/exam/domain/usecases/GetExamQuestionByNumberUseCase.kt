@@ -15,6 +15,7 @@ class GetExamQuestionByNumberUseCase @Inject constructor(
     private val analytics: AnalyticsManager
 ) {
     operator fun invoke(type: ExamTypes, number: Int): Flow<AppResult<ExamQuestion>> = flow {
+        repository.preloadQuestions(type, number, 4)
         repository.getExamQuestionByNumber(type, number).collect { result ->
             when {
                 result is AppResult.Success -> {

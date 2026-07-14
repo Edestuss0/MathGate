@@ -9,6 +9,7 @@ import com.mathgate.app.features.exam.domain.entity.ExamQuestion
 import com.mathgate.app.features.exam.domain.entity.ExamTheme
 import com.mathgate.app.features.exam.domain.entity.ExamTypes
 import com.mathgate.app.features.exam.domain.repository.ExamRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.utils.io.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +27,7 @@ class ExamRepositoryImpl @Inject constructor(
     private val remote: ExamRemoteSource,
     private val localQuestions: ExamQuestionsLocalSource,
     private val localThemes: ExamThemeLocalSource,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ExamRepository {
 
     val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
@@ -37,12 +38,6 @@ class ExamRepositoryImpl @Inject constructor(
             val response = remote.getExamQuestion(type)
             localQuestions.insert(response, type)
             emit(AppResult.Success(response))
-            repeat(5) {
-                scope.launch {
-                    val toCache = remote.getExamQuestion(type)
-                    localQuestions.insert(toCache, type)
-                }
-            }
         } catch (e: Exception) {
             val cached = localQuestions.get(type)
             if (cached != null) {
@@ -59,8 +54,6 @@ class ExamRepositoryImpl @Inject constructor(
 
         }
     }
-
-
 
     override suspend fun getExamThemes(type: ExamTypes): Flow<AppResult<List<ExamTheme>>> = flow {
         val cached = localThemes.get(type)
@@ -91,12 +84,6 @@ class ExamRepositoryImpl @Inject constructor(
             val response = remote.getExamQuestionByNumber(type, number)
             localQuestions.insert(response, type)
             emit(AppResult.Success(response))
-            repeat(5) {
-                scope.launch {
-                    val toCache = remote.getExamQuestionByNumber(type, number)
-                    localQuestions.insert(toCache, type)
-                }
-            }
         } catch (e: Exception) {
             val cached = localQuestions.getByNumber(type, number)
             if (cached != null) {
@@ -111,6 +98,15 @@ class ExamRepositoryImpl @Inject constructor(
                 )
             }
 
+        }
+    }
+
+    override fun preloadQuestions(type: ExamTypes, number: Int?, count: Int) {
+        repeat(count) {
+            scope.launch {
+                val toCache = if (number != null) remote.getExamQuestionByNumber(type, number) else remote.getExamQuestion(type)
+                localQuestions.insert(toCache, type)
+            }
         }
     }
 

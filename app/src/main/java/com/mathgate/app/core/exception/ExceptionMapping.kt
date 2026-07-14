@@ -6,7 +6,7 @@ import java.net.UnknownHostException
 
 fun Throwable.toAppException(): AppException {
     return when (this) {
-        is AppException -> throw this
+        is AppException -> this
         is SocketTimeoutException -> AppException.Network.Timeout
         is UnknownHostException -> AppException.Network.NoInternet
         is CancellationException -> throw this

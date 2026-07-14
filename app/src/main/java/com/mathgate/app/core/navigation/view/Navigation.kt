@@ -45,8 +45,8 @@ fun AppNavigation() {
     }
 
     val startDestination = when (authState) {
-        is AuthState.Registered -> "main"
-        else -> "start_page"
+        is AuthState.Registered -> Screen.MainPage
+        else -> Screen.StartPage
     }
 
     NavHost(

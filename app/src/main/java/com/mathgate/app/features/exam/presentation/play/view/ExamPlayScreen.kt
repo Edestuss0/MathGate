@@ -96,19 +96,21 @@ fun ExamPlayScreen(
                 EmptyState("Не удалось найти вопрос")
             }
             user == null -> {
-                EmptyState("Не удалоь получить необходимую информацию")
+                EmptyState("Не удалось получить необходимую информацию")
             }
             else -> {
                 ExamContent(
                     isError = state.isError,
                     question = state.question!!,
                     isAnswered = state.isSkipped,
-                    onAnswer = {input -> viewModel.onEvent(ExamPlayEvent.OnAnswerInput(input))},
+                    onAnswer = {viewModel.onEvent(ExamPlayEvent.OnAnswer)},
                     skipQuestion = {viewModel.onEvent(ExamPlayEvent.OnSkip)},
                     getNewQuestion = {viewModel.onEvent(ExamPlayEvent.OnGetNewQuestion)},
                     type = viewModel.type,
                     user = user!!,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues),
+                    input = state.answerInput,
+                    onInputChange = {new -> viewModel.onEvent(ExamPlayEvent.OnAnswerInput(new))}
                 )
             }
         }
@@ -118,16 +120,17 @@ fun ExamPlayScreen(
 @Composable
 private fun ExamContent(
     isAnswered: Boolean,
+    input: String,
+    onInputChange: (new: String) -> Unit,
     question: ExamQuestion,
     isError: Boolean,
-    onAnswer: (input: String) -> Unit,
+    onAnswer: () -> Unit,
     skipQuestion: () -> Unit,
     getNewQuestion: () -> Unit,
     user: User,
     type: ExamTypes,
     modifier: Modifier
 ) {
-    var answerInput by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -278,8 +281,8 @@ private fun ExamContent(
 
                 AppTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    onValueChange = { newValue -> answerInput = newValue },
-                    value = answerInput,
+                    onValueChange = { newValue -> onInputChange(newValue) },
+                    value = input,
                     isError = isError,
                     label = "Введите свой ответ",
                 )
@@ -288,8 +291,7 @@ private fun ExamContent(
 
                 PrimaryButton(
                     onClick = {
-                        onAnswer(answerInput)
-                        answerInput = ""
+                        onAnswer()
                     },
                     text = "Ответить"
                 )
@@ -300,7 +302,6 @@ private fun ExamContent(
                     text = "Пропустить задачу",
                     onClick = {
                         skipQuestion()
-                        answerInput = ""
                     }
                 )
             } else {
@@ -337,6 +338,8 @@ private fun ExamPlayPreview() {
         isError = false,
         user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), emptyList(), true),
         type = ExamTypes.OGE,
-        modifier = Modifier
+        modifier = Modifier,
+        input = "",
+        onInputChange = {}
     )
 }
