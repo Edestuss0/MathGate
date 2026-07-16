@@ -7,18 +7,14 @@ import com.mathgate.app.features.exam.data.local.themes.source.ExamThemeLocalSou
 import com.mathgate.app.features.exam.data.remote.source.ExamRemoteSource
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
 import com.mathgate.app.features.exam.domain.entity.ExamTheme
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.exam.domain.repository.ExamRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.ktor.utils.io.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import okio.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 

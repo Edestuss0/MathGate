@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mathgate.app.core.entity.AppResult
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.exam.domain.usecases.GetExamThemesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

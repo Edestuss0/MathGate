@@ -4,7 +4,7 @@ import com.mathgate.app.core.exception.AppException
 import com.mathgate.app.features.exam.data.remote.dto.ExamBlockDto
 import com.mathgate.app.features.exam.data.remote.dto.ExamQuestionDto
 import com.mathgate.app.features.exam.domain.entity.ExamBlock
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

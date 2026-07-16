@@ -1,7 +1,7 @@
 package com.mathgate.app.shared.user.domain.usecases
 
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.user.domain.entity.ExamQuestionInput
 import com.mathgate.app.shared.user.domain.repository.IUserRepository
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class CompleteExamUseCase @Inject constructor(
             answer = question.answer,
             themeLabel = question.themeLabel,
             themeNubmer = question.themeNumber,
-            type = type.label
+            type = type
         ))
     }
 }

@@ -10,4 +10,4 @@ val EXPERIENCE = intPreferencesKey("experience")
 val BEST_STREAK = intPreferencesKey("best_streak")
 val REGISTERED = booleanPreferencesKey("registered")
 val CURRENT_STREAK = intPreferencesKey("current_streak")
-//val FREEMODE_DATA = listPre
+val LEVELUP_LIMIT = intPreferencesKey("level_up_limit")

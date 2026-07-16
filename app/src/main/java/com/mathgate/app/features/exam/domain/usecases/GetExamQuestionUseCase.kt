@@ -4,7 +4,7 @@ import com.mathgate.app.core.analytics.core.AnalyticsManager
 import com.mathgate.app.core.entity.AppResult
 import com.mathgate.app.features.exam.domain.entity.ExamAnalyticsEvent
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.exam.domain.repository.ExamRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -14,6 +14,7 @@ import com.mathgate.app.core.navigation.viewmodel.MainViewModel
 import com.mathgate.app.features.exam.presentation.play.view.ExamPlayScreen
 import com.mathgate.app.features.exam.presentation.themes.view.ExamThemesScreen
 import com.mathgate.app.features.freemode.presentation.play.view.FreemodeScreen
+import com.mathgate.app.features.trigonometry.presentation.view.TrigonometryScreen
 import com.mathgate.app.features.user.presentation.start_page.view.StartPage
 import com.mathgate.app.ui.components.LoadingScreen
 
@@ -32,6 +33,7 @@ sealed class Screen(val route: String) {
     data object FreemodePlay : Screen("freemode/play/{difficulty}") {
         fun navigate(difficulty: String) = "freemode/play/$difficulty"
     }
+    data object Trigonometry : Screen("trigonometry")
 }
 @Composable
 fun AppNavigation() {
@@ -45,8 +47,8 @@ fun AppNavigation() {
     }
 
     val startDestination = when (authState) {
-        is AuthState.Registered -> Screen.MainPage
-        else -> Screen.StartPage
+        is AuthState.Registered -> Screen.MainPage.route
+        else -> Screen.StartPage.route
     }
 
     NavHost(
@@ -114,6 +116,12 @@ fun AppNavigation() {
             )
         ) {
             FreemodeScreen(
+                onBackNavigate = {rootNavController.popBackStack()}
+            )
+        }
+
+        composable(Screen.Trigonometry.route) {
+            TrigonometryScreen(
                 onBackNavigate = {rootNavController.popBackStack()}
             )
         }

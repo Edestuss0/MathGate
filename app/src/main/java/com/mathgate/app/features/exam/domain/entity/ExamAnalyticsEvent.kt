@@ -1,6 +1,7 @@
 package com.mathgate.app.features.exam.domain.entity
 
 import com.mathgate.app.core.analytics.entity.AnalyticsEvent
+import com.mathgate.app.shared.exam.entity.ExamTypes
 
 sealed class ExamAnalyticsEvent : AnalyticsEvent {
     data class GetTheQuestionEvent(val question: ExamQuestion, val type: ExamTypes) : ExamAnalyticsEvent() {

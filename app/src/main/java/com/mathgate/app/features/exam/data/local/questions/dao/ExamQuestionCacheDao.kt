@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mathgate.app.features.exam.data.local.questions.entity.ExamQuestionCacheEntity
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 
 @Dao
 interface ExamQuestionCacheDao {

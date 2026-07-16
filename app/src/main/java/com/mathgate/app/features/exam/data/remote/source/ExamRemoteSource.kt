@@ -7,7 +7,7 @@ import com.mathgate.app.features.exam.data.remote.dto.ExamThemeDto
 import com.mathgate.app.features.exam.data.remote.dto.toDomain
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
 import com.mathgate.app.features.exam.domain.entity.ExamTheme
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

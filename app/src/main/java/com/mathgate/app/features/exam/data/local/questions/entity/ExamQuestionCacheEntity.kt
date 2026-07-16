@@ -2,7 +2,7 @@ package com.mathgate.app.features.exam.data.local.questions.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 
 @Entity(tableName = "exam_cache")
 data class ExamQuestionCacheEntity(

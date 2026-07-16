@@ -4,7 +4,7 @@ import com.mathgate.app.core.app.CACHE_LIVE_TIME
 import com.mathgate.app.features.exam.data.local.questions.dao.ExamQuestionCacheDao
 import com.mathgate.app.features.exam.data.local.questions.entity.ExamQuestionCacheEntity
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 

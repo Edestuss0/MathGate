@@ -7,4 +7,5 @@ data class DatastoreUser(
     val bestStreak: Int,
     val currentStreak: Int,
     val registered: Boolean = false,
+    val levelUpLimit: Int
 )

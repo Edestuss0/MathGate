@@ -3,7 +3,7 @@ package com.mathgate.app.features.exam.domain.repository
 import com.mathgate.app.core.entity.AppResult
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
 import com.mathgate.app.features.exam.domain.entity.ExamTheme
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import kotlinx.coroutines.flow.Flow
 
 interface ExamRepository {

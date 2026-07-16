@@ -3,7 +3,7 @@ package com.mathgate.app.features.freemode.repository
 import com.mathgate.app.features.freemode.data.repository.FreemodeRepositoryImpl
 import com.mathgate.app.features.freemode.data.source.FreemodeLocalSource
 import com.mathgate.app.features.freemode.domain.entity.FreemodeBlockType
-import com.mathgate.app.features.freemode.domain.entity.FreemodeDifficulty
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 import com.mathgate.app.features.freemode.domain.entity.FreemodeQuestion
 import com.mathgate.app.features.freemode.domain.entity.FreemodeQuestionBlock
 import io.mockk.clearAllMocks

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.Icon
@@ -21,13 +22,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mathgate.app.features.exam.presentation.home.view.ExamHomeScreen
 import com.mathgate.app.features.freemode.presentation.home.view.FreemodeHomeScreen
+import com.mathgate.app.features.trigonometry.presentation.view.TrigonometryScreen
 import com.mathgate.app.features.user.presentation.profile.view.ProfileScreen
+import com.mathgate.app.shared.reference.view.ReferenceScreen
 import com.mathgate.app.ui.theme.AppScaffold
 
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
     OgeHome("oge_home", "Экзамены", Icons.Default.School),
     FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
-    Profile("profile", "Профиль", Icons.Default.Person)
+    Profile("profile", "Профиль", Icons.Default.Person),
+    Reference("reference", "Справка", Icons.Default.MenuBook)
 }
 
 @Composable
@@ -87,6 +91,12 @@ fun MainPage(
 
             composable(Screens.Profile.route) {
                 ProfileScreen()
+            }
+
+            composable(Screens.Reference.route) {
+                ReferenceScreen(
+                    onTrigonometryNavigate = {rootNavController.navigate(Screen.Trigonometry.route)}
+                )
             }
         }
     }

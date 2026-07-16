@@ -1,6 +1,7 @@
 package com.mathgate.app.features.freemode.domain.entity
 
 import com.mathgate.app.core.analytics.entity.AnalyticsEvent
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 
 sealed class FreemodeAnalyticsEvent : AnalyticsEvent {
     data class GetTheFreemodeQuestionEvent(val question: FreemodeQuestion, val difficulty: FreemodeDifficulty) : FreemodeAnalyticsEvent() {

@@ -33,7 +33,8 @@ class UserRepositoryImpl @Inject constructor(
                 currentStreak = user.currentStreak,
                 registered = user.registered,
                 examData = exam,
-                freemodeData = freemode
+                freemodeData = freemode,
+                levelUpLimit = user.levelUpLimit
             )
         }
     }
@@ -41,6 +42,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun completeFreemode(question: FreemodeQuestionInput) {
         if (question.isCorrect) {
             userData.updateStreak()
+            userData.addExpFreemode(question.difficulty)
         } else {
             userData.failStreak()
         }
@@ -50,6 +52,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun completeExam(question: ExamQuestionInput) {
         if (question.isCorrect) {
             userData.updateStreak()
+            userData.addExpExam(question.type)
         } else {
             userData.failStreak()
         }

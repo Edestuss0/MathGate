@@ -26,9 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.mathgate.app.features.exam.domain.entity.ExamBlock
 import com.mathgate.app.features.exam.domain.entity.ExamBlockType
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.exam.presentation.play.viewmodel.ExamPlayEffect
 import com.mathgate.app.features.exam.presentation.play.viewmodel.ExamPlayEvent
 import com.mathgate.app.shared.user.domain.entity.User
@@ -336,7 +334,7 @@ private fun ExamPlayPreview() {
         isAnswered = false,
         onAnswer = {},
         isError = false,
-        user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), emptyList(), true),
+        user = User("Traktoristka", 12, 1000, 54, 24, 24, listOf(true, true, false, true), emptyList(), true),
         type = ExamTypes.OGE,
         modifier = Modifier,
         input = "",

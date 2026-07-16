@@ -3,7 +3,8 @@ package com.mathgate.app.core.db.converters
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 
 class Converters {
 
@@ -28,5 +29,14 @@ class Converters {
     @TypeConverter
     fun toType(type: String): ExamTypes {
         return ExamTypes.valueOf(type)
+    }
+
+    @TypeConverter
+    fun fromDifficulty(difficulty: FreemodeDifficulty): String {
+        return difficulty.name
+    }
+    @TypeConverter
+    fun toDifficulty(difficulty: String): FreemodeDifficulty {
+        return FreemodeDifficulty.valueOf(difficulty)
     }
 }

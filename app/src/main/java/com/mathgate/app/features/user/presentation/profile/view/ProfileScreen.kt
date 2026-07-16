@@ -20,6 +20,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,9 @@ import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.AppTextButton
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.PrimaryButton
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,20 +118,14 @@ fun ProfileContent(
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(Modifier.height(16.dp))
+            LevelCard(
+                levelUpLimit = user.levelUpLimit,
+                level = user.level,
+                experience = user.experience
+            )
+            Spacer(Modifier.height(16.dp))
             AppCard(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                    ProfileContentRow(
-                        title = "Уровень:",
-                        icon = Icons.Default.MilitaryTech,
-                        content = user.level.toString()
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    ProfileContentRow(
-                        title = "Опыт:",
-                        icon = Icons.Default.Star,
-                        content = user.experience.toString()
-                    )
-                    Spacer(Modifier.height(8.dp))
                     ProfileContentRow(
                         title = "Лучшая серия ответов:",
                         icon = Icons.Default.Bolt,
@@ -149,7 +147,7 @@ fun ProfileContent(
                         content = "${user.freemodeSuccessRate}%"
                    )
                    Spacer(Modifier.height(16.dp))
-                    AppTextButton(
+                    PrimaryButton(
                         text = "Подробнее",
                         onClick = {}
                     )
@@ -169,12 +167,87 @@ fun ProfileContent(
                         content = "${user.examSuccessRate}%"
                     )
                     Spacer(Modifier.height(16.dp))
-                    AppTextButton(
+                    PrimaryButton(
                         text = "Подробнее",
                         onClick = {}
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun LevelCard(
+    level: Int,
+    experience: Int,
+    levelUpLimit: Int,
+    modifier: Modifier = Modifier
+) {
+    val progress = (experience.toFloat() / levelUpLimit)
+        .coerceIn(0f, 1f)
+
+    AppCard(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Icon(
+                    imageVector = Icons.Default.MilitaryTech,
+                    contentDescription = null,
+                    modifier = Modifier.size(42.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(Modifier.width(12.dp))
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+
+                    Text(
+                        text = "Уровень $level",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Text(
+                        text = "$experience / $levelUpLimit XP",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Text(
+                    text = "${(progress * 100).toInt()}%",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            LinearProgressIndicator(
+                progress = { progress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = "До следующего уровня осталось ${levelUpLimit - experience} XP",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -191,6 +264,7 @@ fun ProfileContentRow(
         ) {
             Icon(
                 imageVector = icon,
+                tint = MaterialTheme.colorScheme.primary,
                 contentDescription = ""
             )
             Spacer(Modifier.width(8.dp))
@@ -216,7 +290,7 @@ fun ProfileContentRow(
 @Composable
 private fun ProfileContentPreview() {
     ProfileContent(
-        user = User("Traktoristka", 12, 650, 24, 24, listOf(true, true, false, true), emptyList(), true),
+        user = User("Traktoristka", 12, 1000, 650, 24, 24, listOf(true, true, false, true), emptyList(), true),
         onDeleteAccount = {}
     )
 }

@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.mathgate.app.shared.user.domain.entity.User
-import com.mathgate.app.features.freemode.domain.entity.FreemodeDifficulty
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 import com.mathgate.app.features.freemode.presentation.home.viewmodel.FreemodeHomeEffect
 import com.mathgate.app.features.freemode.presentation.home.viewmodel.FreemodeHomeEvent
 import com.mathgate.app.features.freemode.presentation.home.viewmodel.FreemodeHomeViewmodel
@@ -208,6 +208,6 @@ private fun FreemodeHomeContentPreview() {
         selectedDifficulty = FreemodeDifficulty.MEDIUM,
         onDifficultySelect = {},
         onStartButtonClick = {},
-        user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), emptyList(), true)
+        user = User("Traktoristka", 12, 1000, 54, 24, 24, listOf(true, true, false, true), emptyList(), true)
     )
 }

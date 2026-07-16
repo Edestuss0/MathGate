@@ -4,7 +4,7 @@ import com.mathgate.app.core.app.CACHE_LIVE_TIME
 import com.mathgate.app.features.exam.data.local.themes.dao.ExamThemeCacheDao
 import com.mathgate.app.features.exam.data.local.themes.entity.ExamThemeCacheEntity
 import com.mathgate.app.features.exam.domain.entity.ExamTheme
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import javax.inject.Inject
 import kotlin.collections.forEach
 

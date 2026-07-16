@@ -1,6 +1,6 @@
 package com.mathgate.app.features.exam.presentation.home.viewmodel
 
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 
 data class ExamHomeState(
     val isError: Boolean = false,

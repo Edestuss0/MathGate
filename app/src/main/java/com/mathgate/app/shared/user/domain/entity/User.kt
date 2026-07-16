@@ -3,6 +3,7 @@ package com.mathgate.app.shared.user.domain.entity
 data class User(
     val username: String = "Загрузка",
     val level: Int = 0,
+    val levelUpLimit: Int = 1000,
     val experience: Int = 0,
     val bestStreak: Int = 0,
     val currentStreak: Int = 0,

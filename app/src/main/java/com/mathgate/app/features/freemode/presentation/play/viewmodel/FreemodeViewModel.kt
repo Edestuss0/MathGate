@@ -3,7 +3,7 @@ package com.mathgate.app.features.freemode.presentation.play.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mathgate.app.features.freemode.domain.entity.FreemodeDifficulty
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 import com.mathgate.app.shared.user.domain.entity.User
 import com.mathgate.app.features.freemode.domain.usecases.GetFreemodeQuestionUseCase
 import com.mathgate.app.features.freemode.domain.usecases.OnFreemodeQuestionAnswerUseCase

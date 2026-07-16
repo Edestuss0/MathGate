@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.exam.presentation.home.viewmodel.ExamHomeEffects
 import com.mathgate.app.features.exam.presentation.home.viewmodel.ExamHomeEvent
 import com.mathgate.app.features.exam.presentation.home.viewmodel.ExamHomeViewModel
@@ -218,7 +218,7 @@ private fun ExamHomeContent(
 private fun ExamHomeContentPreview() {
     ExamHomeContent(
         onStartClick = {},
-        user = User("Traktoristka", 12, 54, 24, 24, listOf(true, true, false, true), listOf(true, true, false, true), true),
+        user = User("Traktoristka", 12, 1000, 54, 24, 24, listOf(true, true, false, true), listOf(true, true, false, true), true),
         onThemesClick = {}
     )
 }

@@ -1,6 +1,6 @@
 package com.mathgate.app.features.freemode.presentation.home.viewmodel
 
-import com.mathgate.app.features.freemode.domain.entity.FreemodeDifficulty
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 
 data class FreemodeHomeState(
     val selectedDifficulty: FreemodeDifficulty = FreemodeDifficulty.MEDIUM

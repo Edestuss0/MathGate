@@ -7,7 +7,7 @@ import com.mathgate.app.features.exam.data.local.themes.source.ExamThemeLocalSou
 import com.mathgate.app.features.exam.data.remote.source.ExamRemoteSource
 import com.mathgate.app.features.exam.data.repository.ExamRepositoryImpl
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
+import com.mathgate.app.shared.exam.entity.ExamTypes
 import kotlinx.coroutines.test.StandardTestDispatcher
 import io.mockk.clearAllMocks
 import io.mockk.coEvery

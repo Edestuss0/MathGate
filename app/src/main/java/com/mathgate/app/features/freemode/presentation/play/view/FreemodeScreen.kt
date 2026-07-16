@@ -33,13 +33,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.hrm.latex.renderer.Latex
 import com.hrm.latex.renderer.model.LatexConfig
 import com.mathgate.app.features.freemode.domain.entity.FreemodeBlockType
-import com.mathgate.app.features.freemode.domain.entity.FreemodeDifficulty
+import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
 import com.mathgate.app.features.freemode.domain.entity.FreemodeQuestion
 import com.mathgate.app.features.freemode.domain.entity.FreemodeQuestionBlock
 import com.mathgate.app.features.freemode.presentation.play.viewmodel.FreemodeEffect
 import com.mathgate.app.features.freemode.presentation.play.viewmodel.FreemodeEvent
 import com.mathgate.app.shared.user.domain.entity.User
-import com.mathgate.app.features.freemode.presentation.play.viewmodel.FreemodeState
 import com.mathgate.app.features.freemode.presentation.play.viewmodel.FreemodeViewModel
 import com.mathgate.app.ui.components.AppSnackbarHost
 import com.mathgate.app.ui.components.AppSnackbarVisuals
@@ -249,7 +248,7 @@ private fun FreemodeContent(
 
 @Composable @Preview(showBackground = true)
 private fun FreemodeContetnPreview() {
-    val user = User("Traktoristka", 12, 4, 6, 2, listOf(true, true, false, true), emptyList(), true)
+    val user = User("Traktoristka", 12, 1000, 4, 6, 2, listOf(true, true, false, true), emptyList(), true)
     FreemodeContent(
         user = user,
         input = "15",

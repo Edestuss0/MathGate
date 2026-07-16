@@ -1,7 +1,6 @@
 package com.mathgate.app.features.exam.presentation.themes.viewmodel
 
 import com.mathgate.app.features.exam.domain.entity.ExamTheme
-import com.mathgate.app.features.exam.domain.entity.ExamTypes
 
 data class ExamThemesState(
     val isLoading: Boolean = false,
