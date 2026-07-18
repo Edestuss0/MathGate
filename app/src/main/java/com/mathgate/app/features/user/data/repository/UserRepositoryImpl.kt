@@ -41,8 +41,8 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun completeFreemode(question: FreemodeQuestionInput) {
         if (question.isCorrect) {
-            userData.updateStreak()
             userData.addExpFreemode(question.difficulty)
+            userData.updateStreak()
         } else {
             userData.failStreak()
         }
@@ -51,8 +51,8 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun completeExam(question: ExamQuestionInput) {
         if (question.isCorrect) {
-            userData.updateStreak()
             userData.addExpExam(question.type)
+            userData.updateStreak()
         } else {
             userData.failStreak()
         }

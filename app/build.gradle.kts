@@ -100,7 +100,6 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.4.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
     ksp("androidx.room:room-compiler:2.8.4")
-    implementation("com.google.code.gson:gson:2.13.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("io.ktor:ktor-client-core:3.5.0")
     implementation("io.ktor:ktor-client-okhttp:3.5.0")

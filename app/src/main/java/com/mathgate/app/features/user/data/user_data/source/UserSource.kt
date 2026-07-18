@@ -52,8 +52,6 @@ class UserSource @Inject constructor(
             preferences[CURRENT_STREAK] = 0
             preferences[LEVELUP_LIMIT] = 1000
         }
-
-        println("Успешная регистрация")
     }
 
     suspend fun deleteAccount() {

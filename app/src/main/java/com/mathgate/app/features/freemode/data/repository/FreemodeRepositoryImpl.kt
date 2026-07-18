@@ -13,34 +13,17 @@ import kotlin.random.nextInt
 class FreemodeRepositoryImpl @Inject constructor(
     private val source: FreemodeLocalSource
 ) : IFreemodeRepository {
+
+    val freemodeGenerators = mapOf<FreemodeDifficulty, List<() -> FreemodeQuestion>>(
+        FreemodeDifficulty.EASY to listOf(source::generateArithmetic, source::generateSimpleFraction),
+        FreemodeDifficulty.MEDIUM to listOf(source::generateSimpleLogarithm, source::generateSimpleTrigonometry, source::generateQuadraticEquation),
+        FreemodeDifficulty.HARD to listOf(source::generateEasyLogarithmicEquation, source::generateMediumLogarithmicEquation, source::generateSimpleTrigonometryEquation)
+    )
+
     override fun getQuestion(difficulty: FreemodeDifficulty): FreemodeQuestion {
-        return when (difficulty) {
-            FreemodeDifficulty.EASY -> {
-                val random = Random.nextInt(1..2)
-                when (random) {
-                    1-> {source.generateArithmetic()}
-                    else -> {source.generateSimpleFraction()}
-                }
-            }
-
-            FreemodeDifficulty.MEDIUM -> {
-                val random = Random.nextInt(1..3)
-                when (random) {
-                    1-> {source.generateSimpleLogarithm()}
-                    2 -> {source.generateSimpleTrigonometry()}
-                    else -> {source.generateQuadraticEquation()}
-                }
-            }
-
-            FreemodeDifficulty.HARD -> {
-                val random = Random.nextInt(1..3)
-                when (random) {
-                    1 -> {source.generateEasyLogarithmicEquation()}
-                    2 -> {source.generateMediumLogarithmicEquation()}
-                    else-> {source.generateSimpleTrigonometryEquation()}
-                }
-            }
-        }
+        val generator = freemodeGenerators[difficulty]?.random()
+            ?: throw IllegalArgumentException("Нет генераторов для сложности: ${difficulty.label}")
+        return generator()
     }
 
 

@@ -2,7 +2,8 @@ package com.mathgate.app.core.db.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mathgate.app.core.db.core.MainDb
+import com.mathgate.app.core.db.core.CacheDb
+import com.mathgate.app.core.db.core.UserDb
 import com.mathgate.app.features.exam.data.local.questions.dao.ExamQuestionCacheDao
 import com.mathgate.app.features.exam.data.local.themes.dao.ExamThemeCacheDao
 import com.mathgate.app.features.user.data.exam_data.dao.ExamDataDao
@@ -19,31 +20,41 @@ import javax.inject.Singleton
 object DatabaseModule {
 
     @Provides @Singleton
-    fun provideDb(
+    fun provideUserDb(
         @ApplicationContext context: Context
-    ): MainDb = Room.databaseBuilder(
+    ): UserDb = Room.databaseBuilder(
             context.applicationContext,
-            MainDb::class.java,
-            "main.db",
-        ).fallbackToDestructiveMigration().build()
+            UserDb::class.java,
+            "user.db",
+        ).build()
 
     @Provides @Singleton
-    fun provideExamCacheDao(
-        db: MainDb
-    ): ExamQuestionCacheDao = db.examQuestionCacheDao
+    fun provideCacheDb(
+        @ApplicationContext context: Context
+    ): CacheDb = Room.databaseBuilder(
+        context.applicationContext,
+        CacheDb::class.java,
+        "cache.db",
+    ).fallbackToDestructiveMigration().build()
 
-    @Provides @Singleton
-    fun provideExamThemeCacheDao(
-        db: MainDb
-    ): ExamThemeCacheDao = db.examThemeCacheDao
 
     @Provides @Singleton
     fun provideExamDataDao(
-        db: MainDb
+        db: UserDb
     ): ExamDataDao = db.examDataDao
 
     @Provides @Singleton
     fun provideFreemodeDataDao(
-        db: MainDb
+        db: UserDb
     ): FreemodeDataDao = db.freemodeDataDao
+
+    @Provides @Singleton
+    fun provideExamCacheDao(
+        db: CacheDb
+    ): ExamQuestionCacheDao = db.examQuestionCacheDao
+
+    @Provides @Singleton
+    fun provideExamThemeCacheDao(
+        db: CacheDb
+    ): ExamThemeCacheDao = db.examThemeCacheDao
 }

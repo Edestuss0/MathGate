@@ -26,4 +26,12 @@ class AnalyticsManager @Inject constructor(
         }
         firebase.logEvent(event.name, bundle)
     }
+
+    fun setUserId(id: String?) {
+        firebase.setUserId(id)
+    }
+
+    fun setUserUsername(username: String?) {
+        firebase.setUserProperty("username", username)
+    }
 }

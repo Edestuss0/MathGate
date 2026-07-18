@@ -14,15 +14,13 @@ import com.mathgate.app.features.user.data.freemode_data.dao.FreemodeDataDao
 import com.mathgate.app.features.user.data.freemode_data.entity.FreemodeDataEntity
 
 @Database(
-    entities = [ExamQuestionCacheEntity::class, FreemodeDataEntity::class, ExamDataEntity::class, ExamThemeCacheEntity::class],
-    version = 14,
+    entities = [FreemodeDataEntity::class, ExamDataEntity::class,],
+    version = 15,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
-abstract class MainDb : RoomDatabase() {
-    abstract val examQuestionCacheDao: ExamQuestionCacheDao
+abstract class UserDb : RoomDatabase() {
     abstract val examDataDao: ExamDataDao
     abstract val freemodeDataDao: FreemodeDataDao
-    abstract val examThemeCacheDao: ExamThemeCacheDao
 
 }

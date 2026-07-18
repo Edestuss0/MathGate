@@ -1,25 +1,22 @@
 package com.mathgate.app.core.db.converters
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.shared.freemode.entity.FreemodeDifficulty
+import kotlinx.serialization.json.Json
 
 class Converters {
 
-    private val gson = Gson()
 
     @TypeConverter
     fun fromStringList(list: List<String>): String {
-        return gson.toJson(list)
+        return Json.encodeToString(list)
     }
 
     @TypeConverter
     fun toStringList(json: String?): List<String> {
         if (json.isNullOrBlank()) return emptyList()
-        val type = object : TypeToken<List<String>>() {}.type
-        return gson.fromJson(json, type)
+        return Json.decodeFromString<List<String>>(json)
     }
 
     @TypeConverter
@@ -28,7 +25,7 @@ class Converters {
     }
     @TypeConverter
     fun toType(type: String): ExamTypes {
-        return ExamTypes.valueOf(type)
+       return runCatching { return ExamTypes.valueOf(type) }.onFailure { return ExamTypes.EGE }.getOrNull() ?: ExamTypes.EGE
     }
 
     @TypeConverter
@@ -37,6 +34,6 @@ class Converters {
     }
     @TypeConverter
     fun toDifficulty(difficulty: String): FreemodeDifficulty {
-        return FreemodeDifficulty.valueOf(difficulty)
+        return runCatching { return FreemodeDifficulty.valueOf(difficulty) }.onFailure { return FreemodeDifficulty.MEDIUM }.getOrNull() ?: FreemodeDifficulty.MEDIUM
     }
 }
