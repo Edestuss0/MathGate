@@ -1,14 +1,19 @@
 package com.mathgate.app.core.navigation.view
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mathgate.app.core.ad.AdManager
+import com.mathgate.app.core.app.findActivity
+import com.mathgate.app.core.navigation.utils.navigateWithAd
 import com.mathgate.app.core.navigation.viewmodel.AuthState
 import com.mathgate.app.core.navigation.viewmodel.MainViewModel
 import com.mathgate.app.features.exam.presentation.play.view.ExamPlayScreen
@@ -35,12 +40,15 @@ sealed class Screen(val route: String) {
     }
     data object Trigonometry : Screen("trigonometry")
 }
+
 @Composable
-fun AppNavigation() {
+fun AppNavigation(adManager: AdManager) {
 
     val rootNavController = rememberNavController()
     val viewModel: MainViewModel = hiltViewModel()
     val authState by viewModel.authState.collectAsState()
+
+    val activity = LocalContext.current.findActivity()
 
     if (authState is AuthState.Loading) {
         LoadingScreen()
@@ -61,70 +69,65 @@ fun AppNavigation() {
         }
 
         composable(Screen.MainPage.route) {
-            MainPage(rootNavController)
+            MainPage(rootNavController, adManager)
         }
 
         composable(
             route = Screen.ExamPlay.route,
             arguments = listOf(
-                navArgument("type") {
-                    type = NavType.StringType
-                }
+                navArgument("type") { type = NavType.StringType }
             )
         ) {
             ExamPlayScreen(
-                onBackNavigate = {rootNavController.popBackStack()},
+                onBackNavigate = { rootNavController.popBackStack() },
             )
         }
 
         composable(
             route = Screen.ExamPlayTheme.route,
             arguments = listOf(
-                navArgument("type") {
-                    type = NavType.StringType
-                },
-                navArgument("number") {
-                    type = NavType.IntType
-                }
+                navArgument("type") { type = NavType.StringType },
+                navArgument("number") { type = NavType.IntType }
             )
         ) {
             ExamPlayScreen(
-                onBackNavigate = {rootNavController.popBackStack()},
+                onBackNavigate = { rootNavController.popBackStack() },
             )
         }
 
         composable(
             route = Screen.ExamThemes.route,
             arguments = listOf(
-                navArgument("type") {
-                    type = NavType.StringType
-                }
+                navArgument("type") { type = NavType.StringType }
             )
         ) {
             ExamThemesScreen(
-                onBackNavigate = {rootNavController.popBackStack()},
-                onPlayNavigate = {type, number -> rootNavController.navigate(Screen.ExamPlayTheme.navigate(type, number))}
+                onBackNavigate = { rootNavController.popBackStack() },
+                onPlayNavigate = { type, number ->
+                    rootNavController.navigateWithAd(
+                        route = Screen.ExamPlayTheme.navigate(type, number),
+                        activity = activity,
+                        adManager = adManager,
+                    )
+                }
             )
         }
 
         composable(
             route = Screen.FreemodePlay.route,
             arguments = listOf(
-                navArgument("difficulty") {
-                    type = NavType.StringType
-                }
+                navArgument("difficulty") { type = NavType.StringType }
             )
         ) {
             FreemodeScreen(
-                onBackNavigate = {rootNavController.popBackStack()}
+                onBackNavigate = { rootNavController.popBackStack() }
             )
         }
 
         composable(Screen.Trigonometry.route) {
             TrigonometryScreen(
-                onBackNavigate = {rootNavController.popBackStack()}
+                onBackNavigate = { rootNavController.popBackStack() }
             )
         }
-
     }
 }

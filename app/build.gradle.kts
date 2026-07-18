@@ -29,6 +29,9 @@ if (configFile.exists()) {
 val apiUrl = configProps.getProperty("API_URL")
     ?: throw GradleException("API_URL not found in config.properties")
 
+val interstitialAdUnitId = configProps.getProperty("INTERSTITIAL_AD_UNIT_ID")
+    ?: "demo-interstitial-yandex"
+
 android {
     namespace = "com.mathgate.app"
     compileSdk = 36
@@ -46,6 +49,11 @@ android {
             "String",
             "API_URL",
             "\"$apiUrl\""
+        )
+        buildConfigField(
+            "String",
+            "INTERSTITIAL_AD_UNIT_ID",
+            "\"$interstitialAdUnitId\""
         )
     }
 
@@ -109,6 +117,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:3.5.0")
     testImplementation("io.ktor:ktor-client-mock:3.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation("com.yandex.android:mobileads:8.1.0")
     implementation(libs.latex.base)
     implementation(libs.latex.renderer)
     implementation(libs.latex.parser)

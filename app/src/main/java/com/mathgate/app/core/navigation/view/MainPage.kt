@@ -1,5 +1,6 @@
 package com.mathgate.app.core.navigation.view
 
+import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -15,11 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.mathgate.app.core.ad.AdManager
+import com.mathgate.app.core.app.findActivity
+import com.mathgate.app.core.navigation.utils.navigateWithAd
 import com.mathgate.app.features.exam.presentation.home.view.ExamHomeScreen
 import com.mathgate.app.features.freemode.presentation.home.view.FreemodeHomeScreen
 import com.mathgate.app.features.trigonometry.presentation.view.TrigonometryScreen
@@ -37,10 +42,13 @@ enum class Screens(val route: String, val title: String, val icon: ImageVector) 
 @Composable
 fun MainPage(
     rootNavController: NavController,
+    adManager: AdManager
 ) {
     val tabNavController = rememberNavController()
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+
+    val activity = LocalContext.current.findActivity()
 
     AppScaffold(
         bottomBar = {
@@ -78,14 +86,32 @@ fun MainPage(
         ) {
             composable(Screens.FreemodeHome.route) {
                 FreemodeHomeScreen(
-                    onStartNavigate = {difficulty -> rootNavController.navigate(Screen.FreemodePlay.navigate(difficulty))}
+                    onStartNavigate = {
+                        difficulty -> rootNavController.navigateWithAd(
+                            route = Screen.FreemodePlay.navigate(difficulty),
+                            adManager = adManager,
+                            activity = activity,
+                            probability = 0.1f
+                        )
+                    }
                 )
             }
 
             composable(Screens.OgeHome.route) {
                 ExamHomeScreen(
-                    onStartNavigate = {type -> rootNavController.navigate(Screen.ExamPlay.navigate(type))},
-                    onThemesNavigate = {type -> rootNavController.navigate(Screen.ExamThemes.navigate(type))}
+                    onStartNavigate = { type -> rootNavController.navigateWithAd(
+                        route = Screen.ExamPlay.navigate(type),
+                        adManager = adManager,
+                        activity = activity,
+                        )
+                    },
+                    onThemesNavigate = {type -> rootNavController.navigateWithAd(
+                            route = Screen.ExamThemes.navigate(type),
+                            adManager = adManager,
+                            activity = activity,
+                            probability = 0.1f
+                        )
+                    }
                 )
             }
 
