@@ -20,6 +20,8 @@ import com.mathgate.app.features.exam.presentation.play.view.ExamPlayScreen
 import com.mathgate.app.features.exam.presentation.themes.view.ExamThemesScreen
 import com.mathgate.app.features.freemode.presentation.play.view.FreemodeScreen
 import com.mathgate.app.features.trigonometry.presentation.view.TrigonometryScreen
+import com.mathgate.app.features.user.presentation.exam_stats.view.ExamStatsScreen
+import com.mathgate.app.features.user.presentation.freemode_stats.view.FreemodeStatsScreen
 import com.mathgate.app.features.user.presentation.start_page.view.StartPage
 import com.mathgate.app.ui.components.LoadingScreen
 
@@ -38,6 +40,8 @@ sealed class Screen(val route: String) {
     data object FreemodePlay : Screen("freemode/play/{difficulty}") {
         fun navigate(difficulty: String) = "freemode/play/$difficulty"
     }
+    data object ExamStats : Screen("exam/stats")
+    data object FreemodeStats : Screen("freemode/stats")
     data object Trigonometry : Screen("trigonometry")
 }
 
@@ -125,7 +129,17 @@ fun AppNavigation(adManager: AdManager) {
         }
 
         composable(Screen.Trigonometry.route) {
-            TrigonometryScreen(
+            TrigonometryScreen { rootNavController.popBackStack() }
+        }
+
+        composable(Screen.ExamStats.route) {
+            ExamStatsScreen(
+                onBackNavigate = { rootNavController.popBackStack() }
+            )
+        }
+
+        composable(Screen.FreemodeStats.route) {
+            FreemodeStatsScreen(
                 onBackNavigate = { rootNavController.popBackStack() }
             )
         }

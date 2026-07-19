@@ -248,7 +248,7 @@ private fun FreemodeContent(
 
 @Composable @Preview(showBackground = true)
 private fun FreemodeContetnPreview() {
-    val user = User("Traktoristka", 12, 1000, 4, 6, 2, listOf(true, true, false, true), emptyList(), true)
+    val user = User("Traktoristka", 12, 1000, 4, 6, 2, emptyList(), emptyList(), true)
     FreemodeContent(
         user = user,
         input = "15",

@@ -1,5 +1,7 @@
 package com.mathgate.app.features.user.data.repository
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.mathgate.app.features.user.data.exam_data.source.ExamDataSource
 import com.mathgate.app.features.user.data.freemode_data.source.FreemodeDataSource
 import com.mathgate.app.features.user.data.user_data.source.UserSource
@@ -39,6 +41,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun completeFreemode(question: FreemodeQuestionInput) {
         if (question.isCorrect) {
             userData.addExpFreemode(question.difficulty)
@@ -49,6 +52,7 @@ class UserRepositoryImpl @Inject constructor(
         freemodeData.insert(question)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun completeExam(question: ExamQuestionInput) {
         if (question.isCorrect) {
             userData.addExpExam(question.type)

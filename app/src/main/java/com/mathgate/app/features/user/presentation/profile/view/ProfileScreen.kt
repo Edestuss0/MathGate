@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Check
@@ -24,6 +26,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +38,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.mathgate.app.features.user.presentation.profile.viewmodel.ProfileEffect
+import com.mathgate.app.features.user.presentation.profile.viewmodel.ProfileEvent
 import com.mathgate.app.shared.user.domain.entity.User
 import com.mathgate.app.features.user.presentation.profile.viewmodel.ProfileViewModel
 import com.mathgate.app.ui.components.LoadingScreen
@@ -49,11 +54,22 @@ import java.math.RoundingMode
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    examStatsNavigate: () -> Unit,
+    freemodeStatsNavigate: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     var isDeleteAccountModalOpen by remember { mutableStateOf<Boolean>(false) }
     val user by viewModel.user.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.effects.collect {
+            when (it) {
+                is ProfileEffect.ExamStatsNavigate -> {examStatsNavigate()}
+                is ProfileEffect.FreemodeStatsNavigate -> {freemodeStatsNavigate()}
+            }
+        }
+    }
 
     when {
         state.isLoading -> {
@@ -63,7 +79,12 @@ fun ProfileScreen(
             EmptyState("Не удалось получить информацию о пользователе")
         }
         else -> {
-            ProfileContent(user = user!!, onDeleteAccount = { isDeleteAccountModalOpen = true })
+            ProfileContent(
+                user = user!!,
+                onDeleteAccount = { isDeleteAccountModalOpen = true },
+                onExamStatsClick = {viewModel.onEvent(ProfileEvent.OnExamStatsClick)},
+                onFreemodeStatsClick = {viewModel.onEvent(ProfileEvent.OnFreemodeStatsClick)}
+            )
         }
     }
 
@@ -99,11 +120,15 @@ fun ProfileScreen(
 @Composable
 fun ProfileContent(
     user: User,
-    onDeleteAccount: () -> Unit
+    onDeleteAccount: () -> Unit,
+    onExamStatsClick: () -> Unit,
+    onFreemodeStatsClick: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     AppScaffold(modifier = Modifier.fillMaxSize())  { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp).verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(48.dp))
@@ -149,7 +174,7 @@ fun ProfileContent(
                    Spacer(Modifier.height(16.dp))
                     PrimaryButton(
                         text = "Подробнее",
-                        onClick = {}
+                        onClick = {onFreemodeStatsClick()}
                     )
                 }
             }
@@ -169,7 +194,7 @@ fun ProfileContent(
                     Spacer(Modifier.height(16.dp))
                     PrimaryButton(
                         text = "Подробнее",
-                        onClick = {}
+                        onClick = {onExamStatsClick()}
                     )
                 }
             }
@@ -290,7 +315,7 @@ fun ProfileContentRow(
 @Composable
 private fun ProfileContentPreview() {
     ProfileContent(
-        user = User("Traktoristka", 12, 1000, 650, 24, 24, listOf(true, true, false, true), emptyList(), true),
-        onDeleteAccount = {}
+        user = User("Traktoristka", 12, 1000, 650, 24, 24, emptyList(), emptyList(), true),
+        onDeleteAccount = {}, {}, {}
     )
 }

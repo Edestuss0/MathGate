@@ -334,7 +334,7 @@ private fun ExamPlayPreview() {
         isAnswered = false,
         onAnswer = {},
         isError = false,
-        user = User("Traktoristka", 12, 1000, 54, 24, 24, listOf(true, true, false, true), emptyList(), true),
+        user = User("Traktoristka", 12, 1000, 54, 24, 24, emptyList(), emptyList(), true),
         type = ExamTypes.OGE,
         modifier = Modifier,
         input = "",

@@ -11,6 +11,7 @@ data class ExamDataEntity(
     val answer: String,
     val isCorrect: Boolean,
     val themeLabel: String,
-    val themeNubmer: Int,
-    val type: ExamTypes
+    val themeNumber: Int,
+    val type: ExamTypes,
+    val date: String
 )

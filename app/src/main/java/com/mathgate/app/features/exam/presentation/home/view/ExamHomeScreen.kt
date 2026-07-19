@@ -218,7 +218,7 @@ private fun ExamHomeContent(
 private fun ExamHomeContentPreview() {
     ExamHomeContent(
         onStartClick = {},
-        user = User("Traktoristka", 12, 1000, 54, 24, 24, listOf(true, true, false, true), listOf(true, true, false, true), true),
+        user = User("Traktoristka", 12, 1000, 54, 24, 24, emptyList(), emptyList(), true),
         onThemesClick = {}
     )
 }

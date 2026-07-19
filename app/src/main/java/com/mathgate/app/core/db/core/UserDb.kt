@@ -15,7 +15,7 @@ import com.mathgate.app.features.user.data.freemode_data.entity.FreemodeDataEnti
 
 @Database(
     entities = [FreemodeDataEntity::class, ExamDataEntity::class,],
-    version = 15,
+    version = 17,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

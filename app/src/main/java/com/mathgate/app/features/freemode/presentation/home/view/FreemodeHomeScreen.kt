@@ -208,6 +208,6 @@ private fun FreemodeHomeContentPreview() {
         selectedDifficulty = FreemodeDifficulty.MEDIUM,
         onDifficultySelect = {},
         onStartButtonClick = {},
-        user = User("Traktoristka", 12, 1000, 54, 24, 24, listOf(true, true, false, true), emptyList(), true)
+        user = User("Traktoristka", 12, 1000, 54, 24, 24, emptyList(), emptyList(), true)
     )
 }

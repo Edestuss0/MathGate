@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MathGateTheme() {
-                NotificationPermissionRequester()
+//                NotificationPermissionRequester()
                 AppNavigation(AdManager(this))
             }
         }

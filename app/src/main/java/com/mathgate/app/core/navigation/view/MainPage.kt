@@ -35,8 +35,8 @@ import com.mathgate.app.ui.theme.AppScaffold
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
     OgeHome("oge_home", "Экзамены", Icons.Default.School),
     FreemodeHome("freemode_home", "Свободный", Icons.Default.Keyboard),
+    Reference("reference", "Справка", Icons.Default.MenuBook),
     Profile("profile", "Профиль", Icons.Default.Person),
-    Reference("reference", "Справка", Icons.Default.MenuBook)
 }
 
 @Composable
@@ -116,7 +116,24 @@ fun MainPage(
             }
 
             composable(Screens.Profile.route) {
-                ProfileScreen()
+                ProfileScreen(
+                    examStatsNavigate = {
+                        rootNavController.navigateWithAd(
+                            route = Screen.ExamStats.route,
+                            adManager = adManager,
+                            activity = activity,
+                            probability = 0.1f
+                        )
+                    },
+                    freemodeStatsNavigate = {
+                        rootNavController.navigateWithAd(
+                            route = Screen.FreemodeStats.route,
+                            adManager = adManager,
+                            activity = activity,
+                            probability = 0.1f
+                        )
+                    }
+                )
             }
 
             composable(Screens.Reference.route) {
