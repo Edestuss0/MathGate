@@ -1,5 +1,6 @@
 package com.mathgate.app.features.user.presentation.exam_stats.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,8 @@ import com.mathgate.app.ui.theme.AppBadge
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
+import com.mathgate.app.ui.preview.PreviewData
 
 @Composable
 fun ExamStatsScreen(
@@ -114,17 +117,51 @@ private fun ExamStatsCard(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Статистика · Экзамены (список)", showBackground = true, showSystemUi = true)
 @Composable
-private fun ExamStatsCardPreview() {
-    ExamStatsCard(
-        item = ExamStatsItem(
-            correct = true,
-            date = "12.02.2023 12:00",
-            themeLabel = "Планиметрия",
-            themeNumber = 1,
-            type = ExamTypes.EGE,
-            answer = "4"
-        )
-    )
+private fun ExamStatsListPreview() {
+    MathGateTheme {
+        AppScaffold(
+            modifier = Modifier.fillMaxSize(),
+            hasBackButton = true,
+            topBarText = "Статистика экзаменов"
+        ) { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(items = PreviewData.examStats) { ExamStatsCard(it) }
+            }
+        }
+    }
+}
+
+@Preview(
+    name = "Статистика · Экзамены (тёмная)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun ExamStatsListDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(
+            modifier = Modifier.fillMaxSize(),
+            hasBackButton = true,
+            topBarText = "Статистика экзаменов"
+        ) { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(items = PreviewData.examStats) { ExamStatsCard(it) }
+            }
+        }
+    }
 }

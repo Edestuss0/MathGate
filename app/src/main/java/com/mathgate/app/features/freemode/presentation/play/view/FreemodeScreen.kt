@@ -1,5 +1,6 @@
 package com.mathgate.app.features.freemode.presentation.play.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,9 @@ import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.AppTextField
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
+import com.mathgate.app.ui.preview.PreviewData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -246,19 +249,42 @@ private fun FreemodeContent(
 }
 
 
-@Composable @Preview(showBackground = true)
-private fun FreemodeContetnPreview() {
-    val user = User("Traktoristka", 12, 1000, 4, 6, 2, emptyList(), emptyList(), true)
-    FreemodeContent(
-        user = user,
-        input = "15",
-        question = FreemodeQuestion(answer = "0.5", blocks = listOf(
-            FreemodeQuestionBlock(type = FreemodeBlockType.TEXT, content = "Найдите значение выражения"),
-            FreemodeQuestionBlock(type = FreemodeBlockType.LATEX, content = "cos \\frac{\\pi}{6}")
-        )),
-        isError = false,
-        onAnswer = {},
-        onInput = {},
-        difficulty = FreemodeDifficulty.MEDIUM
-    )
+@Composable @Preview(name = "Свободный режим · задача", showBackground = true, showSystemUi = true)
+private fun FreemodePlayPreview() {
+    MathGateTheme {
+        AppScaffold(hasBackButton = true, modifier = Modifier.fillMaxSize()) {
+            FreemodeContent(
+                user = PreviewData.user,
+                input = "-2",
+                question = PreviewData.freemodeQuadratic,
+                isError = false,
+                onAnswer = {},
+                onInput = {},
+                difficulty = FreemodeDifficulty.HARD
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(
+    name = "Свободный режим · тригонометрия (тёмная)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+private fun FreemodePlayDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(hasBackButton = true, modifier = Modifier.fillMaxSize()) {
+            FreemodeContent(
+                user = PreviewData.user,
+                input = "0,5",
+                question = PreviewData.freemodeTrig,
+                isError = false,
+                onAnswer = {},
+                onInput = {},
+                difficulty = FreemodeDifficulty.MEDIUM
+            )
+        }
+    }
 }

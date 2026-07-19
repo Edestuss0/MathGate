@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.tooling.preview.Preview
 import com.mathgate.app.core.ad.AdManager
 import com.mathgate.app.core.app.findActivity
 import com.mathgate.app.core.navigation.utils.navigateWithAd
@@ -31,6 +32,7 @@ import com.mathgate.app.features.trigonometry.presentation.view.TrigonometryScre
 import com.mathgate.app.features.user.presentation.profile.view.ProfileScreen
 import com.mathgate.app.shared.reference.view.ReferenceScreen
 import com.mathgate.app.ui.theme.AppScaffold
+import com.mathgate.app.ui.theme.MathGateTheme
 
 enum class Screens(val route: String, val title: String, val icon: ImageVector) {
     OgeHome("oge_home", "Экзамены", Icons.Default.School),
@@ -142,5 +144,37 @@ fun MainPage(
                 )
             }
         }
+    }
+}
+
+// --- Превью нижней навигации (для промо-скриншотов) ---
+
+@Composable
+private fun MathGateNavigationBar(selected: Screens) {
+    NavigationBar {
+        Screens.entries.forEach { screen ->
+            NavigationBarItem(
+                selected = screen == selected,
+                icon = { Icon(imageVector = screen.icon, contentDescription = screen.title) },
+                label = { Text(screen.title) },
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Preview(name = "Нижняя навигация (светлая)", showBackground = true)
+@Composable
+private fun BottomNavLightPreview() {
+    MathGateTheme {
+        MathGateNavigationBar(selected = Screens.OgeHome)
+    }
+}
+
+@Preview(name = "Нижняя навигация (тёмная)", showBackground = true)
+@Composable
+private fun BottomNavDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        MathGateNavigationBar(selected = Screens.FreemodeHome)
     }
 }

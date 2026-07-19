@@ -1,5 +1,6 @@
 package com.mathgate.app.features.user.presentation.profile.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,7 +48,9 @@ import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.AppTextButton
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
+import com.mathgate.app.ui.preview.PreviewData
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -311,11 +314,29 @@ fun ProfileContentRow(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "Профиль", showBackground = true, showSystemUi = true)
 @Composable
 private fun ProfileContentPreview() {
-    ProfileContent(
-        user = User("Traktoristka", 12, 1000, 650, 24, 24, emptyList(), emptyList(), true),
-        onDeleteAccount = {}, {}, {}
-    )
+    MathGateTheme {
+        ProfileContent(
+            user = PreviewData.user,
+            onDeleteAccount = {}, onExamStatsClick = {}, onFreemodeStatsClick = {}
+        )
+    }
+}
+
+@Preview(
+    name = "Профиль (тёмная тема)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun ProfileContentDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        ProfileContent(
+            user = PreviewData.user,
+            onDeleteAccount = {}, onExamStatsClick = {}, onFreemodeStatsClick = {}
+        )
+    }
 }

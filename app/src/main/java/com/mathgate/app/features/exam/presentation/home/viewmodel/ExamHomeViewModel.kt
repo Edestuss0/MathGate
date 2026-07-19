@@ -34,12 +34,12 @@ class ExamHomeViewModel @Inject constructor(
         when (event) {
             is ExamHomeEvent.OnPlayClick -> {
                 viewModelScope.launch {
-                    _effects.send(ExamHomeEffects.OnPlayNavigate(_state.value.selectedType.name))
+                    _effects.send(ExamHomeEffects.OnPlayNavigate(state.value.selectedType.name))
                 }
             }
             is ExamHomeEvent.OnThemesClick -> {
                 viewModelScope.launch {
-                    _effects.send(ExamHomeEffects.OnThemesNavigate(_state.value.selectedType.name))
+                    _effects.send(ExamHomeEffects.OnThemesNavigate(state.value.selectedType.name))
                 }
             }
             is ExamHomeEvent.OnTypeSelect -> {_state.update { it.copy(selectedType = event.type) }}

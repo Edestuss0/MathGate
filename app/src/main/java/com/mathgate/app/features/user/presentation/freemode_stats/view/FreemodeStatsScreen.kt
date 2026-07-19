@@ -1,5 +1,6 @@
 package com.mathgate.app.features.user.presentation.freemode_stats.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,8 @@ import com.mathgate.app.ui.theme.AppBadge
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
+import com.mathgate.app.ui.preview.PreviewData
 
 @Composable
 fun FreemodeStatsScreen(
@@ -108,15 +111,51 @@ private fun FreemodeStatsCard(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Статистика · Свободный (список)", showBackground = true, showSystemUi = true)
 @Composable
-private fun FreemodeStatsCardPreview() {
-    FreemodeStatsCard(
-        item = FreemodeStatsItem(
-            correct = true,
-            date = "12.02.2023 12:00",
-            answer = "4",
-            difficulty = FreemodeDifficulty.MEDIUM,
-        )
-    )
+private fun FreemodeStatsListPreview() {
+    MathGateTheme {
+        AppScaffold(
+            modifier = Modifier.fillMaxSize(),
+            hasBackButton = true,
+            topBarText = "Статистика свободного режима"
+        ) { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(items = PreviewData.freemodeStats) { FreemodeStatsCard(it) }
+            }
+        }
+    }
+}
+
+@Preview(
+    name = "Статистика · Свободный (тёмная)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun FreemodeStatsListDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(
+            modifier = Modifier.fillMaxSize(),
+            hasBackButton = true,
+            topBarText = "Статистика свободного режима"
+        ) { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(items = PreviewData.freemodeStats) { FreemodeStatsCard(it) }
+            }
+        }
+    }
 }

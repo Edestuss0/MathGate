@@ -14,9 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import android.content.res.Configuration
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
 
 @Composable
@@ -84,5 +87,26 @@ fun ReferenceScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(name = "Справка", showBackground = true, showSystemUi = true)
+@Composable
+private fun ReferenceScreenPreview() {
+    MathGateTheme {
+        ReferenceScreen(onTrigonometryNavigate = {})
+    }
+}
+
+@Preview(
+    name = "Справка (тёмная тема)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun ReferenceScreenDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        ReferenceScreen(onTrigonometryNavigate = {})
     }
 }

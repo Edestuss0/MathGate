@@ -21,6 +21,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
+import android.content.res.Configuration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,6 +37,7 @@ import com.mathgate.app.features.trigonometry.presentation.viewmodel.Trigonometr
 import com.mathgate.app.features.trigonometry.presentation.viewmodel.TrigonometryViewModel
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
 import io.ktor.util.hex
 import kotlin.math.*
@@ -391,22 +393,45 @@ private fun updateAngle(
 
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Тригонометрия · Круг", showBackground = true)
 @Composable
 private fun TrigonometryPreview() {
-    InteractiveTrigonometricCircle(
-        onAngleClick = {},
-        state = TrigonometryState(
-            currentAngle = CurrentAngle(52)
+    MathGateTheme {
+        InteractiveTrigonometricCircle(
+            onAngleClick = {},
+            state = TrigonometryState(
+                currentAngle = CurrentAngle(30),
+                currentTableAngle = trigonometryTable.first { it.degree == 30 }
+            )
         )
-    )
+    }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Тригонометрия · Значения", showBackground = true)
 @Composable
-private fun ValuesPreview() {
-    ValuesPreview(
-        currentAngle = CurrentAngle(30),
-        currentTableValue = TrigonometryTableValue(30, "\\frac{\\pi}{6}", null, "\\frac{\\sqrt{3}}{2}", "\\frac{\\sqrt{3}}{3}"),
-    )
+private fun TrigonometryValuesPreview() {
+    MathGateTheme {
+        ValuesPreview(
+            currentAngle = CurrentAngle(30),
+            currentTableValue = TrigonometryTableValue(30, "\\frac{\\pi}{6}", null, "\\frac{\\sqrt{3}}{2}", "\\frac{\\sqrt{3}}{3}"),
+        )
+    }
+}
+
+@Preview(
+    name = "Тригонометрия · Круг (тёмная тема)",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun TrigonometryDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        InteractiveTrigonometricCircle(
+            onAngleClick = {},
+            state = TrigonometryState(
+                currentAngle = CurrentAngle(45),
+                currentTableAngle = trigonometryTable.first { it.degree == 45 }
+            )
+        )
+    }
 }

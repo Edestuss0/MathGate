@@ -1,5 +1,6 @@
 package com.mathgate.app.features.exam.presentation.themes.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,7 +33,9 @@ import com.mathgate.app.ui.theme.AppBadge
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
+import com.mathgate.app.ui.preview.PreviewData
 
 @Composable
 fun ExamThemesScreen(
@@ -120,14 +123,61 @@ private fun ThemeBlock(
     }
 }
 
-@Composable @Preview(showBackground = true)
+@Composable @Preview(name = "Каталог заданий · один блок", showBackground = true)
 private fun ThemeBlockPreview() {
-    ThemeBlock(
-        theme = ExamTheme(
-            tasks = 61,
-            number = 1,
-            label = "Планиметрия"
-        ),
-        onStartClick = {}
-    )
+    MathGateTheme {
+        ThemeBlock(
+            theme = ExamTheme(
+                tasks = 128,
+                number = 1,
+                label = "Планиметрия"
+            ),
+            onStartClick = {}
+        )
+    }
+}
+
+@Composable
+@Preview(name = "Каталог заданий · список (ЕГЭ)", showBackground = true, showSystemUi = true,     uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun ExamThemesListPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(hasBackButton = true, topBarText = "К списку заданий") { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(items = PreviewData.egeThemes) { theme ->
+                    ThemeBlock(theme = theme, onStartClick = {})
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@Preview(
+    name = "Каталог заданий · список (тёмная)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+private fun ExamThemesListDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(hasBackButton = true, topBarText = "К списку заданий") { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(items = PreviewData.ogeThemes) { theme ->
+                    ThemeBlock(theme = theme, onStartClick = {})
+                }
+            }
+        }
+    }
 }

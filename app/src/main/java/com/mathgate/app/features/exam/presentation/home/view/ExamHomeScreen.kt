@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -41,7 +42,9 @@ import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.AppTextButton
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
+import com.mathgate.app.ui.preview.PreviewData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +54,7 @@ fun ExamHomeScreen(
     onThemesNavigate: (type: String) -> Unit,
 ) {
     val user by viewModel.user.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
@@ -70,7 +74,9 @@ fun ExamHomeScreen(
                 ExamHomeContent(
                     onStartClick = { viewModel.onEvent(ExamHomeEvent.OnPlayClick) },
                     user = user!!,
-                    onThemesClick = { viewModel.onEvent(ExamHomeEvent.OnThemesClick) }
+                    onThemesClick = { viewModel.onEvent(ExamHomeEvent.OnThemesClick) },
+                    selectedType = state.selectedType,
+                    onSelectType = { viewModel.onEvent(ExamHomeEvent.OnTypeSelect(it)) }
                 )
             }
         }
@@ -83,13 +89,16 @@ fun ExamHomeScreen(
 private fun ExamHomeContent(
     onStartClick: (type: ExamTypes) -> Unit,
     onThemesClick: (type: ExamTypes) -> Unit,
+    selectedType: ExamTypes,
+    onSelectType: (type: ExamTypes) -> Unit,
     user: User
 ) {
     var isDropdownOpen by remember { mutableStateOf(false) }
-    var selectedType by remember { mutableStateOf<ExamTypes>(ExamTypes.EGE) }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Column(
@@ -152,7 +161,9 @@ private fun ExamHomeContent(
 
             AppCard() {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
                     Text(
                         text = "Решайте задачи из экзаменов в формате свободного режима",
@@ -167,7 +178,9 @@ private fun ExamHomeContent(
                         onExpandedChange = { isDropdownOpen = it }
                     ) {
                         OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
                             shape = MaterialTheme.shapes.medium,
                             value = selectedType.label,
                             onValueChange = {},
@@ -185,7 +198,7 @@ private fun ExamHomeContent(
                                 DropdownMenuItem(
                                     text = { Text(option.label) },
                                     onClick = {
-                                        selectedType = option
+                                        onSelectType(option)
                                         isDropdownOpen = false
                                     },
                                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
@@ -213,12 +226,39 @@ private fun ExamHomeContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Экзамены · Главная (ЕГЭ)", showBackground = true, showSystemUi = true)
 @Composable
 private fun ExamHomeContentPreview() {
-    ExamHomeContent(
-        onStartClick = {},
-        user = User("Traktoristka", 12, 1000, 54, 24, 24, emptyList(), emptyList(), true),
-        onThemesClick = {}
-    )
+    MathGateTheme {
+        AppScaffold(Modifier.fillMaxSize()) {
+            ExamHomeContent(
+                onStartClick = {},
+                user = PreviewData.user,
+                onThemesClick = {},
+                onSelectType = {},
+                selectedType = ExamTypes.EGE
+            )
+        }
+    }
+}
+
+@Preview(
+    name = "Экзамены · Главная (тёмная)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun ExamHomeContentDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(Modifier.fillMaxSize()) {
+            ExamHomeContent(
+                onStartClick = {},
+                user = PreviewData.user,
+                onThemesClick = {},
+                onSelectType = {},
+                selectedType = ExamTypes.OGE
+            )
+        }
+    }
 }

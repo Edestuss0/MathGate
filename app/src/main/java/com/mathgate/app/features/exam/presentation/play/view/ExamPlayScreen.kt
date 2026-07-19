@@ -1,5 +1,6 @@
 package com.mathgate.app.features.exam.presentation.play.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,7 +50,9 @@ import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.AppTextButton
 import com.mathgate.app.ui.theme.AppTextField
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
+import com.mathgate.app.ui.preview.PreviewData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -311,33 +314,51 @@ private fun ExamContent(
         }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Играть · ЕГЭ (разбор)", showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ExamPlayPreview() {
-    ExamContent(
-        question = ExamQuestion(
-            answer = "0.5",
-            blocks = listOf(
-                ExamBlock(type = ExamBlockType.TEXT, "Найдите значение выражения"),
-                ExamBlock(type = ExamBlockType.FORMULA, "sin \\frac{\\pi}{6}")
-            ),
-            solutionBlocks = listOf(
-                ExamBlock(type = ExamBlockType.TEXT, "Найдите значение выражения"),
-                ExamBlock(type = ExamBlockType.FORMULA, "sin \\frac{\\pi}{6}")
-            ),
-            id = 1314,
-            themeNumber = 52,
-            themeLabel = "dssfd"
-        ),
-        skipQuestion = {},
-        getNewQuestion = {},
-        isAnswered = false,
-        onAnswer = {},
-        isError = false,
-        user = User("Traktoristka", 12, 1000, 54, 24, 24, emptyList(), emptyList(), true),
-        type = ExamTypes.OGE,
-        modifier = Modifier,
-        input = "",
-        onInputChange = {}
-    )
+private fun ExamPlaySolutionPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(hasBackButton = true, topBarText = "Экзамены") { padding ->
+            ExamContent(
+                question = PreviewData.egeLogarithm,
+                skipQuestion = {},
+                getNewQuestion = {},
+                isAnswered = true,
+                onAnswer = {},
+                isError = false,
+                user = PreviewData.user,
+                type = ExamTypes.EGE,
+                modifier = Modifier.padding(padding),
+                input = "0,6",
+                onInputChange = {}
+            )
+        }
+    }
+}
+
+@Preview(
+    name = "Играть · ЕГЭ (тёмная тема)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun ExamPlayDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(hasBackButton = true, topBarText = "Экзамены") { padding ->
+            ExamContent(
+                question = PreviewData.egeLogarithm,
+                skipQuestion = {},
+                getNewQuestion = {},
+                isAnswered = false,
+                onAnswer = {},
+                isError = false,
+                user = PreviewData.user,
+                type = ExamTypes.EGE,
+                modifier = Modifier.padding(padding),
+                input = "0,81",
+                onInputChange = {}
+            )
+        }
+    }
 }

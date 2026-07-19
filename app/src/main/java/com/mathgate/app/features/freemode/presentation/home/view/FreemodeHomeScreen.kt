@@ -1,5 +1,6 @@
 package com.mathgate.app.features.freemode.presentation.home.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,7 +41,9 @@ import com.mathgate.app.ui.components.AppSnackbarHost
 import com.mathgate.app.ui.theme.AppCard
 import com.mathgate.app.ui.theme.AppScaffold
 import com.mathgate.app.ui.theme.EmptyState
+import com.mathgate.app.ui.theme.MathGateTheme
 import com.mathgate.app.ui.theme.PrimaryButton
+import com.mathgate.app.ui.preview.PreviewData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -201,13 +204,37 @@ private fun FreemodeHomeScreenContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Свободный · Главная", showBackground = true, showSystemUi = true)
 @Composable
 private fun FreemodeHomeContentPreview() {
-    FreemodeHomeScreenContent(
-        selectedDifficulty = FreemodeDifficulty.MEDIUM,
-        onDifficultySelect = {},
-        onStartButtonClick = {},
-        user = User("Traktoristka", 12, 1000, 54, 24, 24, emptyList(), emptyList(), true)
-    )
+    MathGateTheme {
+        AppScaffold(Modifier.fillMaxSize()) {
+            FreemodeHomeScreenContent(
+                selectedDifficulty = FreemodeDifficulty.MEDIUM,
+                onDifficultySelect = {},
+                onStartButtonClick = {},
+                user = PreviewData.user
+            )
+        }
+    }
+}
+
+@Preview(
+    name = "Свободный · Главная (тёмная)",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun FreemodeHomeContentDarkPreview() {
+    MathGateTheme(darkTheme = true) {
+        AppScaffold(Modifier.fillMaxSize()) {
+            FreemodeHomeScreenContent(
+                selectedDifficulty = FreemodeDifficulty.HARD,
+                onDifficultySelect = {},
+                onStartButtonClick = {},
+                user = PreviewData.user
+            )
+        }
+    }
 }
