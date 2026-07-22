@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.seconds
 class AdManager @Inject constructor(
     @param:ApplicationContext private val context: Context
 ) {
-    private val adUnitId = INTERSTITIAL_AD_UNIT_ID
+    private val adUnitId = "R-M-19617673-1"
 
     private val adLoader = InterstitialAdLoader(context)
     private var interstitialAd: InterstitialAd? = null

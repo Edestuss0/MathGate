@@ -12,25 +12,36 @@ class ExamQuestionsLocalSource @Inject constructor(
     private val dao: ExamQuestionCacheDao
 ) {
 
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        explicitNulls = false
+    }
+
     suspend fun get(type: ExamTypes): ExamQuestion? {
         dao.clearExpired(System.currentTimeMillis() - CACHE_LIVE_TIME)
-        val cached = dao.get(type)
-        if (cached == null) return null
-        return Json.decodeFromString<ExamQuestion>(cached.json)
+        val cached = dao.get(type) ?: return null
+        return decodeOrInvalidate(cached)
     }
 
     suspend fun getByNumber(type: ExamTypes, number: Int): ExamQuestion? {
         dao.clearExpired(System.currentTimeMillis() - CACHE_LIVE_TIME)
-        val cached = dao.getByNumber(type, number)
-        if (cached == null) return null
-        return Json.decodeFromString<ExamQuestion>(cached.json)
+        val cached = dao.getByNumber(type, number) ?: return null
+        return decodeOrInvalidate(cached)
     }
+
+    private suspend fun decodeOrInvalidate(cached: ExamQuestionCacheEntity): ExamQuestion? =
+        runCatching { json.decodeFromString<ExamQuestion>(cached.json) }
+            .getOrElse {
+                dao.invalidate(cached.id)
+                null
+            }
 
     suspend fun insert(question: ExamQuestion, type: ExamTypes) {
         dao.insert(ExamQuestionCacheEntity(
             id = question.id,
             type = type,
-            json = Json.encodeToString(question),
+            json = json.encodeToString(question),
             number = question.themeNumber
         ))
     }
@@ -40,7 +51,7 @@ class ExamQuestionsLocalSource @Inject constructor(
             dao.insert(ExamQuestionCacheEntity(
                 id = question.id,
                 type = type,
-                json = Json.encodeToString(question),
+                json = json.encodeToString(question),
                 number = question.themeNumber
             ))
         }

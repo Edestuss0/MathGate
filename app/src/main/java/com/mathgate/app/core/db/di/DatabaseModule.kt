@@ -35,7 +35,7 @@ object DatabaseModule {
         context.applicationContext,
         CacheDb::class.java,
         "cache.db",
-    ).fallbackToDestructiveMigration().build()
+    ).fallbackToDestructiveMigration(true).build()
 
 
     @Provides @Singleton

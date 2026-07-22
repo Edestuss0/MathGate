@@ -320,13 +320,13 @@ private fun ExamPlaySolutionPreview() {
     MathGateTheme(darkTheme = true) {
         AppScaffold(hasBackButton = true, topBarText = "Экзамены") { padding ->
             ExamContent(
-                question = PreviewData.egeLogarithm,
+                question = PreviewData.egePlanimetry,
                 skipQuestion = {},
                 getNewQuestion = {},
                 isAnswered = true,
                 onAnswer = {},
                 isError = false,
-                user = PreviewData.user,
+                user = PreviewData.newUser,
                 type = ExamTypes.EGE,
                 modifier = Modifier.padding(padding),
                 input = "0,6",
