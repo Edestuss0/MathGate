@@ -1,5 +1,6 @@
 package com.mathgate.app.features.exam.data.local.themes.source
 
+import androidx.room.Transaction
 import com.mathgate.app.core.app.CACHE_LIVE_TIME
 import com.mathgate.app.features.exam.data.local.themes.dao.ExamThemeCacheDao
 import com.mathgate.app.features.exam.data.local.themes.entity.ExamThemeCacheEntity
@@ -30,6 +31,7 @@ class ExamThemeLocalSource @Inject constructor(
         ))
     }
 
+    @Transaction
     suspend fun insertMore(themes: List<ExamTheme>, type: ExamTypes) {
         themes.forEach { theme ->
             dao.insert(ExamThemeCacheEntity(

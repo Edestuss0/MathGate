@@ -111,7 +111,8 @@ fun ExamPlayScreen(
                     user = user!!,
                     modifier = Modifier.padding(paddingValues),
                     input = state.answerInput,
-                    onInputChange = {new -> viewModel.onEvent(ExamPlayEvent.OnAnswerInput(new))}
+                    onInputChange = {new -> viewModel.onEvent(ExamPlayEvent.OnAnswerInput(new))},
+                    isAnswering = state.isAnswered
                 )
             }
         }
@@ -130,7 +131,8 @@ private fun ExamContent(
     getNewQuestion: () -> Unit,
     user: User,
     type: ExamTypes,
-    modifier: Modifier
+    modifier: Modifier,
+    isAnswering: Boolean
 ) {
 
     Column(
@@ -294,7 +296,8 @@ private fun ExamContent(
                     onClick = {
                         onAnswer()
                     },
-                    text = "Ответить"
+                    text = "Ответить",
+                    enabled = !isAnswering
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -330,7 +333,8 @@ private fun ExamPlaySolutionPreview() {
                 type = ExamTypes.EGE,
                 modifier = Modifier.padding(padding),
                 input = "0,6",
-                onInputChange = {}
+                onInputChange = {},
+                isAnswering = false
             )
         }
     }
@@ -357,7 +361,8 @@ private fun ExamPlayDarkPreview() {
                 type = ExamTypes.EGE,
                 modifier = Modifier.padding(padding),
                 input = "0,81",
-                onInputChange = {}
+                onInputChange = {},
+                isAnswering = false
             )
         }
     }

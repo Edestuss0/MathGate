@@ -10,10 +10,10 @@ import com.mathgate.app.shared.exam.entity.ExamTypes
 @Dao
 interface ExamQuestionCacheDao {
 
-    @Query("SELECT * FROM exam_cache WHERE type = :type LIMIT 1")
+    @Query("SELECT * FROM exam_cache WHERE type = :type ORDER BY cachedAt DESC LIMIT 1")
     suspend fun get(type: ExamTypes): ExamQuestionCacheEntity?
 
-    @Query("SELECT * FROM exam_cache WHERE type = :type AND number = :number LIMIT 1")
+    @Query("SELECT * FROM exam_cache WHERE type = :type AND number = :number ORDER BY cachedAt DESC LIMIT 1")
     suspend fun getByNumber(type: ExamTypes, number: Int): ExamQuestionCacheEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

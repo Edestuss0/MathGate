@@ -1,5 +1,6 @@
 package com.mathgate.app.features.exam.data.local.questions.source
 
+import androidx.room.Transaction
 import com.mathgate.app.core.app.CACHE_LIVE_TIME
 import com.mathgate.app.features.exam.data.local.questions.dao.ExamQuestionCacheDao
 import com.mathgate.app.features.exam.data.local.questions.entity.ExamQuestionCacheEntity
@@ -46,6 +47,7 @@ class ExamQuestionsLocalSource @Inject constructor(
         ))
     }
 
+    @Transaction
     suspend fun insertMore(questions: List<ExamQuestion>, type: ExamTypes) {
         questions.forEach { question ->
             dao.insert(ExamQuestionCacheEntity(

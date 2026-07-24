@@ -3,6 +3,7 @@ package com.mathgate.app.core.ad
 import android.app.Activity
 import android.content.Context
 import com.mathgate.app.core.app.INTERSTITIAL_AD_UNIT_ID
+import com.mathgate.app.core.di.ApplicationScope
 import com.yandex.mobile.ads.common.AdError
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.ImpressionData
@@ -25,16 +26,16 @@ import kotlin.time.Duration.Companion.seconds
 
 @Singleton
 class AdManager @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @ApplicationScope private val scope: CoroutineScope
 ) {
-    private val adUnitId = "R-M-19617673-1"
+    private val adUnitId = INTERSTITIAL_AD_UNIT_ID
 
     private val adLoader = InterstitialAdLoader(context)
     private var interstitialAd: InterstitialAd? = null
 
     private val _isAdLoaded = MutableStateFlow(false)
     val isAdLoaded: StateFlow<Boolean> = _isAdLoaded.asStateFlow()
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private var retryDelay = 2.seconds
     private var isLoading = false

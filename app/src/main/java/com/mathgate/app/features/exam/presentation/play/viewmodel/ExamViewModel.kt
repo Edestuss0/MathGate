@@ -104,23 +104,29 @@ class ExamViewModel @Inject constructor(
     }
 
     private fun onAnswer() {
+        if (state.value.isAnswered) return
         viewModelScope.launch {
-            val isCorrect = state.value.answerInput.trim() == state.value.question?.answer
-            if (state.value.question != null) {
-                completeExam(isCorrect, state.value.question!!, type)
-                onAnswerAnalytics(state.value.question!!, type, isCorrect)
-            }
-            if (isCorrect) {
-                _state.update { it.copy(
-                    isError = false,
-                )}
-                _effects.send(ExamPlayEffect.SuccessSnackbar("Правильно"))
-                getNewQuestion()
-            } else {
-                _state.update { it.copy(
-                    isError = true,
-                )}
-                _effects.send(ExamPlayEffect.ErrorSnackbar("Неправильно"))
+            _state.update { it.copy(isAnswered = true) }
+            try {
+                val isCorrect = state.value.answerInput.trim() == state.value.question?.answer
+                if (state.value.question != null) {
+                    completeExam(isCorrect, state.value.question!!, type)
+                    onAnswerAnalytics(state.value.question!!, type, isCorrect)
+                }
+                if (isCorrect) {
+                    _state.update { it.copy(
+                        isError = false,
+                    )}
+                    _effects.send(ExamPlayEffect.SuccessSnackbar("Правильно"))
+                    getNewQuestion()
+                } else {
+                    _state.update { it.copy(
+                        isError = true,
+                    )}
+                    _effects.send(ExamPlayEffect.ErrorSnackbar("Неправильно"))
+                }
+            } finally {
+                _state.update { it.copy(isAnswered = false) }
             }
         }
     }

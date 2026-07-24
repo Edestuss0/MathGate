@@ -6,8 +6,11 @@ import com.mathgate.app.features.exam.domain.entity.ExamAnalyticsEvent
 import com.mathgate.app.features.exam.domain.entity.ExamQuestion
 import com.mathgate.app.shared.exam.entity.ExamTypes
 import com.mathgate.app.features.exam.domain.repository.ExamRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetExamQuestionByNumberUseCase @Inject constructor(
@@ -15,7 +18,9 @@ class GetExamQuestionByNumberUseCase @Inject constructor(
     private val analytics: AnalyticsManager
 ) {
     operator fun invoke(type: ExamTypes, number: Int): Flow<AppResult<ExamQuestion>> = flow {
-        repository.preloadQuestions(type, number, 4)
+        coroutineScope {
+            launch { repository.preloadQuestions(type, number, 4) }
+        }
         repository.getExamQuestionByNumber(type, number).collect { result ->
             when {
                 result is AppResult.Success -> {

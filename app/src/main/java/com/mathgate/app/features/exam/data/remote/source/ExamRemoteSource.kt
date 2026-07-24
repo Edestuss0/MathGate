@@ -19,18 +19,21 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.isSuccess
 import io.ktor.util.encodeBase64
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 class ExamRemoteSource @Inject constructor(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val ioDispatcher: CoroutineDispatcher
 ) {
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     suspend fun getExamQuestion(type: ExamTypes): ExamQuestion {
         val response = client.get("$API_URL/api/exam?type=${(type.toString()).lowercase()}")
         if (!(response.status.isSuccess())) throw AppException.Network.ServerError(response.status.value)
@@ -76,18 +79,20 @@ class ExamRemoteSource @Inject constructor(
     suspend fun downloadImagesForBlocks(blocks: List<ExamBlock>): List<ExamBlock> {
         val imageBlocks = blocks.filter { it.type != ExamBlockType.TEXT }
         val textBlocks = blocks.filter { it.type == ExamBlockType.TEXT }
-        val downloadedImageBlocks = imageBlocks.map { block ->
-            scope.async {
-                try {
-                    val imageBytes = client.get(block.content).bodyAsBytes()
-                    val base64String = Base64.encodeToString(imageBytes, Base64.NO_WRAP)
-                    val final = "data:image/jpeg;base64,$base64String"
-                    block.copy(content = final)
-                } catch (_: Exception) {
-                    block
+        val downloadedImageBlocks = coroutineScope {
+            imageBlocks.map { block ->
+                async(ioDispatcher) {
+                    try {
+                        val imageBytes = client.get(block.content).bodyAsBytes()
+                        val base64String = Base64.encodeToString(imageBytes, Base64.NO_WRAP)
+                        val final = "data:image/jpeg;base64,$base64String"
+                        block.copy(content = final)
+                    } catch (_: Exception) {
+                        block
+                    }
                 }
-            }
-        }.awaitAll()
+            }.awaitAll()
+        }
         return textBlocks + downloadedImageBlocks
     }
 }

@@ -13,11 +13,13 @@ import com.mathgate.app.shared.notification.presentation.view.NotificationPermis
 import com.mathgate.app.ui.theme.MathGateTheme
 import com.yandex.mobile.ads.common.YandexAds
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var analytics: FirebaseAnalytics
+    @Inject lateinit var adManager: AdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         analytics = Firebase.analytics
@@ -25,8 +27,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MathGateTheme() {
-//                NotificationPermissionRequester()
-                AppNavigation(AdManager(this))
+                AppNavigation(adManager)
             }
         }
     }

@@ -7,7 +7,8 @@ data class ExamPlayState(
     val question: ExamQuestion? = null,
     val isLoading: Boolean = false,
     val isSkipped: Boolean = false,
-    val answerInput: String = ""
+    val answerInput: String = "",
+    val isAnswered: Boolean = false
 )
 
 sealed class ExamPlayEvent {

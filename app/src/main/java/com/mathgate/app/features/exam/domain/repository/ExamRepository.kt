@@ -10,5 +10,5 @@ interface ExamRepository {
     suspend fun getExamQuestion(type: ExamTypes): Flow<AppResult<ExamQuestion>>
     suspend fun getExamThemes(type: ExamTypes): Flow<AppResult<List<ExamTheme>>>
     suspend fun getExamQuestionByNumber(type: ExamTypes, number: Int): Flow<AppResult<ExamQuestion>>
-    fun preloadQuestions(type: ExamTypes, number: Int?, count: Int)
+    suspend fun preloadQuestions(type: ExamTypes, number: Int?, count: Int)
 }

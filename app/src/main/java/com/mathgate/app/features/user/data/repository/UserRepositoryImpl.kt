@@ -2,6 +2,7 @@ package com.mathgate.app.features.user.data.repository
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.room.Transaction
 import com.mathgate.app.features.user.data.exam_data.source.ExamDataSource
 import com.mathgate.app.features.user.data.freemode_data.source.FreemodeDataSource
 import com.mathgate.app.features.user.data.user_data.source.UserSource
@@ -41,6 +42,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    @Transaction
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun completeFreemode(question: FreemodeQuestionInput) {
         if (question.isCorrect) {
@@ -52,6 +54,7 @@ class UserRepositoryImpl @Inject constructor(
         freemodeData.insert(question)
     }
 
+    @Transaction
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun completeExam(question: ExamQuestionInput) {
         if (question.isCorrect) {
@@ -63,6 +66,7 @@ class UserRepositoryImpl @Inject constructor(
         examData.insert(question)
     }
 
+    @Transaction
     override suspend fun deleteAccount() {
         userData.deleteAccount()
         examData.clearAll()
