@@ -9,6 +9,6 @@ class GetAuthorizedStatusUseCase @Inject constructor(
     private val repository: IUserRepository
 ) {
     operator fun invoke(): Flow<Boolean> {
-        return repository.getUser().map { it.registered }
+        return repository.getUser().map { it?.registered ?: false }
     }
 }

@@ -15,9 +15,5 @@ import javax.inject.Inject
 class ExamStatsViewModel @Inject constructor(
     private val getUser: GetUserUseCase
 ) : ViewModel() {
-    val stats: StateFlow<List<ExamStatsItem>?> = getUser().map { it.examData }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
+    val stats: StateFlow<List<ExamStatsItem>?> = getUser().map { it?.examData } as StateFlow<List<ExamStatsItem>?>
 }

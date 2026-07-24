@@ -56,6 +56,7 @@ fun AppNavigation(adManager: AdManager) {
 
     if (authState is AuthState.Loading) {
         LoadingScreen()
+        return
     }
 
     val startDestination = when (authState) {

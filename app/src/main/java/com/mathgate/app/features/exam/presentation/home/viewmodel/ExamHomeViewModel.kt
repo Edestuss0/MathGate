@@ -24,11 +24,7 @@ class ExamHomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
     private val _effects = Channel<ExamHomeEffects>(Channel.BUFFERED)
     val effects = _effects.receiveAsFlow()
-    val user: StateFlow<User?> = getUser().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
+    val user: StateFlow<User?> = getUser()
 
     fun onEvent(event: ExamHomeEvent) {
         when (event) {

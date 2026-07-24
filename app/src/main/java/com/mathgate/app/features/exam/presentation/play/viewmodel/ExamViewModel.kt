@@ -39,9 +39,7 @@ class ExamViewModel @Inject constructor(
     val state = _state.asStateFlow()
     private val _effects = Channel<ExamPlayEffect>(Channel.BUFFERED)
     val effects = _effects.receiveAsFlow()
-    val user: StateFlow<User?> = getUser().stateIn(
-        scope = viewModelScope, started = SharingStarted.WhileSubscribed(5000), initialValue = null
-    )
+    val user: StateFlow<User?> = getUser()
     val type = ExamTypes.valueOf(savedStateHandle.get<String>("type") ?: "ege")
     private val number = savedStateHandle.get<Int>("number")
 

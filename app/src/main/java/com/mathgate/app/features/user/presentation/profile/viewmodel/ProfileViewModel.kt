@@ -26,11 +26,7 @@ class ProfileViewModel @Inject constructor(
     val effects = _effects.receiveAsFlow()
     private val _state = MutableStateFlow(ProfileState())
     val state = _state.asStateFlow()
-    val user: StateFlow<User?> = getUser().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
+    val user: StateFlow<User?> = getUser()
 
     fun onEvent(event: ProfileEvent) {
         when (event) {

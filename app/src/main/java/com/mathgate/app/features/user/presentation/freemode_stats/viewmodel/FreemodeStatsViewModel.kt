@@ -15,9 +15,5 @@ import javax.inject.Inject
 class FreemodeStatsViewModel @Inject constructor(
     private val getUser: GetUserUseCase
 ) : ViewModel() {
-    val stats: StateFlow<List<FreemodeStatsItem>?> = getUser().map { it.freemodeData }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
+    val stats: StateFlow<List<FreemodeStatsItem>?> = getUser().map { it?.freemodeData } as StateFlow<List<FreemodeStatsItem>?>
 }

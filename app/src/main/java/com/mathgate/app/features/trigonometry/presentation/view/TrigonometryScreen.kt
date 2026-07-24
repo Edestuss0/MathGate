@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import android.content.res.Configuration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hrm.latex.renderer.Latex
 import com.hrm.latex.renderer.model.LatexConfig
@@ -44,7 +45,7 @@ import kotlin.math.*
 
 @Composable
 fun TrigonometryScreen(
-    viewmodel: TrigonometryViewModel = viewModel(),
+    viewmodel: TrigonometryViewModel = hiltViewModel(),
     onBackNavigate: () -> Unit
 ) {
     val state by viewmodel.state.collectAsState()

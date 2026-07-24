@@ -36,11 +36,7 @@ class FreemodeViewModel @Inject constructor(
 
     private val _effects = Channel<FreemodeEffect>(Channel.BUFFERED)
     val effects = _effects.receiveAsFlow()
-    val user: StateFlow<User?> = getUser().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
+    val user: StateFlow<User?> = getUser()
 
     init {
         loadData()
@@ -59,15 +55,15 @@ class FreemodeViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            try {
-                _state.update { it.copy(question = getQuestion(difficulty)) }
-            } catch (_: Exception) {
+        _state.update { it.copy(isLoading = true) }
+        try {
+            _state.update { it.copy(question = getQuestion(difficulty)) }
+        } catch (_: Exception) {
+            viewModelScope.launch {
                 _effects.send(FreemodeEffect.ErrorSnackbar("Ошибка при получении данных"))
-            } finally {
-                _state.update { it.copy(isLoading = false) }
             }
+        } finally {
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
